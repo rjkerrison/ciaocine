@@ -1,3 +1,4 @@
+const { getShowtimes } = require('../api/allocine')
 const Cinema = require('../models/Cinema.model')
 
 const router = require('express').Router()
@@ -12,9 +13,9 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const cinema = await Cinema.findById(req.params.id)
-    console.log(cinema)
+    const showtimes = await getShowtimes(cinema.allocine_id)
 
-    res.render('cinema/view', { cinema })
+    res.render('cinema/view', { cinema, showtimes })
   } catch (error) {
     next(error)
   }

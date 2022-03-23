@@ -9,3 +9,16 @@
     {{label}}
   {{/each}}
 {{/with}}
+
+{{#each showtimes}}
+  <p>
+    {{movie.title}}
+  </p>
+  {{#each scr}}
+    <p>
+      {{d}}
+      at
+      {{#each t}}{{this.$}}, {{/each}}
+    </p>
+  {{/each}}
+{{/each}}
