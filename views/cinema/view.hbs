@@ -1,9 +1,5 @@
-{{#each cinemas}}
-  <h2>
-    <a href='/cinema/{{id}}'>
-      {{name}}
-    </a>
-  </h2>
+{{#with cinema}}
+  <h2>{{name}}</h2>
   {{allocine_id}}
   {{address}}
   {{zipcode}}
@@ -12,4 +8,4 @@
     {{code}}
     {{label}}
   {{/each}}
-{{/each}}
+{{/with}}
