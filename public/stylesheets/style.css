@@ -19,3 +19,13 @@ h1 {
   color: white;
   border-radius: 4px;
 }
+
+picture {
+  display: block;
+  max-width: 10rem;
+}
+picture img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}

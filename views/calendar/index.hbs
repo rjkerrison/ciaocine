@@ -1,0 +1,17 @@
+<h1>Your calendar</h1>
+{{#each calendar}}
+  <h2>
+    {{showtime.movie.title}}
+  </h2>
+  <picture>
+    <img src='{{showtime.movie.poster}}' alt='{{showtime.movie.title}}' />
+  </picture>
+  <p>
+    {{showtime.startTime}}
+  </p>
+  <p>
+    {{showtime.cinema.name}}
+    {{showtime.cinema.address}}
+    {{showtime.cinema.postal_code}}
+  </p>
+{{/each}}

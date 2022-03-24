@@ -28,4 +28,20 @@ router.post('/', isLoggedIn, async (req, res, next) => {
   }
 })
 
+router.get('/', isLoggedIn, async (req, res, next) => {
+  try {
+    const userId = req.user._id
+
+    const calendar = await Calendar.find({ user: userId }).populate({
+      path: 'showtime',
+      model: Showtime,
+      populate: ['movie', 'cinema'],
+    })
+
+    res.render('calendar', { calendar })
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = router
