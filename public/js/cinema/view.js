@@ -11,7 +11,7 @@ function addToCalendar(event) {
 }
 
 async function makeCalendarCall(code) {
-  let config = {
+  const config = {
     method: 'post',
     url: '/calendar',
     headers: {

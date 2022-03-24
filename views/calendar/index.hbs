@@ -8,7 +8,7 @@
       </h2>
 
       {{#each this}}
-        <div class='calendar-entry'>
+        <div class='calendar-entry' data-calendar='{{_id}}'>
           <h3 class='showtime'>
             {{showtime.movie.title}}
             at
@@ -32,8 +32,10 @@
               {{showtime.cinema.zipcode}}
             </span>
           </p>
+          <button data-calendar='{{this._id}}'>Remove from calendar</button>
         </div>
       {{/each}}
     </div>
   {{/each}}
 </div>
+<script src='/js/calendar/index.js'></script>

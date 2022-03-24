@@ -28,6 +28,17 @@ router.post('/', isLoggedIn, async (req, res, next) => {
   }
 })
 
+/* DELETE /calendar/:calendarId */
+router.delete('/:calendarId', isLoggedIn, async (req, res, next) => {
+  try {
+    const deletion = await Calendar.findByIdAndDelete(req.params.calendarId)
+
+    res.json(deletion)
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.get('/', isLoggedIn, async (req, res, next) => {
   try {
     const userId = req.user._id
