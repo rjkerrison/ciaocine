@@ -36,7 +36,7 @@ const getShowtimes = async (allocineCinemaId) => {
     }
   })
 
-  const cinema = await Cinema.findOne({ allocineId: allocineCinemaId })
+  const cinema = await Cinema.findOne({ allocine_id: allocineCinemaId })
   if (!cinema) {
     throw new Error(`cinema not found: ${place.theater.code}`)
   }
