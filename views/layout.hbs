@@ -1,18 +1,28 @@
-<html lang="en">
+<html lang='en'>
 
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta http-equiv='X-UA-Compatible' content='ie=edge' />
     <title>{{appTitle}}</title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
   </head>
 
   <body>
+    <nav>
+      {{#if isUserLoggedIn}}
+        <a href='/auth/logout'>Logout</a>
+      {{else}}
+        <a href='/auth/login'>Login</a>
+        <a href='/auth/signup'>Signup</a>
+      {{/if}}
+      <a href='/cinema'>Cinema</a>
+    </nav>
 
     {{{body}}}
 
-    <script src="/js/script.js"></script>
+    <script src='/js/script.js'></script>
   </body>
 
 </html>

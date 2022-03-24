@@ -23,13 +23,17 @@
       {{#each t}}
         <li class='showtime'>
           <h3>
-            {{this.$}}
+            {{$}}
           </h3>
-          <button data-showtime='{{t.code}}'>
-            Add this to your calendar
-          </button>
+          {{#if @root.isUserLoggedIn}}
+            <button data-showtime='{{code}}'>
+              Add this to your calendar
+            </button>
+          {{/if}}
         </li>
       {{/each}}
     </ul>
   {{/each}}
 {{/each}}
+
+<script src='/js/cinema/view.js'></script>

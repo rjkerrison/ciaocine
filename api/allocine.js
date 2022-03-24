@@ -45,14 +45,11 @@ const getShowtimes = async (allocineCinemaId) => {
   return showtimes
 }
 
-const saveMovieFromAllocine = async ({
-  code: allocineId,
-  title,
-  poster: { href: poster },
-}) => {
+const saveMovieFromAllocine = async ({ code: allocineId, title, poster }) => {
+  const href = poster?.href
   const movie = await Movie.findOneAndUpdate(
     { allocineId },
-    { allocineId, title, poster },
+    { allocineId, title, poster: href },
     { upsert: true, new: true }
   )
   return movie
