@@ -41,33 +41,46 @@ router.delete('/:calendarId', isLoggedIn, async (req, res, next) => {
 
 router.get('/', isLoggedIn, async (req, res, next) => {
   try {
-    const userId = req.user._id
-
-    const calendar = await Calendar.find({ user: userId }).populate({
-      path: 'showtime',
-      model: Showtime,
-      populate: ['movie', 'cinema'],
-    })
-
-    const calendarByDay = calendar.reduce((dict, seance) => {
-      const date = seance.showtime.startTime.toLocaleDateString('en-GB')
-      if (!dict[date]) {
-        dict[date] = []
-      }
-      let { format } = Intl.DateTimeFormat('fr-FR', {
-        hour: 'numeric',
-        minute: 'numeric',
-      })
-
-      seance.showtime.timeString = format(seance.showtime.startTime)
-      dict[date].push(seance)
-      return dict
-    }, {})
+    const calendarByDay = await getUserCalendarByDay(req.user._id)
 
     res.render('calendar', { calendarByDay })
   } catch (error) {
     next(error)
   }
 })
+
+const getUserCalendarByDay = async (userId) => {
+  const calendar = await Calendar.find({ user: userId }).populate({
+    path: 'showtime',
+    model: Showtime,
+    populate: ['movie', 'cinema'],
+  })
+
+  return calendar.reduce(groupByDay, {})
+}
+
+const groupByDay = (dict, seance) => {
+  const date = seance.showtime.startTime.toLocaleDateString('en-GB')
+  if (!dict[date]) {
+    dict[date] = []
+  }
+  let { format } = Intl.DateTimeFormat('fr-FR', {
+    hour: 'numeric',
+    minute: 'numeric',
+  })
+
+  seance.showtime.timeString = format(seance.showtime.startTime)
+  dict[date].push(seance)
+  dict[date].sort(bySeanceTime)
+  return dict
+}
+
+const bySeanceTime = (a, b) => {
+  if (a.showtime.timeString > b.showtime.timeString) {
+    return 1
+  } else {
+    return -1
+  }
+}
 
 module.exports = router
