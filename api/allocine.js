@@ -1,26 +1,30 @@
-const fetch = require('node-fetch')
+const { default: axios } = require('axios')
 const baseUrl = process.env.BASE_URL
 const partnerKey = process.env.PARTNER_KEY
 const Movie = require('../models/Movie.model')
 
-const getShowtimeListUrl = (allocineCinemaId) => {
+const getShowtimeListConfig = (allocineCinemaId) => {
   const page = 1
   const count = 10
 
-  const url =
-    `${baseUrl}/showtimelist?partner=${partnerKey}&format=json` +
-    `&theaters=${allocineCinemaId}&page=${page}&count=${count}`
-
-  return url
+  return {
+    baseURL: baseUrl,
+    url: '/showtimelist',
+    params: {
+      partner: partnerKey,
+      theaters: allocineCinemaId,
+      page,
+      count,
+      format: 'json',
+    },
+  }
 }
 
 const getShowtimes = async (allocineCinemaId) => {
-  const url = getShowtimeListUrl(allocineCinemaId)
-  console.log('fetching url', url)
-  const response = await fetch(url)
-  const result = await response.json()
+  const config = getShowtimeListConfig(allocineCinemaId)
+  const { data } = await axios(config)
 
-  const showtimes = result.feed.theaterShowtimes[0].movieShowtimes.map(
+  const showtimes = data.feed.theaterShowtimes[0].movieShowtimes.map(
     ({ onShow, version, scr, ...rest }) => {
       return {
         ...onShow,
@@ -33,10 +37,10 @@ const getShowtimes = async (allocineCinemaId) => {
 
   showtimes.forEach(({ movie }) => saveMovieFromAllocine(movie))
 
-  //   console.log(
-  //     'fetched screenings',
-  //     showtimes.map((x) => x.scr[0].t)
-  //   )
+  // console.log(
+  //   'fetched screenings',
+  //   showtimes.map((x) => x.scr[0].t)
+  // )
 
   return showtimes
 }

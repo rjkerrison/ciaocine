@@ -1,6 +1,6 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
 }
 
 a {
@@ -9,4 +9,13 @@ a {
 
 h1 {
   color: 15px;
+}
+
+.showtimes {
+  display: flex;
+}
+.showtime {
+  background: black;
+  color: white;
+  border-radius: 4px;
 }

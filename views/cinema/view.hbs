@@ -18,7 +18,18 @@
     <p>
       {{d}}
       at
-      {{#each t}}{{this.$}}, {{/each}}
     </p>
+    <ul class='showtimes'>
+      {{#each t}}
+        <li class='showtime'>
+          <h3>
+            {{this.$}}
+          </h3>
+          <button data-showtime='{{t.code}}'>
+            Add this to your calendar
+          </button>
+        </li>
+      {{/each}}
+    </ul>
   {{/each}}
 {{/each}}
