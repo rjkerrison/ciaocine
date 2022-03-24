@@ -43,8 +43,12 @@ router.get('/', isLoggedIn, async (req, res, next) => {
       if (!dict[date]) {
         dict[date] = []
       }
-      seance.showtime.timeString =
-        seance.showtime.startTime.startTime.toLocaleDateString('en-GB')
+      let { format } = Intl.DateTimeFormat('fr-FR', {
+        hour: 'numeric',
+        minute: 'numeric',
+      })
+
+      seance.showtime.timeString = format(seance.showtime.startTime)
       dict[date].push(seance)
       return dict
     }, {})

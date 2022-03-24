@@ -16,12 +16,3 @@
   grid-row: 1;
   counter-increment: column;
 }
-
-.calendar-entry {
-  /* grid-row: 2; */
-  --column: counter(column);
-  grid-column: var(--column);
-}
-.calendar-entry::after {
-  content: 'hello' var(--column) 'there';
-}
