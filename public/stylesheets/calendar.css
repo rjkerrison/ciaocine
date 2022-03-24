@@ -1,0 +1,27 @@
+.calendar {
+  display: grid;
+  grid-auto-flow: column;
+  counter-reset: column;
+}
+
+.calendar-date {
+  grid-row: 1 / 100;
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+  grid-auto-flow: row;
+}
+
+.calendar-head {
+  grid-row: 1;
+  counter-increment: column;
+}
+
+.calendar-entry {
+  /* grid-row: 2; */
+  --column: counter(column);
+  grid-column: var(--column);
+}
+.calendar-entry::after {
+  content: 'hello' var(--column) 'there';
+}

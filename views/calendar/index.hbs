@@ -1,17 +1,33 @@
 <h1>Your calendar</h1>
-{{#each calendar}}
-  <h2>
-    {{showtime.movie.title}}
-  </h2>
-  <picture>
-    <img src='{{showtime.movie.poster}}' alt='{{showtime.movie.title}}' />
-  </picture>
-  <p>
-    {{showtime.startTime}}
-  </p>
-  <p>
-    {{showtime.cinema.name}}
-    {{showtime.cinema.address}}
-    {{showtime.cinema.zipcode}}
-  </p>
-{{/each}}
+<div class='calendar'>
+  {{#each calendarByDay}}
+    <div class='calendar-date'>
+      <h2 class='calendar-head'>
+        Date:
+        {{@key}}
+      </h2>
+
+      {{#each this}}
+        <div class='calendar-entry'>
+          <h3>
+            {{showtime.movie.title}}
+          </h3>
+          <picture>
+            <img
+              src='{{showtime.movie.poster}}'
+              alt='{{showtime.movie.title}}'
+            />
+          </picture>
+          <p>
+            {{showtime.startTime}}
+          </p>
+          <p>
+            {{showtime.cinema.name}}
+            {{showtime.cinema.address}}
+            {{showtime.cinema.zipcode}}
+          </p>
+        </div>
+      {{/each}}
+    </div>
+  {{/each}}
+</div>

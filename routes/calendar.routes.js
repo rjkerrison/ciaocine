@@ -38,7 +38,18 @@ router.get('/', isLoggedIn, async (req, res, next) => {
       populate: ['movie', 'cinema'],
     })
 
-    res.render('calendar', { calendar })
+    const calendarByDay = calendar.reduce((dict, seance) => {
+      const date = seance.showtime.startTime.toLocaleDateString('en-GB')
+      if (!dict[date]) {
+        dict[date] = []
+      }
+      seance.showtime.timeString =
+        seance.showtime.startTime.startTime.toLocaleDateString('en-GB')
+      dict[date].push(seance)
+      return dict
+    }, {})
+
+    res.render('calendar', { calendarByDay })
   } catch (error) {
     next(error)
   }
