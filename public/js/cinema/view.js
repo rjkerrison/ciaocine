@@ -22,6 +22,7 @@ async function makeCalendarCall(code) {
   try {
     const response = await axios(config)
     console.log(response.data)
+    popupWithMessage('Saved to your calendar!')
   } catch (error) {
     console.log(error)
   }

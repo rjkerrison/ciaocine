@@ -11,6 +11,9 @@
   </head>
 
   <body>
+    {{#> toast}}
+      Congratulations!
+    {{/toast}}
     <nav>
       {{#if isUserLoggedIn}}
         <a href='/auth/logout'>Logout</a>

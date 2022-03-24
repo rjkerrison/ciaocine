@@ -29,3 +29,27 @@ picture img {
   max-width: 100%;
   height: auto;
 }
+
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  transition: all 1s;
+  font-size: 2rem;
+}
+
+.popup {
+  width: 50%;
+  background: #8ad38a;
+  box-shadow: 0.5rem 0.5rem 0.25rem -0.25rem #8ad38a67;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.popup-container.bye-bye-bye {
+  left: -100%;
+}

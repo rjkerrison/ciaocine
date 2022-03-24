@@ -18,7 +18,7 @@ async function makeDeleteCalendarCall(id) {
     }
     const response = await axios(config)
     console.log(response.data)
-    alert('successfully removed')
+    popupWithMessage('Successfully removed!')
     document.querySelector(`.calendar-entry[data-calendar="${id}"]`).remove()
   } catch (error) {
     console.log(error)
