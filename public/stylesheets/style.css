@@ -1,55 +1,56 @@
 body {
-  padding: 50px;
-  font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
+	padding: 50px;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	background-color: #8ad38a;
 }
 
 a {
-  color: #00b7ff;
+	color: #00b7ff;
 }
 
 h1 {
-  color: 15px;
+	color: 15px;
 }
 
 .showtimes {
-  display: flex;
+	display: flex;
 }
 .showtime {
-  background: black;
-  color: white;
-  border-radius: 4px;
+	background: black;
+	color: white;
+	border-radius: 4px;
 }
 
 picture {
-  display: block;
-  max-width: 10rem;
+	display: block;
+	max-width: 10rem;
 }
 picture img {
-  display: block;
-  max-width: 100%;
-  height: auto;
+	display: block;
+	max-width: 100%;
+	height: auto;
 }
 
 .popup-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  padding: 2rem;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  transition: all 1s;
-  font-size: 2rem;
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 2rem;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	transition: all 1s;
+	font-size: 2rem;
 }
 
 .popup {
-  width: 50%;
-  background: #8ad38a;
-  box-shadow: 0.5rem 0.5rem 0.25rem -0.25rem #8ad38a67;
-  padding: 1rem;
-  border-radius: 1rem;
+	width: 50%;
+	background: #8ad38a;
+	box-shadow: 0.5rem 0.5rem 0.25rem -0.25rem #8ad38a67;
+	padding: 1rem;
+	border-radius: 1rem;
 }
 
 .popup-container.bye-bye-bye {
-  left: -100%;
+	left: -100%;
 }
