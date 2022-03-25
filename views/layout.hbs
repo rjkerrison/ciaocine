@@ -10,22 +10,31 @@
     <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
   </head>
   <body>
-  <h1>Hello hackers !</h1>
+    <header>
+      <h1>{{pageTitle}}</h1>
+      <nav>
+        {{#if isUserLoggedIn}}
+          <a href='/auth/logout'>Logout</a>
+          <a href='/calendar'>My Calendar</a>
+        {{else}}
+          <a href='/auth/login'>Login</a>
+          <a href='/auth/signup'>Signup</a>
+        {{/if}}
+        <a href='/cinema'>Cinema</a>
+      </nav>
+    </header>
+    <main>
+
+      {{{body}}}
+    </main>
+
+    <footer>
+      This website is not commercial in any way.
+    </footer>
+
     {{#> toast}}
       Congratulations!
     {{/toast}}
-    <nav>
-      {{#if isUserLoggedIn}}
-        <a href='/auth/logout'>Logout</a>
-        <a href='/calendar'>My Calendar</a>
-      {{else}}
-        <a href='/auth/login'>Login</a>
-        <a href='/auth/signup'>Signup</a>
-      {{/if}}
-      <a href='/cinema'>Cinema</a>
-    </nav>
-
-    {{{body}}}
 
     <script src='/js/script.js'></script>
   </body>
