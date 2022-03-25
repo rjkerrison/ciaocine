@@ -42,8 +42,10 @@ router.delete('/:calendarId', isLoggedIn, async (req, res, next) => {
 router.get('/', isLoggedIn, async (req, res, next) => {
   try {
     const calendarByDay = await getUserCalendarByDay(req.user._id)
+    const profilePictureUrl =
+      req.user.profilePictureUrl || 'https://www.fillmurray.com/200/200'
 
-    res.render('calendar', { calendarByDay })
+    res.render('calendar', { calendarByDay, profilePictureUrl })
   } catch (error) {
     next(error)
   }
