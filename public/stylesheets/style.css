@@ -53,3 +53,28 @@ picture img {
 .popup-container.bye-bye-bye {
   left: -100%;
 }
+
+.cinema-list {
+  list-style: none;
+  display: grid;
+  grid-template: repeat(7, 1fr) / repeat(5, 1fr);
+  gap: 1rem;
+}
+
+.cinema-list .cinema {
+  box-shadow: 0.25rem 0.25rem 0.5rem -0.25rem #8ad38a67;
+}
+
+.member-card-list {
+  display: flex;
+  padding: 0;
+  gap: 0.25rem;
+  list-style: none;
+}
+
+.member-card {
+  padding: 0.125rem;
+  border-radius: 0.25rem;
+  background-color: black;
+  color: white;
+}

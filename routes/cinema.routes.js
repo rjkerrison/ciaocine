@@ -4,9 +4,26 @@ const FavouriteCinema = require('../models/FavouriteCinema.model')
 
 const router = require('express').Router()
 
+const getUserLikedCinemas = async (userId) => {
+  const cinemas = await FavouriteCinema.find({
+    user: userId,
+  })
+  return cinemas.map((x) => x.cinema)
+}
+
+const addLikedToCinema = (likedCinemas, cinema) => {
+  const liked = likedCinemas.some((lc) => lc.equals(cinema.id))
+  return { liked, ...cinema._doc }
+}
+
 /* GET home page */
 router.get('/', async (req, res, next) => {
-  const cinemas = await Cinema.find()
+  let cinemas = await Cinema.find()
+  if (req.session.user) {
+    const likedCinemas = await getUserLikedCinemas(req.session.user._id)
+    cinemas = cinemas.map((c) => addLikedToCinema(likedCinemas, c))
+    console.log({ cinema: cinemas[0], likedCinemas })
+  }
   res.render('cinema', { cinemas })
 })
 
@@ -17,12 +34,8 @@ router.get('/:id', async (req, res, next) => {
     const showtimes = await getShowtimes(cinema.allocine_id)
 
     if (req.session.user) {
-      const liked =
-        (await FavouriteCinema.count({
-          cinema: cinema._id,
-          user: req.session.user._id,
-        })) > 0
-      cinema = { liked, ...cinema._doc }
+      const likedCinemas = await getUserLikedCinemas(req.session.user._id)
+      cinema = addLikedToCinema(likedCinemas, cinema)
     }
 
     res.render('cinema/view', { cinema, showtimes })
