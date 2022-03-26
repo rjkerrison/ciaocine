@@ -1,0 +1,42 @@
+{{#with cinema}}
+  <h2>{{name}}</h2>
+  <p>
+    {{address}},
+    {{city}}
+    {{zipcode}}
+  </p>
+  {{#if @root.isUserLoggedIn}}
+    <button data-cinema='{{_id}}' data-liked='{{liked}}'></button>
+  {{/if}}
+  <ul>
+    {{#each member_cards}}
+      <li data-code='{{code}}'>
+        {{label}}
+      </li>
+    {{/each}}
+  </ul>
+{{/with}}
+
+{{#each showtimes}}
+  <p>
+    {{this._id}}
+  </p>
+  <ul class='showtimes'>
+    {{#each showtimes}}
+      <li class='showtime'>
+        <h3>
+          {{movie.title}}
+          at
+          {{time startTime}}
+        </h3>
+        {{#if @root.isUserLoggedIn}}
+          <button data-showtime='{{code}}'>
+            Add this to your calendar
+          </button>
+        {{/if}}
+      </li>
+    {{/each}}
+  </ul>
+{{/each}}
+
+<script src='/js/cinema/view.js'></script>

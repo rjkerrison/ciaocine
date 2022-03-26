@@ -26,6 +26,18 @@ const groupByDate = {
   },
 }
 
+const sortById = {
+  $sort: {
+    _id: 1,
+  },
+}
+
+const sortByStartTime = {
+  $sort: {
+    startTime: 1,
+  },
+}
+
 const populateMovie = {
   $lookup: {
     from: 'movies',
@@ -47,9 +59,11 @@ const project = {
 const getShowtimesForCinemaGroupByDate = async (cinemaId) => {
   const showtimes = await Showtime.aggregate([
     match(cinemaId),
+    sortByStartTime,
     populateMovie,
     project,
     groupByDate,
+    sortById,
   ])
   return showtimes
 }
