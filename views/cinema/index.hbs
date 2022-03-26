@@ -1,15 +1,28 @@
-{{#each cinemas}}
-  <h2>
-    <a href='/cinema/{{id}}'>
-      {{name}}
-    </a>
-  </h2>
-  {{allocine_id}}
-  {{address}}
-  {{zipcode}}
-  {{city}}
-  {{#each member_cards}}
-    {{code}}
-    {{label}}
+<ul class='cinema-list'>
+  {{#each cinemas}}
+    <li class='cinema'>
+      <h2>
+        <a href='/cinema/{{id}}'>
+          {{name}}
+        </a>
+      </h2>
+      {{#if @root.isUserLoggedIn}}
+        <button data-cinema='{{_id}}' data-liked='{{liked}}'></button>
+      {{/if}}
+      <p>
+        {{address}}
+        {{zipcode}}
+        {{city}}
+      </p>
+      <ul class='member-card-list'>
+        {{#each member_cards}}
+          <li class='member-card' data-code='{{code}}'>
+            {{label}}
+          </li>
+        {{/each}}
+      </ul>
+    </li>
   {{/each}}
-{{/each}}
+</ul>
+
+<script src='/js/cinema/view.js'></script>

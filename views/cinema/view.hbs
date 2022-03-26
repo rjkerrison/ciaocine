@@ -1,13 +1,20 @@
 {{#with cinema}}
   <h2>{{name}}</h2>
-  {{allocine_id}}
-  {{address}}
-  {{zipcode}}
-  {{city}}
-  {{#each member_cards}}
-    {{code}}
-    {{label}}
-  {{/each}}
+  <p>
+    {{address}},
+    {{city}}
+    {{zipcode}}
+  </p>
+  {{#if @root.isUserLoggedIn}}
+    <button data-cinema='{{_id}}' data-liked='{{liked}}'></button>
+  {{/if}}
+  <ul>
+    {{#each member_cards}}
+      <li data-code='{{code}}'>
+        {{label}}
+      </li>
+    {{/each}}
+  </ul>
 {{/with}}
 
 {{#each showtimes}}

@@ -34,6 +34,8 @@ const cinemaRoutes = require('./routes/cinema.routes')
 app.use('/cinema', cinemaRoutes)
 const calendarRoutes = require('./routes/calendar.routes')
 app.use('/calendar', calendarRoutes)
+const favouriteRoutes = require('./routes/favourite.routes')
+app.use('/favourite', favouriteRoutes)
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require('./error-handling')(app)
