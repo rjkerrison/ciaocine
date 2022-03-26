@@ -1,7 +1,7 @@
 const Movie = require('../models/Movie.model')
 const Showtime = require('../models/Showtime.model')
 
-const populateShowtimes = (showtimes) => {
+const populateShowtimes = (showtimes, cinema) => {
   showtimes.forEach(async ({ movie: fetchedMovie, scr }) => {
     const movie = await saveMovieFromAllocine(fetchedMovie)
     scr.forEach((s) => saveShowtimesFromAllocine({ ...s, movie, cinema }))
