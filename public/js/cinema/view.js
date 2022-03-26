@@ -27,14 +27,14 @@ function favouriteCinema(event) {
   makeFavouriteCinemaCall(button)
 }
 
-async function makeCalendarCall(code) {
+async function makeCalendarCall(id) {
   const config = {
     method: 'post',
     url: '/calendar',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: { code },
+    data: { id },
   }
   try {
     const response = await axios(config)
