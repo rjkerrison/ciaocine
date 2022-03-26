@@ -1,4 +1,5 @@
 const { getShowtimes } = require('../api/allocine')
+const { populateShowtimes } = require('../db/populate-showtimes')
 const Cinema = require('../models/Cinema.model')
 const FavouriteCinema = require('../models/FavouriteCinema.model')
 
@@ -32,6 +33,9 @@ router.get('/:id', async (req, res, next) => {
   try {
     let cinema = await Cinema.findById(req.params.id)
     const showtimes = await getShowtimes(cinema.allocine_id)
+
+    // Populate database
+    populateShowtimes(showtimes, cinema)
 
     if (req.session.user) {
       const likedCinemas = await getUserLikedCinemas(req.session.user._id)
