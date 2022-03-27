@@ -1,0 +1,6 @@
+require('../models/Calendar.model')
+require('../models/Cinema.model')
+require('../models/FavouriteCinema.model')
+require('../models/Movie.model')
+require('../models/Showtime.model')
+require('../models/User.model')
