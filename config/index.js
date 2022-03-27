@@ -27,6 +27,13 @@ const MongoStore = require('connect-mongo')
 
 // Connects the mongo uri to maintain the same naming structure
 const MONGO_URI = require('../utils/consts')
+const addStandardOptions = require('../middleware/addStandardOptions')
+
+// Handle the handlebars setup
+require('./handlebars')
+
+// Ensure models are known to mongoose
+require('./registerModels')
 
 // Middleware configuration
 module.exports = (app) => {
@@ -62,10 +69,5 @@ module.exports = (app) => {
     })
   )
 
-  // Middleware to make 'isUserLoggedIn' available in all templates
-  app.use((req, res, next) => {
-    app.locals.isUserLoggedIn = Boolean(req.session.user)
-    console.log(`USER IS ${app.locals.isUserLoggedIn ? '' : 'NOT '}LOGGED IN`)
-    next()
-  })
+  app.use(addStandardOptions)
 }

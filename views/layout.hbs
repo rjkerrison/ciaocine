@@ -1,28 +1,15 @@
 <html lang='en'>
-
   <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <meta http-equiv='X-UA-Compatible' content='ie=edge' />
-    <title>{{appTitle}}</title>
+    <title>{{appTitle}} — {{pageSubtitle}}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/calendar.css' />
     <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
   </head>
   <body>
-    <header>
-      <h1>{{pageTitle}}</h1>
-      <nav>
-        {{#if isUserLoggedIn}}
-          <a href='/auth/logout'>Logout</a>
-          <a href='/calendar'>My Calendar</a>
-        {{else}}
-          <a href='/auth/login'>Login</a>
-          <a href='/auth/signup'>Signup</a>
-        {{/if}}
-        <a href='/cinema'>Cinema</a>
-      </nav>
-    </header>
+    {{> header}}
     <main>
       {{{body}}}
     </main>

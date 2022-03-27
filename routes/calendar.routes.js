@@ -45,7 +45,11 @@ router.get('/', isLoggedIn, async (req, res, next) => {
     const profilePictureUrl =
       req.user.profilePictureUrl || 'https://www.fillmurray.com/200/200'
 
-    res.render('calendar', { calendarByDay, profilePictureUrl })
+    res.render('calendar', {
+      calendarByDay,
+      profilePictureUrl,
+      pageTitle: 'Your calendar',
+    })
   } catch (error) {
     next(error)
   }

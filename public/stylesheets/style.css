@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   padding: 50px;
   font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
@@ -60,17 +64,25 @@ picture img {
 .cinema-list {
   list-style: none;
   display: grid;
-  grid-template: repeat(7, 1fr) / repeat(5, 1fr);
+  grid-template: auto / repeat(auto-fill, minmax(16rem, 1fr));
   gap: 1rem;
 }
 
 .cinema-list .cinema {
-  box-shadow: 0.25rem 0.25rem 0.5rem -0.25rem #8ad38a67;
+  box-shadow: 0.25rem 0.25rem 0.75rem -0.25rem #8ad38a67;
+  border-radius: 1rem;
+  padding: 0.5rem;
+}
+
+.cinema-list .cinema h2 {
+  padding: 0;
+  margin: 0.5rem 0;
 }
 
 .member-card-list {
   display: flex;
   padding: 0;
+  flex-wrap: wrap;
   gap: 0.25rem;
   list-style: none;
 }
@@ -147,4 +159,39 @@ button.favourite-cinema:hover {
 
 .sr-only {
   font-size: 0;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.account-header {
+  display: flex;
+  height: 4rem;
+  gap: 1rem;
+  background-image: linear-gradient(90deg, #533ea7, #29a929);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.account-header picture {
+  height: 100%;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 0.125rem solid #533ea7;
+}
+
+.account-header picture img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  width: auto;
+}
+
+.account-header nav ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }

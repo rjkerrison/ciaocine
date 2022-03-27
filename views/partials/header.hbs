@@ -1,0 +1,32 @@
+<header class='app-header'>
+  <h1>Ciaocine: {{pageTitle}}</h1>
+  <nav aria-label='main navigation'>
+    <a href='/cinema'>Cinemas</a>
+  </nav>
+  <div class="account-header">
+    {{#if @root.user.isLoggedIn}}
+      <nav aria-label='account navigation'>
+        <ul>
+          <li>
+            <a href='/calendar'>My Calendar</a>
+          </li>
+          <li>
+            <a href='/auth/logout'>Logout</a>
+          </li>
+        </ul>
+      </nav>
+      {{> profilePicture }}
+    {{else}}
+      <nav aria-label='login or signup'>
+        <ul>
+          <li>
+            <a href='/auth/login'>Login</a>
+          </li>
+          <li>
+            <a href='/auth/signup'>Signup</a>
+          </li>
+        </ul>
+      </nav>
+    {{/if}}
+  </div>
+</header>

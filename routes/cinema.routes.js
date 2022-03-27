@@ -1,10 +1,7 @@
-const { getShowtimes } = require('../api/allocine')
 const getShowtimesForCinemaGroupByDate = require('../db/aggregations/showtimes-by-date')
 const getShowtimesForCinemaGroupByMovie = require('../db/aggregations/showtimes-by-movie')
-const { populateShowtimes } = require('../db/populate-showtimes')
 const Cinema = require('../models/Cinema.model')
 const FavouriteCinema = require('../models/FavouriteCinema.model')
-const Showtime = require('../models/Showtime.model')
 
 const router = require('express').Router()
 
@@ -28,7 +25,7 @@ router.get('/', async (req, res, next) => {
     cinemas = cinemas.map((c) => addLikedToCinema(likedCinemas, c))
     console.log({ cinema: cinemas[0], likedCinemas })
   }
-  res.render('cinema', { cinemas })
+  res.render('cinema', { cinemas, pageTitle: 'Cinemas' })
 })
 
 /* GET single cinema view page */
