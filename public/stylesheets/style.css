@@ -69,9 +69,11 @@ picture img {
 }
 
 .cinema-list .cinema {
+  position: relative;
   box-shadow: 0.25rem 0.25rem 0.75rem -0.25rem #8ad38a67;
   border-radius: 1rem;
-  padding: 0.5rem;
+  padding: 0.5rem 0.5rem 2rem;
+  overflow: hidden;
 }
 
 .cinema-list .cinema h2 {
@@ -127,6 +129,22 @@ picture img {
   grid-row: span 3;
 }
 
+.overlay {
+  opacity: 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  background-color: #1c153a;
+  padding: 0.25rem;
+  transition: all 500ms;
+}
+
+.cinema:hover .overlay {
+  opacity: 1;
+}
+
 button {
   font-size: 1.25rem;
   color: #1c153a;
@@ -137,13 +155,13 @@ button {
   cursor: pointer;
   background-color: #8ad38a;
   border: 1px solid #533ea7;
-  box-shadow: 0rem 0.5rem 0.5rem -0.25rem #efec4291;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem #e5ccf091;
 }
 button:hover {
   background-color: #96dc96;
   transform: translateY(-0.125rem);
   border: 1px solid #3d2a8a;
-  box-shadow: 0rem 0.75rem 0.5rem -0.25rem #efec4291;
+  box-shadow: 0rem 0.75rem 0.5rem -0.25rem #e5ccf091;
 }
 
 button.favourite-cinema,

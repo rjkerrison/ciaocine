@@ -6,7 +6,7 @@
           {{name}}
         </a>
       </h2>
-      {{> favouriteCinema cinema=this liked=liked}}
+      
       <p>
         {{address}}
         {{zipcode}}
@@ -19,6 +19,9 @@
           </li>
         {{/each}}
       </ul>
+      <div class="overlay">
+        {{> favouriteCinema cinema=this liked=liked}}
+      </div>
     </li>
   {{/each}}
 </ul>
