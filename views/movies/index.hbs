@@ -1,0 +1,46 @@
+<h1>All movies showing on {{date chosenDate}}</h1>
+<nav>
+<a href="/movies?date={{date previousDate}}">Previous day</a>
+<a href="/movies?date={{date nextDate}}">Next day</a>
+</nav>
+<div class='movies'>
+  {{#each movies}}
+    <div class='movie'>
+      {{#with movie}}
+      <h2 class='calendar-head'>
+        {{title}}
+      </h2>
+      <picture>
+        <img
+          src='{{poster}}'
+          alt='{{title}}'
+        />
+      </picture>
+      {{/with}}
+
+      <div class='movie-showtimes' data-calendar='{{_id}}'>
+        {{#each showtimes}}
+          <div class='movie-showtime' data-calendar='{{_id}}'>
+            <h3>
+              {{time startTime}}
+            </h3>
+            <p class="extra-info">
+              <span>
+                {{cinema.name}}
+              </span>
+              <span>
+                {{cinema.address}}
+              </span>
+              <span>
+                {{cinema.zipcode}}
+              </span>
+            </p>
+            <div class="overlay">
+              {{> addToCalendar}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  {{/each}}
+</div>

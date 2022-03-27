@@ -9,18 +9,18 @@ const {
   unwindMovie,
 } = require('./steps')
 
-const getToday = () => {
-  const date = new Date(Date.now())
-  date.setUTCHours(0)
-  date.setUTCMinutes(0)
-  date.setUTCSeconds(0)
-  date.setUTCMilliseconds(0)
+const getStartOfDay = (d) => {
+  const date = d || new Date(Date.now())
+  date.setHours(0)
+  date.setMinutes(0)
+  date.setSeconds(0)
+  date.setMilliseconds(0)
   return date
 }
 
 const getMoviesForDate = async (date) => {
   const showtimes = await Showtime.aggregate([
-    matchDate(date || getToday()),
+    matchDate(getStartOfDay(date)),
     sortByStartTime,
     populateCinema,
     unwindCinema,

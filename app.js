@@ -18,17 +18,7 @@ app.locals.appTitle = `Ciaocine`
 app.locals.pageTitle = `Ciaocine`
 app.locals.pageSubtitle = `Find cinema screenings in Paris`
 
-// 👇 Start handling routes here
-const index = require('./routes/index.routes')
-app.use('/', index)
-const authRoutes = require('./routes/auth.routes')
-app.use('/auth', authRoutes)
-const cinemaRoutes = require('./routes/cinema.routes')
-app.use('/cinema', cinemaRoutes)
-const calendarRoutes = require('./routes/calendar.routes')
-app.use('/calendar', calendarRoutes)
-const favouriteRoutes = require('./routes/favourite.routes')
-app.use('/favourite', favouriteRoutes)
+require('./routes')(app)
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require('./error-handling')(app)

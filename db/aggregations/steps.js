@@ -7,13 +7,15 @@ const match = (cinemaId) => ({
 })
 
 const matchDate = (date, field = 'startTime') => {
-  console.log('matching date', date)
+  const tomorrow = date.getDate() + 1
+  const nextDay = new Date(date)
+  nextDay.setDate(tomorrow)
 
   return {
     $match: {
       [field]: {
         $gte: date,
-        //$lt: new Date(date + 86400000),
+        $lt: nextDay,
       },
     },
   }
