@@ -1,7 +1,8 @@
-<h1>All movies showing on {{date chosenDate}}</h1>
+<h1>All movies showing on {{weekdaydate chosenDate}}</h1>
 <nav>
-<a href="/movies?date={{date previousDate}}">Previous day</a>
-<a href="/movies?date={{date nextDate}}">Next day</a>
+<a href="{{previousDayUrl}}">Previous day</a>
+<a href="{{afterworkUrl}}">Showings only after 6pm</a>
+<a href="{{nextDayUrl}}">Next day</a>
 </nav>
 <div class='movies'>
   {{#each movies}}
