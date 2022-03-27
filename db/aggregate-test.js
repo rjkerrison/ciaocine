@@ -1,11 +1,12 @@
 const { default: mongoose } = require('mongoose')
-const getShowtimesForCinemaGroupByMovie = require('./aggregations/showtimes-by-movie')
+const { getMoviesForDate } = require('./aggregations/movies-showing-by-date')
 
-let cinemaId = '623b47d48f8dbba189a1a6cb'
+const cinemaId = '623b47d48f8dbba189a1a6cb'
+const date = new Date(2022, 2, 27)
 
 async function execute() {
   await require('./index')
-  const showtimes = await getShowtimesForCinemaGroupByMovie(cinemaId)
+  const showtimes = await getMoviesForDate(date)
 
   console.log(showtimes[0])
 

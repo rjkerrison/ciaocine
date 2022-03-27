@@ -1,18 +1,17 @@
+import removeFromCalendar from '/js/removeFromCalendar.js'
+import addToCalendar from '/js/addToCalendar.js'
+import favouriteCinema from '/js/favouriteCinemas.js'
+import popupMessage from '/js/popupMessage.js'
+
 document.addEventListener(
   'DOMContentLoaded',
   () => {
     console.log('ciaocine JS imported successfully!')
+    const { popupWithMessage } = popupMessage.setup()
+
+    removeFromCalendar.setup({ popupWithMessage })
+    addToCalendar.setup({ popupWithMessage })
+    favouriteCinema.setup({ popupWithMessage })
   },
   false
 )
-
-const popupContainer = document.querySelector('.popup-container')
-const popup = document.querySelector('.popup')
-
-const popupWithMessage = (message) => {
-  popup.textContent = message
-  popupContainer.classList.remove('bye-bye-bye')
-  setTimeout(() => {
-    popupContainer.classList.add('bye-bye-bye')
-  }, 2000)
-}

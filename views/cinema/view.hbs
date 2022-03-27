@@ -5,9 +5,7 @@
     {{city}}
     {{zipcode}}
   </p>
-  {{#if @root.isUserLoggedIn}}
-    <button data-cinema='{{_id}}' data-liked='{{liked}}'></button>
-  {{/if}}
+  {{> favouriteCinema cinema=this liked=liked}}
   <ul>
     {{#each member_cards}}
       <li data-code='{{code}}'>
@@ -41,16 +39,10 @@
               at
               {{time startTime}}
             </h3>
-            {{#if @root.isUserLoggedIn}}
-              <button data-showtime='{{_id}}'>
-                +<span class='sr-only'>Add this to your calendar</span>
-              </button>
-            {{/if}}
+            {{> addToCalendar showtime=this}}
           </li>
         {{/each}}
       </ul>
     </div>
   {{/each}}
 </div>
-
-<script src='/js/cinema/view.js'></script>
