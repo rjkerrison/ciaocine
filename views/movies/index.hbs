@@ -24,19 +24,19 @@
             <h3>
               {{time startTime}}
             </h3>
-            <p class="extra-info">
-              <span>
-                {{cinema.name}}
-              </span>
-              <span>
-                {{cinema.address}}
-              </span>
-              <span>
-                {{cinema.zipcode}}
-              </span>
-            </p>
             <div class="overlay">
               {{> addToCalendar}}
+              <p class="extra-info">
+                <span>
+                  {{cinema.name}}
+                </span>
+                {{!-- <span>
+                  {{cinema.address}}
+                </span>
+                <span>
+                  {{cinema.zipcode}}
+                </span> --}}
+              </p>
             </div>
           </div>
         {{/each}}
