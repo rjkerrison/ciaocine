@@ -105,6 +105,12 @@ const groupByMovie = {
   },
 }
 
+const filterCinemaToUgcIllimite = {
+  $match: {
+    'cinema.member_cards.code': 106002,
+  },
+}
+
 module.exports = {
   match,
   matchDate,
@@ -118,4 +124,5 @@ module.exports = {
   unwindMovie,
   unwindCinema,
   groupByMovie,
+  filterCinemaToUgcIllimite,
 }

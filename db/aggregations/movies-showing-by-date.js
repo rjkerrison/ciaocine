@@ -11,7 +11,7 @@ const {
 
 const getMoviesForDate = async (date) => {
   const showtimes = await Showtime.aggregate([
-    matchDate(getStartOfDay(date)),
+    matchDate(date),
     sortByStartTime,
     populateCinema,
     unwindCinema,
@@ -22,11 +22,12 @@ const getMoviesForDate = async (date) => {
   return showtimes
 }
 
-const getMoviesBetweenTimes = async (fromDate, toDate) => {
+const getMoviesBetweenTimes = async (fromDate, toDate, additionalFilters) => {
   const showtimes = await Showtime.aggregate([
     matchDate(fromDate, toDate),
     sortByStartTime,
     populateCinema,
+    ...additionalFilters,
     unwindCinema,
     groupByMovie,
     populateMovieFromId,

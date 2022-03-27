@@ -1,11 +1,8 @@
 const {
   getMoviesBetweenTimes,
 } = require('../db/aggregations/movies-showing-by-date')
-const {
-  formatDate,
-  shortDateFormat,
-  dateFormat,
-} = require('../utils/formatDate')
+const { filterCinemaToUgcIllimite } = require('../db/aggregations/steps')
+const { formatDate, dateFormat } = require('../utils/formatDate')
 const router = require('express').Router()
 
 const getDateHour = (d, hour) => {
@@ -54,21 +51,40 @@ const getUrls = (options) => {
     ...options,
     fromHour: 18,
   })
+  const ugcIllimiteUrl = getMovieUrl({
+    ...options,
+    ugcIllimiteOnly: true,
+  })
 
   return {
     previousDayUrl,
     afterworkUrl,
     nextDayUrl,
+    ugcIllimiteUrl,
   }
 }
 
 /* GET movies */
 router.get('/', async (req, res, next) => {
-  const { fromHour = 0, toHour = 24, date } = req.query
+  const {
+    fromHour = 0,
+    toHour = 24,
+    date = Date.now(),
+    ugcIllimiteOnly = false,
+  } = req.query
   const fromDate = getDateHour(date, fromHour)
   const toDate = getDateHour(date, toHour)
 
-  const movies = await getMoviesBetweenTimes(fromDate, toDate)
+  const additionalFilters = []
+  if (Boolean(ugcIllimiteOnly)) {
+    additionalFilters.push(filterCinemaToUgcIllimite)
+  }
+
+  const movies = await getMoviesBetweenTimes(
+    fromDate,
+    toDate,
+    additionalFilters
+  )
 
   res.render('movies', {
     movies,
