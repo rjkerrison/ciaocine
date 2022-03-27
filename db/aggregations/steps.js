@@ -6,16 +6,17 @@ const match = (cinemaId) => ({
   },
 })
 
-const matchDate = (date, field = 'startTime') => {
-  const tomorrow = date.getDate() + 1
-  const nextDay = new Date(date)
-  nextDay.setDate(tomorrow)
+const matchDate = (fromDate, toDate, field = 'startTime') => {
+  if (!toDate) {
+    toDate = new Date(fromDate)
+    toDate.setDate(fromDate.getDate() + 1)
+  }
 
   return {
     $match: {
       [field]: {
-        $gte: date,
-        $lt: nextDay,
+        $gte: fromDate,
+        $lt: toDate,
       },
     },
   }
