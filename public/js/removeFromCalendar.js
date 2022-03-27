@@ -1,12 +1,7 @@
-document
-  .querySelectorAll('button')
-  .forEach((button) => button.addEventListener('click', removeFromCalendar))
-
 function removeFromCalendar(event) {
   const button = event.target
   const { calendar } = button.dataset
 
-  console.log('add to calendar', calendar)
   makeDeleteCalendarCall(calendar)
 }
 
@@ -24,3 +19,11 @@ async function makeDeleteCalendarCall(id) {
     console.log(error)
   }
 }
+
+function setup() {
+  document
+    .querySelectorAll('button.remove-from-calendar')
+    .forEach((button) => button.addEventListener('click', removeFromCalendar))
+}
+
+export default { setup }

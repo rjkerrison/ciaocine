@@ -6,9 +6,7 @@
           {{name}}
         </a>
       </h2>
-      {{#if @root.isUserLoggedIn}}
-        <button data-cinema='{{_id}}' data-liked='{{liked}}'></button>
-      {{/if}}
+      {{> favouriteCinema cinema=this liked=liked}}
       <p>
         {{address}}
         {{zipcode}}
@@ -24,5 +22,3 @@
     </li>
   {{/each}}
 </ul>
-
-<script src='/js/cinema/view.js'></script>

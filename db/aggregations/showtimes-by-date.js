@@ -3,7 +3,7 @@ const {
   match,
   sortByStartTime,
   populateMovie,
-  flattenShowtimeMovie,
+  unwindMovie,
   groupByDate,
   sortById,
 } = require('./steps')
@@ -13,7 +13,7 @@ const getShowtimesForCinemaGroupByDate = async (cinemaId) => {
     match(cinemaId),
     sortByStartTime,
     populateMovie,
-    flattenShowtimeMovie,
+    unwindMovie,
     groupByDate,
     sortById,
   ])

@@ -1,2 +1,20 @@
-<h1>{{appTitle}} 🚀</h1>
-<p>Welcome Ironhacker!</p>
+<h1>{{appTitle}}</h1>
+<p>For finding cinema screenings in Paris.</p>
+<div class='random-screening'>
+  {{#with showtime}}
+    <h2>
+      <a href='/cinema/{{cinema.id}}'>
+        {{cinema.name}}
+      </a>
+    </h2>
+    <p>
+      Why not see
+      <strong>{{movie.title}}</strong>
+      at
+      <strong>{{time startTime}}</strong>
+      on
+      <strong>{{date startTime}}</strong>?
+    </p>
+    <picture><img src='{{movie.poster}}' alt='{{movie.title}}' /></picture>
+  {{/with}}
+</div>

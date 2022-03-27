@@ -17,7 +17,7 @@ require('./config')(app)
 const capitalized = require('./utils/capitalized')
 const projectName = 'ciaocine'
 
-app.locals.appTitle = `${capitalized(projectName)} created with IronLauncher`
+app.locals.appTitle = `Ciaocine`
 
 // 👇 Start handling routes here
 const index = require('./routes/index.routes')

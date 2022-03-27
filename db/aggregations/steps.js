@@ -6,6 +6,19 @@ const match = (cinemaId) => ({
   },
 })
 
+const matchDate = (date, field = 'startTime') => {
+  console.log('matching date', date)
+
+  return {
+    $match: {
+      [field]: {
+        $gte: date,
+        //$lt: new Date(date + 86400000),
+      },
+    },
+  }
+}
+
 const groupByDate = {
   $group: {
     _id: {
@@ -37,6 +50,15 @@ const sortByStartTime = {
   },
 }
 
+const populateCinema = {
+  $lookup: {
+    from: 'cinemas',
+    localField: 'cinema',
+    foreignField: '_id',
+    as: 'cinema',
+  },
+}
+
 const populateMovie = {
   $lookup: {
     from: 'movies',
@@ -50,7 +72,7 @@ const populateMovieFromId = {
     from: 'movies',
     localField: '_id',
     foreignField: '_id',
-    as: 'movies',
+    as: 'movie',
   },
 }
 
@@ -63,12 +85,12 @@ const flattenShowtimeMovie = {
   },
 }
 
-const flattenGroupedMovie = {
-  $project: {
-    showtimes: '$showtimes',
-    movie: { $arrayElemAt: ['$movies', 0] },
-    _id: 0,
-  },
+const unwindCinema = {
+  $unwind: '$cinema',
+}
+
+const unwindMovie = {
+  $unwind: '$movie',
 }
 
 const groupByMovie = {
@@ -82,12 +104,15 @@ const groupByMovie = {
 
 module.exports = {
   match,
+  matchDate,
   groupByDate,
   sortById,
   sortByStartTime,
   populateMovie,
+  populateCinema,
   populateMovieFromId,
   flattenShowtimeMovie,
-  flattenGroupedMovie,
+  unwindMovie,
+  unwindCinema,
   groupByMovie,
 }

@@ -134,6 +134,17 @@ button:hover {
   box-shadow: 0rem 0.75rem 0.5rem -0.25rem #efec4291;
 }
 
+button.favourite-cinema,
+button.favourite-cinema.liked:hover {
+  color: white;
+  background-color: transparent;
+}
+button.favourite-cinema.liked,
+button.favourite-cinema:hover {
+  color: #1c153a;
+  background-color: #8ad38a;
+}
+
 .sr-only {
   font-size: 0;
 }
