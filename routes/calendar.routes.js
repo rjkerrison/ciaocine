@@ -7,10 +7,10 @@ const router = require('express').Router()
 /* POST /calendar */
 router.post('/', isLoggedIn, async (req, res, next) => {
   try {
-    const { code } = req.body
+    const { id } = req.body
     const userId = req.user._id
 
-    const showtime = await Showtime.findOne({ allocineId: code })
+    const showtime = await Showtime.findById(id)
     const calendarEntry = {
       user: userId,
       showtime: showtime.id,

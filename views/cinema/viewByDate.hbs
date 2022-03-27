@@ -16,8 +16,8 @@
     {{/each}}
   </ul>
   <p>
-    <a href='/cinema/{{_id}}/byDate'>
-      View listings by date
+    <a href='/cinema/{{_id}}'>
+      View listings by movie
     </a>
   </p>
 {{/with}}
@@ -27,20 +27,22 @@
     <div class='showtime-for-group'>
       <div class='group-heading'>
         <h2>
-          {{movie.title}}
+          {{this._id}}
         </h2>
-        <picture>
-          <img src='{{movie.poster}}' alt='{{movie.title}}' />
-        </picture>
       </div>
       <ul class='showtimes'>
         {{#each showtimes}}
           <li class='showtime'>
             <h3>
-              {{date startTime}}
-              at
-              {{time startTime}}
+              {{time startTime}}:
+              {{movie.title}}
             </h3>
+            <div>
+              <picture>
+                <img src='{{movie.poster}}' alt='{{movie.title}}' />
+              </picture>
+
+            </div>
             {{#if @root.isUserLoggedIn}}
               <button data-showtime='{{_id}}'>
                 +<span class='sr-only'>Add this to your calendar</span>

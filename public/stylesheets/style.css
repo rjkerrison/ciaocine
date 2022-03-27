@@ -81,3 +81,59 @@ picture img {
   background-color: black;
   color: white;
 }
+
+.showtimes-grouping {
+  display: grid;
+  grid-template-columns: 1fr repeat(100, 10rem);
+  grid-auto-flow: row;
+  row-gap: 1rem;
+}
+
+.showtime-for-group {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+}
+
+.group-heading {
+  grid-row: span 3;
+}
+
+.group-heading h2 {
+  transform: rotate(-0.25turn);
+  transform-origin: 75% 200%;
+}
+
+.showtimes {
+  display: contents;
+}
+
+.showtime {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+}
+
+button {
+  font-size: 1.25rem;
+  color: #1c153a;
+  padding: 0.25rem;
+  margin: 0.125rem;
+  border-radius: 0.25rem;
+  transition: all 500ms;
+  cursor: pointer;
+  background-color: #8ad38a;
+  border: 1px solid #533ea7;
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem #efec4291;
+}
+button:hover {
+  background-color: #96dc96;
+  transform: translateY(-0.125rem);
+  border: 1px solid #3d2a8a;
+  box-shadow: 0rem 0.75rem 0.5rem -0.25rem #efec4291;
+}
+
+.sr-only {
+  font-size: 0;
+}
