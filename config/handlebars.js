@@ -13,3 +13,10 @@ hbs.registerHelper('date', (datetime) => formatDate(datetime, dateFormat))
 hbs.registerHelper('weekdaydate', (datetime) =>
   formatDate(datetime, weekdayDateFormat)
 )
+hbs.registerHelper('ifGreaterThan', (v1, v2, options) => {
+  'use strict'
+  if (v1 > v2) {
+    return options.fn(this)
+  }
+  return options.inverse(this)
+})
