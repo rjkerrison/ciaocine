@@ -1,0 +1,9 @@
+/* generic */
+@import url('./core.css');
+@import url('./header.css');
+@import url('./overlay.css');
+@import url('./popup.css');
+/* pages */
+@import url('./calendar.css');
+@import url('./cinema.css');
+@import url('./movies.css');
