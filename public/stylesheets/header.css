@@ -2,6 +2,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #34276c;
+  font-family: Courier, 'Courier New', monospace;
+  font-size: 1.5rem;
+}
+
+.app-header h1 {
+  padding: 1rem;
+  margin: 0;
+  font-size: 2rem;
 }
 
 .account-header {

@@ -39,12 +39,6 @@ const getShowtimes = async (allocineCinemaId) => {
   const { movieShowtimes, place } = data.feed.theaterShowtimes[0]
 
   const showtimes = movieShowtimes.map(fromAllocineApiToShowtime)
-
-  // console.log(
-  //   'fetched screenings',
-  //   showtimes.map((x) => x.scr[0].t)
-  // )
-
   return showtimes
 }
 

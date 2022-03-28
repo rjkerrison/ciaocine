@@ -1,20 +1,24 @@
-<h2>{{appTitle}}</h2>
-<p>{{pageSubtitle}}</p>
-<div class='random-screening'>
+<section class='splash'>
+  <h2>{{appTitle}}</h2>
+  <p>{{pageSubtitle}}</p>
+</section>
+<section class='random-screening'>
   {{#with showtime}}
     <h2>
+      Have you seen
+      <strong>{{movie.title}}</strong>?
+    </h2>
+    <p>
+      Why not see it at
       <a href='/cinema/{{cinema.id}}'>
         {{cinema.name}}
       </a>
-    </h2>
-    <p>
-      Why not see
-      <strong>{{movie.title}}</strong>
       at
       <strong>{{time startTime}}</strong>
       on
       <strong>{{date startTime}}</strong>?
+      {{> addToCalendar showtime=_id}}
     </p>
     <picture><img src='{{movie.poster}}' alt='{{movie.title}}' /></picture>
   {{/with}}
-</div>
+</section>

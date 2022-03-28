@@ -1,5 +1,6 @@
+<section>
 {{#with cinema}}
-  <h1>{{name}}</h1>
+  <h2>Showtimes for {{name}}</h2>
   <p>
     {{address}},
     {{city}}
@@ -24,9 +25,9 @@
   {{#each showtimes}}
     <div class='showtime-for-group'>
       <div class='group-heading'>
-        <h2>
+        <h3>
           {{movie.title}}
-        </h2>
+        </h3>
         <picture>
           <img src='{{movie.poster}}' alt='{{movie.title}}' />
         </picture>
@@ -46,3 +47,4 @@
     </div>
   {{/each}}
 </div>
+</section>

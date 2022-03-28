@@ -1,0 +1,53 @@
+.splash {
+  background-image: url('https://i.pinimg.com/originals/ac/09/db/ac09dbaaebf77d6e928d355e1b528325.jpg');
+  background-image: linear-gradient(#1c153a 0, #34276c 50%, #533ea7 100%),
+    url('https://i.pinimg.com/originals/ac/09/db/ac09dbaaebf77d6e928d355e1b528325.jpg');
+  background-position: center 85%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-blend-mode: color;
+  height: 40vh;
+}
+
+.splash,
+.random-screening {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  text-shadow: 0.1em 0.1em 0.1em #1c153a;
+  width: 100%;
+}
+
+.splash h2 {
+  font-size: calc(3rem + 2vw);
+  text-shadow: 0.1em 0.1em 0.1em #1c153a;
+  margin: 0;
+}
+.splash p {
+  font-size: calc(2rem + 1vw);
+  margin: 0;
+}
+
+.random-screening h2 {
+  font-size: calc(2rem + 0.5vw);
+  font-family: inherit;
+}
+.random-screening h2 strong {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.random-screening p {
+  font-size: calc(1rem + 0.5vw);
+}
+
+.random-screening picture {
+  max-width: 20rem;
+  box-shadow: 2rem 2rem 2rem -1rem black;
+}
+
+.random-screening button .sr-only {
+  font-size: inherit;
+}

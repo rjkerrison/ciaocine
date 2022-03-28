@@ -87,7 +87,7 @@
   transform: rotateX(1turn);
 }
 
-button.add-to-calendar {
+.movie button.add-to-calendar {
   width: 1.5rem;
   padding: 0;
   display: inline-flex;
