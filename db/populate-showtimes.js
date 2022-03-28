@@ -1,11 +1,26 @@
 const Movie = require('../models/Movie.model')
 const Showtime = require('../models/Showtime.model')
 
-const populateShowtimes = (showtimes, cinema) => {
-  showtimes.forEach(async ({ movie: fetchedMovie, scr }) => {
-    const movie = await saveMovieFromAllocine(fetchedMovie)
-    scr.forEach((s) => saveShowtimesFromAllocine({ ...s, movie, cinema }))
-  })
+const populateShowtimes = async (showtimes, cinema) => {
+  const showtimePromises = showtimes.flatMap(
+    async ({ movie: fetchedMovie, scr }) => {
+      const movie = await saveMovieFromAllocine(fetchedMovie)
+      const saveShowtimesPromises = scr.map((s) =>
+        saveShowtimesFromAllocine({ ...s, movie, cinema })
+      )
+      const result = await Promise.all(saveShowtimesPromises)
+
+      console.log(`Result of saving:`, result)
+
+      return result
+    }
+  )
+
+  const mappedShowtimes = await Promise.all(showtimePromises)
+  console.log(
+    `Populated ${mappedShowtimes.length} showtimes for ${cinema.name}`
+  )
+  return mappedShowtimes
 }
 
 const saveMovieFromAllocine = async ({ code: allocineId, title, poster }) => {
@@ -24,17 +39,25 @@ const saveShowtimesFromAllocine = async ({
   movie,
   cinema,
 }) => {
-  times.forEach(({ code, $ }) => {
-    // this is far too hacky and needs to be changed
-    const startTime = new Date(date + ' ' + $)
+  const result = await Promise.all(
+    times.map(async ({ code, $ }) => {
+      // this is far too hacky and needs to be changed
+      const startTime = new Date(date + ' ' + $)
 
-    return saveShowtimeFromAllocine({
-      code,
-      startTime,
-      movie,
-      cinema,
+      const result = await saveShowtimeFromAllocine({
+        code,
+        startTime,
+        movie,
+        cinema,
+      })
+
+      console.log(`Result of time mapping:`, result)
+
+      return result
     })
-  })
+  )
+  console.log(`Result of time mapped array:`, result)
+  return result
 }
 
 const saveShowtimeFromAllocine = async ({
