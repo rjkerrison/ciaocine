@@ -3,7 +3,11 @@ const {
 } = require('../db/aggregations/movies-showing-by-date')
 const { filterCinemaToUgcIllimite } = require('../db/aggregations/steps')
 const { APP_URL } = require('../utils/consts')
-const { formatDate, dateFormat } = require('../utils/formatDate')
+const {
+  formatDate,
+  dateFormat,
+  weekdayDateMonthFormat,
+} = require('../utils/formatDate')
 const router = require('express').Router()
 
 const getDateHour = (d, hour) => {
@@ -37,17 +41,28 @@ const adjustDateByDays = (date, days) => {
   return newDate
 }
 
-const getUrls = (options) => {
-  const { date } = options
+const getDaysUrls = (options, step, count) => {
+  const dates = []
 
-  const previousDayUrl = getMovieUrl({
-    ...options,
-    date: adjustDateByDays(date, -1),
+  for (let i = 1; i <= count; i++) {
+    const date = adjustDateByDays(options.date, i * step)
+    dates.push(date)
+  }
+
+  dates.sort((a, b) => a - b)
+  const results = dates.map((date) => {
+    const url = getMovieUrl({
+      ...options,
+      date,
+    })
+    const label = formatDate(date, weekdayDateMonthFormat)
+
+    return { url, label }
   })
-  const nextDayUrl = getMovieUrl({
-    ...options,
-    date: adjustDateByDays(date, 1),
-  })
+  return results
+}
+
+const getUrls = (options) => {
   const afterworkUrl = getMovieUrl({
     ...options,
     fromHour: 18,
@@ -58,9 +73,15 @@ const getUrls = (options) => {
   })
 
   return {
-    previousDayUrl,
-    afterworkUrl,
-    nextDayUrl,
+    calendarUrls: [
+      ...getDaysUrls(options, -1, 3),
+      {
+        url: getMovieUrl(options),
+        label: formatDate(options.date, weekdayDateMonthFormat),
+        class: 'selected',
+      },
+      ...getDaysUrls(options, 1, 3),
+    ],
     ugcIllimiteUrl,
   }
 }

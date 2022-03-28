@@ -26,6 +26,12 @@ const weekdayDateFormat = {
   weekday: 'long',
 }
 
+const weekdayDateMonthFormat = {
+  month: 'long',
+  day: 'numeric',
+  weekday: 'long',
+}
+
 const shortDateFormat = {
   year: 'numeric',
   month: '2-digit',
@@ -38,4 +44,5 @@ module.exports = {
   dateFormat,
   shortDateFormat,
   weekdayDateFormat,
+  weekdayDateMonthFormat,
 }

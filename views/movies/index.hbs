@@ -1,11 +1,13 @@
 
 <section>
-<h2>{{movies.length}} movies are showing on {{weekdaydate chosenDate}} matching your filters</h2>
-<nav>
-<a href="{{previousDayUrl}}">Previous day</a>
-<a href="{{afterworkUrl}}">Showings only after 6pm</a>
-<a href="{{nextDayUrl}}">Next day</a>
-<a href="{{ugcIllimiteUrl}}">Only show cinemas accepting UGC Illimité</a>
+  <h2>
+    {{weekdaydate chosenDate}}
+  </h2>
+   <p>{{movies.length}} movies are showing on {{weekdaydate chosenDate}} matching your filters</p>
+<nav class="movies-filters">
+  {{#each calendarUrls}}
+    <a class="movies-filter {{class}}" href="{{url}}">{{label}}</a>
+  {{/each}}
 </nav>
 <div class='movies'>
   {{#each movies}}
