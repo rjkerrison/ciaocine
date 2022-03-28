@@ -13,7 +13,7 @@ const connection = mongoose
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
   .catch((err) => {
-    console.error('Error connecting to mongo: ', err)
+    console.error(`Error connecting to mongo: ${MONGO_URI}.`, err)
   })
 
 module.exports = connection
