@@ -21,5 +21,5 @@ hbs.registerHelper('ifGreaterThan', (v1, v2, options) => {
   return options.inverse(this)
 })
 hbs.registerHelper('stripProtocol', (url) => {
-  return url.replace(/^http(s?):\/\//, '//')
+  return url?.replace(/^http(s?):\/\//, '//')
 })
