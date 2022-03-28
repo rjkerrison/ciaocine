@@ -16,10 +16,11 @@ const seedShowtimes = async () => {
   const cinemas = await Cinema.find()
 
   for (let cinema of cinemas) {
-    await sleep(1000)
+    // Attempt to do a little rate limiting
+    await sleep(250)
     const result = await findShowtimesAndSave(cinema)
     if (result) {
-      console.log('finished for', { cinema })
+      console.log(`Finished importing showtimes for ${cinema.name}.`)
     }
   }
 
@@ -34,7 +35,7 @@ const findShowtimesAndSave = async (cinema) => {
 
     return population
   } catch (error) {
-    console.error('error for cinema', cinema, error)
+    console.error(`Error for cinema ${cinema.name}.`, error)
     return
   }
 }

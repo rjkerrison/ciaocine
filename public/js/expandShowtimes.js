@@ -4,8 +4,8 @@ function expandShowtimes(event) {
   const movieShowtimes = movieElement.querySelector('.movie-showtimes')
   movieShowtimes.classList.toggle('expanded')
   button.textContent = movieShowtimes.classList.contains('expanded')
-    ? 'Show more'
-    : 'Hide'
+    ? 'Hide'
+    : 'Show more'
 }
 
 function setup() {

@@ -51,12 +51,11 @@ const saveShowtimesFromAllocine = async ({
         cinema,
       })
 
-      console.log(`Result of time mapping:`, result)
-
+      //console.log(`Result of time mapping:`, result)
       return result
     })
   )
-  console.log(`Result of time mapped array:`, result)
+  //console.log(`Result of time mapped array:`, result)
   return result
 }
 
@@ -67,7 +66,7 @@ const saveShowtimeFromAllocine = async ({
   cinema,
 }) => {
   const showtime = await Showtime.findOneAndUpdate(
-    { allocineId },
+    { movie, cinema, startTime },
     { allocineId, movie, cinema, startTime },
     { upsert: true, new: true }
   )
