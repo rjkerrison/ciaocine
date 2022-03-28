@@ -1,40 +1,42 @@
-<h2>Your saved screenings</h2>
-<div class='calendar'>
-  {{#each calendarByDay}}
-    <div class='calendar-date'>
-      <h2 class='calendar-head'>
-        Date:
-        {{@key}}
-      </h2>
+<section>
+  <h2>Your saved screenings</h2>
+  <div class='calendar'>
+    {{#each calendarByDay}}
+      <div class='calendar-date'>
+        <h2 class='calendar-head'>
+          Date:
+          {{@key}}
+        </h2>
 
-      {{#each this}}
-        <div class='calendar-entry' data-calendar='{{_id}}'>
-          <h3 class='showtime'>
-            {{showtime.movie.title}}
-            at
-            {{showtime.timeString}}
-          </h3>
-          <picture>
-            <img
-              src='{{showtime.movie.poster}}'
-              alt='{{showtime.movie.title}}'
-            />
-          </picture>
+        {{#each this}}
+          <div class='calendar-entry' data-calendar='{{_id}}'>
+            <h3 class='showtime'>
+              {{showtime.movie.title}}
+              at
+              {{showtime.timeString}}
+            </h3>
+            <picture>
+              <img
+                src='{{showtime.movie.poster}}'
+                alt='{{showtime.movie.title}}'
+              />
+            </picture>
 
-          <p class='showtimes'>
-            <span class='showtime'>
-              {{showtime.cinema.name}}
-            </span>
-            <span class='showtime'>
-              {{showtime.cinema.address}}
-            </span>
-            <span class='showtime'>
-              {{showtime.cinema.zipcode}}
-            </span>
-          </p>
-          <button data-calendar='{{this._id}}'>Remove from calendar</button>
-        </div>
-      {{/each}}
-    </div>
-  {{/each}}
-</div>
+            <p class='showtimes'>
+              <span class='showtime'>
+                {{showtime.cinema.name}}
+              </span>
+              <span class='showtime'>
+                {{showtime.cinema.address}}
+              </span>
+              <span class='showtime'>
+                {{showtime.cinema.zipcode}}
+              </span>
+            </p>
+            <button data-calendar='{{this._id}}'>Remove from calendar</button>
+          </div>
+        {{/each}}
+      </div>
+    {{/each}}
+  </div>
+</section>
