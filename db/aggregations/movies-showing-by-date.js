@@ -9,18 +9,9 @@ const {
   unwindMovie,
 } = require('./steps')
 
-const getToday = () => {
-  const date = new Date(Date.now())
-  date.setUTCHours(0)
-  date.setUTCMinutes(0)
-  date.setUTCSeconds(0)
-  date.setUTCMilliseconds(0)
-  return date
-}
-
 const getMoviesForDate = async (date) => {
   const showtimes = await Showtime.aggregate([
-    matchDate(date || getToday()),
+    matchDate(date),
     sortByStartTime,
     populateCinema,
     unwindCinema,
@@ -31,6 +22,21 @@ const getMoviesForDate = async (date) => {
   return showtimes
 }
 
+const getMoviesBetweenTimes = async (fromDate, toDate, additionalFilters) => {
+  const showtimes = await Showtime.aggregate([
+    matchDate(fromDate, toDate),
+    sortByStartTime,
+    populateCinema,
+    ...additionalFilters,
+    unwindCinema,
+    groupByMovie,
+    populateMovieFromId,
+    unwindMovie,
+  ])
+  return showtimes
+}
+
 module.exports = {
   getMoviesForDate,
+  getMoviesBetweenTimes,
 }

@@ -141,7 +141,8 @@ picture img {
   transition: all 500ms;
 }
 
-.cinema:hover .overlay {
+.cinema:hover .overlay,
+.movie-showtime:hover .overlay {
   opacity: 1;
 }
 
@@ -212,4 +213,71 @@ button.favourite-cinema:hover {
   padding: 0;
   margin: 0;
   list-style: none;
+}
+
+.movies {
+  display: grid;
+  grid-template: auto / repeat(auto-fill, minmax(20rem, 1fr));
+}
+
+.movie-showtimes {
+  display: grid;
+  grid-template: auto / repeat(auto-fill, minmax(10rem, 1fr));
+}
+
+.movie-showtime {
+  padding: 1rem;
+  position: relative;
+}
+
+.movie-showtime .extra-info {
+  display: none;
+  margin: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-height: 100%;
+}
+
+.movie-showtime h3,
+.movie-showtime p {
+  margin: 0;
+}
+
+.movie-showtime:hover .extra-info {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.movie-showtime .overlay {
+  display: flex;
+  align-items: center;
+  height: 2rem;
+}
+
+button.add-to-calendar {
+  width: 1.5rem;
+  padding: 0;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+}
+
+.movie-showtime .overlay {
+  height: 100%;
+  z-index: 1;
+  top: 0;
+  transform: rotateX(0.5turn);
+}
+
+.movie-showtime {
+  transition: all 1s;
+}
+
+.movie-showtime:hover .overlay {
+  transform: rotateX(1turn);
 }

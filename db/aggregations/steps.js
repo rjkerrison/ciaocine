@@ -6,14 +6,17 @@ const match = (cinemaId) => ({
   },
 })
 
-const matchDate = (date, field = 'startTime') => {
-  console.log('matching date', date)
+const matchDate = (fromDate, toDate, field = 'startTime') => {
+  if (!toDate) {
+    toDate = new Date(fromDate)
+    toDate.setDate(fromDate.getDate() + 1)
+  }
 
   return {
     $match: {
       [field]: {
-        $gte: date,
-        //$lt: new Date(date + 86400000),
+        $gte: fromDate,
+        $lt: toDate,
       },
     },
   }
@@ -102,6 +105,12 @@ const groupByMovie = {
   },
 }
 
+const filterCinemaToUgcIllimite = {
+  $match: {
+    'cinema.member_cards.code': 106002,
+  },
+}
+
 module.exports = {
   match,
   matchDate,
@@ -115,4 +124,5 @@ module.exports = {
   unwindMovie,
   unwindCinema,
   groupByMovie,
+  filterCinemaToUgcIllimite,
 }
