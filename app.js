@@ -15,7 +15,7 @@ const app = express()
 require('./config')(app)
 
 app.locals.appTitle = `Ciaocine`
-app.locals.pageTitle = `Ciaocine`
+app.locals.pageTitle = `Home`
 app.locals.pageSubtitle = `Find cinema screenings in Paris`
 
 require('./routes')(app)

@@ -4,6 +4,7 @@
 @import url('./overlay.css');
 @import url('./popup.css');
 /* pages */
+@import url('./splash.css');
 @import url('./calendar.css');
 @import url('./cinema.css');
 @import url('./movies.css');

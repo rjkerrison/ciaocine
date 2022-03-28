@@ -11,7 +11,7 @@ body {
   color: #e6e3f4;
 }
 
-main {
+section {
   padding: 1rem 2rem;
 }
 
@@ -55,4 +55,9 @@ button:hover {
 
 .sr-only {
   font-size: 0;
+}
+
+footer {
+  display: flex;
+  padding: 2rem 1rem 1rem;
 }
