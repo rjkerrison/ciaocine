@@ -62,14 +62,39 @@ const getDaysUrls = (options, step, count) => {
   return results
 }
 
-const getUrls = (options) => {
-  const afterworkUrl = getMovieUrl({
+const getHourUrlInfo = (hour, options) => {
+  const label = `${hour}h`
+
+  if (hour === Number(options.fromHour)) {
+    return {
+      url: getMovieUrl({
+        ...options,
+        fromHour: null,
+      }),
+      label,
+      class: 'selected',
+    }
+  }
+
+  const url = getMovieUrl({
     ...options,
-    fromHour: 18,
+    fromHour: hour,
   })
+
+  return { url, label }
+}
+
+const getHoursUrls = (options) => {
+  const hours = [8, 10, 12, 14, 16, 18, 20, 22]
+  const results = hours.map((hour) => getHourUrlInfo(hour, options))
+  return results
+}
+
+const getUrls = (options) => {
   const ugcIllimiteUrl = getMovieUrl({
     ...options,
-    ugcIllimiteOnly: true,
+    // deselection
+    ugcIllimiteOnly: !options.ugcIllimiteOnly,
   })
 
   return {
@@ -82,7 +107,14 @@ const getUrls = (options) => {
       },
       ...getDaysUrls(options, 1, 3),
     ],
-    ugcIllimiteUrl,
+    hoursUrls: getHoursUrls(options),
+    filtersUrls: [
+      {
+        url: ugcIllimiteUrl,
+        label: 'Accepts UGC Illimité',
+        class: options.ugcIllimiteOnly ? 'selected' : null,
+      },
+    ],
   }
 }
 

@@ -1,3 +1,7 @@
+section.movies-section {
+  text-align: center;
+}
+
 section.movies-section h2 {
   font-size: 3rem;
 }
@@ -66,9 +70,16 @@ section.movies-section h2 {
   max-height: 100%;
 }
 
+.movie h3 {
+  font-size: 1.5rem;
+}
 .movie-showtime h3,
+.movie-showtime h4,
 .movie-showtime p {
   margin: 0;
+}
+.movie-showtime h4 {
+  font-size: 1.5rem;
 }
 
 .movie-showtime:hover .extra-info {
@@ -108,6 +119,8 @@ section.movies-section h2 {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
+  margin: 0.25rem;
+  justify-content: center;
 }
 
 .movies-filter {
