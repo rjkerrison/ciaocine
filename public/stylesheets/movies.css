@@ -1,0 +1,97 @@
+.movies {
+  display: grid;
+  grid-template: auto / repeat(auto-fill, minmax(30rem, 1fr));
+}
+
+.movie-showtimes {
+  display: grid;
+  grid-template: repeat(auto-fill, 5rem) / repeat(auto-fill, minmax(10rem, 1fr));
+  align-items: center;
+  justify-content: center;
+  grid-gap: 0.5rem;
+}
+
+.movie-showtime {
+  padding: 1rem;
+  position: relative;
+}
+
+.movie-showtime .extra-info {
+  display: none;
+  margin: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-height: 100%;
+}
+
+.movie-showtime h3,
+.movie-showtime p {
+  margin: 0;
+}
+
+.movie-showtime:hover .extra-info {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.movie-showtime .overlay {
+  display: flex;
+  align-items: center;
+  height: 2rem;
+}
+
+button.add-to-calendar {
+  width: 1.5rem;
+  padding: 0;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+}
+
+.movie-showtime .overlay {
+  height: 100%;
+  z-index: 1;
+  top: 0;
+  transform: rotateX(0.5turn);
+}
+
+.movie-showtime {
+  transition: all 1s;
+}
+
+.movie-showtime:hover .overlay {
+  transform: rotateX(1turn);
+}
+
+.movie {
+  display: grid;
+  grid-template-areas: 'info showtimes';
+  grid-template-columns: 1fr 2fr;
+  text-align: center;
+}
+
+.movie-showtime {
+  display: flex;
+  align-items: center;
+  background-color: #533ea7;
+}
+
+/* style.css | http://localhost:3000/stylesheets/style.css */
+
+.movie-showtimes {
+  /* grid-template: repeat(auto-fill, 5rem) / repeat(auto-fill, minmax(10rem, 1fr)); */
+  grid-template: repeat(auto-fill, 4rem) / repeat(auto-fill, minmax(10rem, 1fr));
+}
+
+.movie-showtime {
+  height: 100%;
+}
+
+.movie-showtime {
+  justify-content: center;
+}
