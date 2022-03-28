@@ -1,19 +1,36 @@
 
-<section>
-<h2>{{movies.length}} movies are showing on {{weekdaydate chosenDate}} matching your filters</h2>
+<section class='movies-section'>
+  <h2>
+    {{weekdaydate chosenDate}}
+  </h2>
+   <p>{{movies.length}} movies are showing on {{weekdaydate chosenDate}} matching your filters</p>
 <nav>
-<a href="{{previousDayUrl}}">Previous day</a>
-<a href="{{afterworkUrl}}">Showings only after 6pm</a>
-<a href="{{nextDayUrl}}">Next day</a>
-<a href="{{ugcIllimiteUrl}}">Only show cinemas accepting UGC Illimité</a>
+  <div class="movies-filters">
+    <p>sur le</p>
+    {{#each calendarUrls}}
+      <a class="movies-filter {{class}}" href="{{url}}">{{label}}</a>
+    {{/each}}
+  </div>
+  <div class="movies-filters">
+    <p>à partir de</p>
+    {{#each hoursUrls}}
+      <a class="movies-filter {{class}}" href="{{url}}">{{label}}</a>
+    {{/each}}
+  </div>
+  <div class="movies-filters">
+    <p>+ de filtres:</p>
+    {{#each filtersUrls}}
+      <a class="movies-filter {{class}}" href="{{url}}">{{label}}</a>
+    {{/each}}
+  </div>
 </nav>
 <div class='movies'>
   {{#each movies}}
     <div class='movie overlay-container'>
       {{#with movie}}
-        <h2 class='movie-heading'>
+        <h3 class='movie-heading'>
           {{title}}
-        </h2>
+        </h3>
         <picture class="poster">
           <img
             src='{{stripProtocol poster}}'
@@ -25,9 +42,9 @@
       <div class='movie-showtimes'>
         {{#each showtimes}}
           <div class='movie-showtime overlay-container'>
-            <h3>
+            <h4>
               {{time startTime}}
-            </h3>
+            </h4>
             <div class="overlay">
               {{> addToCalendar showtime=_id}}
               <p class="extra-info">
