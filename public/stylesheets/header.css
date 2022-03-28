@@ -2,6 +2,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #34276c;
+  font-family: Courier, 'Courier New', monospace;
+}
+
+.app-header h1 {
+  padding: 1rem;
+  margin: 0;
 }
 
 .account-header {

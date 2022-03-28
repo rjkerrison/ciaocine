@@ -41,6 +41,7 @@ router.get('/:id', async (req, res, next) => {
 
     res.render('cinema/view', { cinema, showtimes })
   } catch (error) {
+    console.error('ERROR OCCURRED IN CINEMA ROUTE')
     next(error)
   }
 })
