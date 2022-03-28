@@ -1,6 +1,7 @@
 import removeFromCalendar from '/js/removeFromCalendar.js'
 import addToCalendar from '/js/addToCalendar.js'
 import favouriteCinema from '/js/favouriteCinemas.js'
+import expandShowtimes from '/js/expandShowtimes.js'
 import popupMessage from '/js/popupMessage.js'
 
 document.addEventListener(
@@ -9,6 +10,7 @@ document.addEventListener(
     console.log('ciaocine JS imported successfully!')
     const { popupWithMessage } = popupMessage.setup()
 
+    expandShowtimes.setup()
     removeFromCalendar.setup({ popupWithMessage })
     addToCalendar.setup({ popupWithMessage })
     favouriteCinema.setup({ popupWithMessage })

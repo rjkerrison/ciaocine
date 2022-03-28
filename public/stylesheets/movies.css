@@ -1,19 +1,57 @@
 .movies {
   display: grid;
   grid-template: auto / repeat(auto-fill, minmax(30rem, 1fr));
+  grid-gap: 1rem;
 }
 
-.movie-showtimes {
+.movie {
   display: grid;
-  grid-template: repeat(auto-fill, 5rem) / repeat(auto-fill, minmax(10rem, 1fr));
-  align-items: center;
-  justify-content: center;
+  grid-template-areas:
+    'poster heading'
+    'poster showtimes';
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 5rem 1fr;
+  text-align: center;
+}
+.movie .poster {
+  grid-area: poster;
+  justify-self: center;
+  align-self: center;
+}
+
+.movie .movie-heading {
+  grid-area: heading;
+  margin: 0;
+  align-self: center;
+  justify-self: center;
+}
+
+.movie .movie-showtimes {
+  grid-area: showtimes;
+  display: grid;
+  grid-template: repeat(auto-fill, 4rem) / repeat(auto-fill, minmax(10rem, 1fr));
   grid-gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  height: 10rem;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 1rem;
+}
+
+.movie-showtimes.expanded {
+  height: min-content;
 }
 
 .movie-showtime {
-  padding: 1rem;
   position: relative;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: #533ea7;
+  padding: 1rem;
+  transition: all 1s;
 }
 
 .movie-showtime .extra-info {
@@ -39,6 +77,14 @@
   display: flex;
   align-items: center;
   height: 2rem;
+  height: 100%;
+  z-index: 1;
+  top: 0;
+  transform: rotateX(0.5turn);
+}
+
+.movie-showtime:hover .overlay {
+  transform: rotateX(1turn);
 }
 
 button.add-to-calendar {
@@ -51,47 +97,4 @@ button.add-to-calendar {
   position: absolute;
   top: -1rem;
   right: -1rem;
-}
-
-.movie-showtime .overlay {
-  height: 100%;
-  z-index: 1;
-  top: 0;
-  transform: rotateX(0.5turn);
-}
-
-.movie-showtime {
-  transition: all 1s;
-}
-
-.movie-showtime:hover .overlay {
-  transform: rotateX(1turn);
-}
-
-.movie {
-  display: grid;
-  grid-template-areas: 'info showtimes';
-  grid-template-columns: 1fr 2fr;
-  text-align: center;
-}
-
-.movie-showtime {
-  display: flex;
-  align-items: center;
-  background-color: #533ea7;
-}
-
-/* style.css | http://localhost:3000/stylesheets/style.css */
-
-.movie-showtimes {
-  /* grid-template: repeat(auto-fill, 5rem) / repeat(auto-fill, minmax(10rem, 1fr)); */
-  grid-template: repeat(auto-fill, 4rem) / repeat(auto-fill, minmax(10rem, 1fr));
-}
-
-.movie-showtime {
-  height: 100%;
-}
-
-.movie-showtime {
-  justify-content: center;
 }

@@ -8,9 +8,14 @@
   background-color: #1c153a;
   padding: 0.25rem;
   transition: all 500ms;
+  z-index: 1;
+}
+
+.overlay-container {
+  position: relative;
 }
 
 .cinema:hover .overlay,
-.movie-showtime:hover .overlay {
+.overlay-container:hover > .overlay {
   opacity: 1;
 }
