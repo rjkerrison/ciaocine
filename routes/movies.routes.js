@@ -2,6 +2,7 @@ const {
   getMoviesBetweenTimes,
 } = require('../db/aggregations/movies-showing-by-date')
 const { filterCinemaToUgcIllimite } = require('../db/aggregations/steps')
+const { APP_URL } = require('../utils/consts')
 const { formatDate, dateFormat } = require('../utils/formatDate')
 const router = require('express').Router()
 
@@ -24,7 +25,7 @@ const appendSearchParams = (url, params) => {
 }
 
 const getMovieUrl = (params) => {
-  return appendSearchParams(new URL('http://localhost:3000/movies'), {
+  return appendSearchParams(new URL(`${APP_URL}/movies`), {
     ...params,
     date: formatDate(params.date, dateFormat),
   })
