@@ -8,17 +8,18 @@ section.movies-section h2 {
 
 .movies {
   display: grid;
-  grid-template: auto / repeat(auto-fill, minmax(30rem, 1fr));
+  grid-template: auto / auto;
   grid-gap: 1rem;
 }
 
 .movie {
   display: grid;
   grid-template-areas:
-    'poster heading'
-    'poster showtimes';
-  grid-template-columns: 1fr 2fr;
-  grid-template-rows: 5rem 1fr;
+    'poster'
+    'heading'
+    'showtimes';
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 5rem auto;
   text-align: center;
 }
 .movie .poster {
@@ -147,4 +148,18 @@ section.movies-section h2 {
 .movies-filter.selected:hover {
   background-color: #725cc9;
   color: white;
+}
+
+@media screen and (min-width: 600px) {
+  .movies {
+    grid-template: auto / repeat(auto-fill, minmax(30rem, 1fr));
+  }
+
+  .movie {
+    grid-template-areas:
+      'poster heading'
+      'poster showtimes';
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 5rem 1fr;
+  }
 }
