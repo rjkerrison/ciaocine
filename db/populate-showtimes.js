@@ -9,9 +9,6 @@ const populateShowtimes = async (showtimes, cinema) => {
         saveShowtimesFromAllocine({ ...s, movie, cinema })
       )
       const result = await Promise.all(saveShowtimesPromises)
-
-      console.log(`Result of saving:`, result)
-
       return result
     }
   )
@@ -51,11 +48,9 @@ const saveShowtimesFromAllocine = async ({
         cinema,
       })
 
-      //console.log(`Result of time mapping:`, result)
       return result
     })
   )
-  //console.log(`Result of time mapped array:`, result)
   return result
 }
 
