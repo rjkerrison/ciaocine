@@ -1,5 +1,10 @@
 <header class='app-header'>
-  <h1>Ciaocine: {{pageTitle}}</h1>
+  <div class="header-main-row">
+    <h1>Ciaocine: {{pageTitle}}</h1>
+    <button class="collapse-toggle" data-target="main-nav" role="switch">&UpDownArrow;</button>
+  </div>
+  <div class="mobile-collapsible collapsed" id="main-nav">
+
   <nav aria-label='main navigation'>
     <a href='/cinema'>Cinemas</a>
     <a href='/movies'>Movies</a>
@@ -29,5 +34,7 @@
         </ul>
       </nav>
     {{/if}}
+
+  </div>
   </div>
 </header>

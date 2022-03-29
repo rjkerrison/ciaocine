@@ -71,3 +71,28 @@ main {
   width: 100%;
   overflow-x: hidden;
 }
+
+.mobile-collapsible {
+  height: calc(100vh - 5rem);
+  transition: all 1s ease-in-out;
+  overflow-y: hidden;
+}
+
+@media screen and (max-width: 599px) {
+  .mobile-collapsible.collapsed {
+    height: 0;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .mobile-collapsible {
+    height: unset;
+  }
+  .mobile-collapsible.collapsed {
+    height: unset;
+  }
+
+  .collapse-toggle {
+    display: none;
+  }
+}

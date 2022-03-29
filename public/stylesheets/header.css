@@ -13,9 +13,21 @@
   z-index: 1;
 }
 
-.app-header h1 {
+.app-header .header-main-row {
+  display: flex;
   height: 5rem;
   padding: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-header .mobile-collapsible {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header h1 {
+  padding: 0;
   margin: 0;
   font-size: 1.75rem;
 }
@@ -69,5 +81,12 @@
 
   .app-header nav {
     flex-direction: row;
+  }
+
+  .app-header .mobile-collapsible {
+    display: contents;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-grow: 100%;
   }
 }
