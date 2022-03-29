@@ -142,7 +142,7 @@ router.get('/', async (req, res, next) => {
 
   res.render('movies', {
     movies,
-    pageTitle: `Movies showing ${formatDate(fromDate, dateFormat)}`,
+    pageTitle: `What's On`,
     chosenDate: fromDate,
     ...getUrls({ ...req.query, date: fromDate }),
   })
