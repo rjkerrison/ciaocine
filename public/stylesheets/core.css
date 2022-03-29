@@ -9,6 +9,8 @@ body {
   background-image: linear-gradient(#1c153a 0, #34276c 50vh, #533ea7 100vh);
   background-attachment: fixed;
   color: #e6e3f4;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 section {
@@ -63,4 +65,9 @@ button:hover {
 footer {
   display: flex;
   padding: 2rem 1rem 1rem;
+}
+
+main {
+  width: 100%;
+  overflow-x: hidden;
 }
