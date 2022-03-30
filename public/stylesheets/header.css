@@ -21,6 +21,11 @@
   align-items: center;
 }
 
+body {
+  /* to allow for the fixed header */
+  padding-top: 5rem;
+}
+
 .app-header .mobile-collapsible {
   display: flex;
   flex-direction: column;
