@@ -95,7 +95,6 @@ section.movies-section h2 {
   align-items: center;
   height: 2rem;
   height: 100%;
-  z-index: 1;
   top: 0;
   transform: rotateX(0.5turn);
 }
