@@ -26,6 +26,7 @@ section.movies-section h2 {
   grid-area: poster;
   justify-self: center;
   align-self: center;
+  box-shadow: 0.5rem 0.5rem 1rem -0.25rem black;
 }
 
 .movie .movie-heading {
@@ -38,14 +39,13 @@ section.movies-section h2 {
 .movie .movie-showtimes {
   grid-area: showtimes;
   display: grid;
-  grid-template: repeat(auto-fill, 4rem) / repeat(auto-fill, minmax(10rem, 1fr));
+  grid-template: repeat(auto-fill, 4rem) / repeat(auto-fill, minmax(33%, 1fr));
   grid-gap: 0.5rem;
   justify-content: center;
   align-items: center;
   height: 10rem;
   overflow-x: hidden;
   overflow-y: scroll;
-  padding: 1rem;
 }
 
 .movie-showtimes.expanded {
@@ -83,7 +83,8 @@ section.movies-section h2 {
   font-size: 1.5rem;
 }
 
-.movie-showtime:hover .extra-info {
+.movie-showtime:hover .extra-info,
+.movie-showtime.show-overlay .extra-info {
   display: block;
   width: 100%;
   text-align: center;
@@ -99,7 +100,8 @@ section.movies-section h2 {
   transform: rotateX(0.5turn);
 }
 
-.movie-showtime:hover .overlay {
+.movie-showtime:hover .overlay,
+.movie-showtime.show-overlay .overlay {
   transform: rotateX(1turn);
 }
 

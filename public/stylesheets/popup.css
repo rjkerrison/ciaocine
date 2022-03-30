@@ -8,10 +8,10 @@
   justify-content: center;
   transition: all 1s;
   font-size: 2rem;
+  z-index: 2;
 }
 
 .popup {
-  width: 50%;
   background: #8ad38a;
   color: #3f3275;
   box-shadow: 0.5rem 0.5rem 0.25rem -0.25rem #8ad38a67;

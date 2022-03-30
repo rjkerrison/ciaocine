@@ -63,7 +63,7 @@ button:hover {
 }
 
 footer {
-  display: flex;
+  text-align: center;
   padding: 2rem 1rem 1rem;
 }
 

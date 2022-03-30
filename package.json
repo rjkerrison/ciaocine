@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js -e js,hbs,css"
+    "dev": "nodemon server.js -e js,hbs,css",
+    "seed": "node bin/seed.js",
+    "seed:clean": "node bin/removeShowtimes.js",
+    "seed:refresh": "npm run seed:clean && npm run seed"
   },
   "dependencies": {
     "axios": "^0.26.1",

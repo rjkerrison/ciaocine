@@ -11,7 +11,7 @@ const {
 const router = require('express').Router()
 
 const getDateHour = (d, hour) => {
-  const date = new Date(d)
+  const date = new Date(Date.now())
   date.setHours(hour)
   date.setMinutes(0)
   date.setSeconds(0)

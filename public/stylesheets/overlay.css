@@ -16,6 +16,7 @@
 }
 
 .cinema:hover .overlay,
-.overlay-container:hover > .overlay {
+.overlay-container:hover > .overlay,
+.overlay-container.show-overlay > .overlay {
   opacity: 1;
 }
