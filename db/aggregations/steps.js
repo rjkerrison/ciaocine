@@ -1,8 +1,8 @@
 const { default: mongoose } = require('mongoose')
 
-const match = (cinemaId) => ({
+const match = (value, name = 'cinema') => ({
   $match: {
-    cinema: new mongoose.Types.ObjectId(cinemaId),
+    [name]: new mongoose.Types.ObjectId(value),
   },
 })
 
@@ -88,6 +88,28 @@ const flattenShowtimeMovie = {
   },
 }
 
+const populateShowtime = {
+  $lookup: {
+    from: 'showtimes',
+    localField: 'showtime',
+    foreignField: '_id',
+    as: 'showtime',
+  },
+}
+
+const unwindShowtime = {
+  $unwind: '$showtime',
+}
+
+const projectToShowtime = {
+  $project: {
+    _id: '$showtime._id',
+    movie: '$showtime.movie',
+    cinema: '$showtime.cinema',
+    startTime: '$showtime.startTime',
+  },
+}
+
 const unwindCinema = {
   $unwind: '$cinema',
 }
@@ -120,9 +142,12 @@ module.exports = {
   populateMovie,
   populateCinema,
   populateMovieFromId,
+  populateShowtime,
   flattenShowtimeMovie,
+  projectToShowtime,
   unwindMovie,
   unwindCinema,
+  unwindShowtime,
   groupByMovie,
   filterCinemaToUgcIllimite,
 }

@@ -11,26 +11,23 @@
         {{#each this}}
           <div class='calendar-entry' data-calendar='{{_id}}'>
             <h3 class='showtime'>
-              {{showtime.movie.title}}
+              {{movie.title}}
               at
-              {{showtime.timeString}}
+              {{timeString}}
             </h3>
             <picture>
-              <img
-                src='{{stripProtocol showtime.movie.poster}}'
-                alt='{{showtime.movie.title}}'
-              />
+              <img src='{{stripProtocol movie.poster}}' alt='{{movie.title}}' />
             </picture>
 
             <p class='showtimes'>
               <span class='showtime'>
-                {{showtime.cinema.name}}
+                {{cinema.name}}
               </span>
               <span class='showtime'>
-                {{showtime.cinema.address}}
+                {{cinema.address}}
               </span>
               <span class='showtime'>
-                {{showtime.cinema.zipcode}}
+                {{cinema.zipcode}}
               </span>
             </p>
             <button data-calendar='{{this._id}}'>Remove from calendar</button>
