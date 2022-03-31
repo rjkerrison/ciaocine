@@ -1,10 +1,12 @@
 function expand({ target }) {
   const container = target.closest('.expander-container')
-  container.classList.toggle('expanded')
-  target.textContent = container.classList.contains('expanded')
-    ? 'Hide'
-    : 'Show more'
-  container.scrollIntoView()
+  const isExpanded = container.classList.toggle('expanded')
+
+  target.textContent = isExpanded ? 'Hide' : 'Show more'
+  container.scrollIntoView({
+    behavior: 'smooth',
+    block: isExpanded ? 'end' : 'start',
+  })
 }
 
 function setup() {
