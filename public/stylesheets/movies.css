@@ -43,9 +43,6 @@ section.movies-section h2 {
   grid-gap: 0.5rem;
   justify-content: center;
   align-items: center;
-  height: 10rem;
-  overflow-x: hidden;
-  overflow-y: scroll;
 }
 
 .movie-showtimes.expanded {

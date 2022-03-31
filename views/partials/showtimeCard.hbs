@@ -1,0 +1,13 @@
+<div class='movie-showtime overlay-container {{class}}'>
+    <h4>
+        {{time startTime}}
+    </h4>
+    <div class="overlay">
+        {{> addToCalendar showtime=_id}}
+        <p class="extra-info">
+        <span>
+            {{cinema.name}}
+        </span>
+        </p>
+    </div>
+</div>

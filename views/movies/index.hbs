@@ -26,7 +26,7 @@
 </nav>
 <div class='movies'>
   {{#each movies}}
-    <div class='movie overlay-container'>
+    <div class='movie overlay-container expander-container'>
       {{#with movie}}
         <h3 class='movie-heading'>
           {{title}}
@@ -40,30 +40,22 @@
       {{/with}}
 
       <div class='movie-showtimes'>
-        {{#each showtimes}}
-          <div class='movie-showtime overlay-container'>
-            <h4>
-              {{time startTime}}
-            </h4>
-            <div class="overlay">
-              {{> addToCalendar showtime=_id}}
-              <p class="extra-info">
-                <span>
-                  {{cinema.name}}
-                </span>
-              </p>
-            </div>
-          </div>
-        {{/each}}
-      </div>
-
-      {{#ifGreaterThan showtimes.length 4}}
-        <div class="overlay">
-          <button class="expand-showtimes">
+        {{#ifGreaterThan showtimes.length 6}}
+          {{#eachSlice ../showtimes 0 5}}
+            {{> showtimeCard this=this}}
+          {{/eachSlice}}
+          {{#eachSlice ../showtimes 5 showtimes.length}}
+            {{> showtimeCard this=this class='expanded-only'}}
+          {{/eachSlice}}
+          <div class="movie-showtime expander">
             Show more
-          </button>
-        </div>
-      {{/ifGreaterThan}}
+          </div>
+        {{else}}
+          {{#each ../showtimes}}
+            {{> showtimeCard this=this}}
+          {{/each}}
+        {{/ifGreaterThan}}
+      </div>
     </div>
   {{/each}}
 </div>

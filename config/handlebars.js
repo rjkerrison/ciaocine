@@ -23,3 +23,13 @@ hbs.registerHelper('ifGreaterThan', (v1, v2, options) => {
 hbs.registerHelper('stripProtocol', (url) => {
   return url?.replace(/^http(s?):\/\//, '//')
 })
+
+hbs.registerHelper('eachSlice', function (array, start, end, options) {
+  if (!array || array.length == 0) {
+    return options.inverse(this)
+  }
+
+  const items = array.slice(start, end)
+  const result = items.map((item) => options.fn(item))
+  return result.join('')
+})
