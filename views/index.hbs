@@ -17,7 +17,7 @@
       <strong>{{time startTime}}</strong>
       on
       <strong>{{date startTime}}</strong>?
-      {{> addToCalendar showtime=_id}}
+      {{> addToCalendar showtime=this}}
     </p>
     <picture><img src='{{stripProtocol movie.poster}}' alt='{{movie.title}}' /></picture>
   {{/with}}
