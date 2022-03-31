@@ -1,0 +1,7 @@
+.expander-container .expanded-only {
+  display: none;
+}
+
+.expander-container.expanded .expanded-only {
+  display: block;
+}

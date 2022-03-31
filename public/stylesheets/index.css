@@ -2,6 +2,7 @@
 @import url('./core.css');
 @import url('./header.css');
 @import url('./overlay.css');
+@import url('./expander.css');
 @import url('./popup.css');
 /* pages */
 @import url('./splash.css');

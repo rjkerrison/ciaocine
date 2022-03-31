@@ -10,7 +10,7 @@
   top: 0;
   left: 0;
   width: 100vw;
-  z-index: 1;
+  z-index: 2;
 }
 
 .app-header .header-main-row {
@@ -21,6 +21,11 @@
   align-items: center;
 }
 
+body {
+  /* to allow for the fixed header */
+  padding-top: 5rem;
+}
+
 .app-header .mobile-collapsible {
   display: flex;
   flex-direction: column;
@@ -29,7 +34,7 @@
 .app-header h1 {
   padding: 0;
   margin: 0;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
 }
 
 .app-header nav {

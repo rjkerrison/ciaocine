@@ -26,6 +26,7 @@ section.movies-section h2 {
   grid-area: poster;
   justify-self: center;
   align-self: center;
+  box-shadow: 0.5rem 0.5rem 1rem -0.25rem black;
 }
 
 .movie .movie-heading {
@@ -33,19 +34,19 @@ section.movies-section h2 {
   margin: 0;
   align-self: center;
   justify-self: center;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .movie .movie-showtimes {
   grid-area: showtimes;
   display: grid;
-  grid-template: repeat(auto-fill, 4rem) / repeat(auto-fill, minmax(10rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(33%, 1fr));
+  grid-auto-rows: 4rem;
   grid-gap: 0.5rem;
   justify-content: center;
   align-items: center;
-  height: 10rem;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  padding: 1rem;
 }
 
 .movie-showtimes.expanded {
@@ -83,7 +84,8 @@ section.movies-section h2 {
   font-size: 1.5rem;
 }
 
-.movie-showtime:hover .extra-info {
+.movie-showtime:hover .extra-info,
+.movie-showtime.show-overlay .extra-info {
   display: block;
   width: 100%;
   text-align: center;
@@ -94,12 +96,12 @@ section.movies-section h2 {
   align-items: center;
   height: 2rem;
   height: 100%;
-  z-index: 1;
   top: 0;
   transform: rotateX(0.5turn);
 }
 
-.movie-showtime:hover .overlay {
+.movie-showtime:hover .overlay,
+.movie-showtime.show-overlay .overlay {
   transform: rotateX(1turn);
 }
 
@@ -122,6 +124,8 @@ section.movies-section h2 {
   gap: 0.25rem;
   margin: 0.25rem;
   justify-content: center;
+  list-style: none;
+  padding: 0;
 }
 
 .movies-filter {
@@ -131,6 +135,7 @@ section.movies-section h2 {
   justify-content: center;
   background-color: #3f3275;
   padding: 1rem;
+  margin: 0;
   transition: all 1s;
   border-radius: 0.25rem;
   color: white;
@@ -140,12 +145,12 @@ section.movies-section h2 {
   background-color: #725cc9;
 }
 
-.movies-filter.selected {
+.selected .movies-filter {
   background-color: #73c973;
   color: #3f3275;
 }
 
-.movies-filter.selected:hover {
+.selected .movies-filter:hover {
   background-color: #725cc9;
   color: white;
 }

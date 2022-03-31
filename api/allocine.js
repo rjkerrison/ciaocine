@@ -38,6 +38,10 @@ const getShowtimes = async (allocineCinemaId) => {
   const { data } = await axios(config)
   const { movieShowtimes, place } = data.feed.theaterShowtimes[0]
 
+  if (!movieShowtimes) {
+    return []
+  }
+
   const showtimes = movieShowtimes.map(fromAllocineApiToShowtime)
   return showtimes
 }

@@ -5,28 +5,13 @@
   </h2>
    <p>{{movies.length}} movies are showing on {{weekdaydate chosenDate}} matching your filters</p>
 <nav>
-  <div class="movies-filters">
-    <p>sur le</p>
-    {{#each calendarUrls}}
-      <a class="movies-filter {{class}}" href="{{url}}">{{label}}</a>
-    {{/each}}
-  </div>
-  <div class="movies-filters">
-    <p>à partir de</p>
-    {{#each hoursUrls}}
-      <a class="movies-filter {{class}}" href="{{url}}">{{label}}</a>
-    {{/each}}
-  </div>
-  <div class="movies-filters">
-    <p>+ de filtres:</p>
-    {{#each filtersUrls}}
-      <a class="movies-filter {{class}}" href="{{url}}">{{label}}</a>
-    {{/each}}
-  </div>
+  {{> moviesFilters label='sur le' urls=calendarUrls}}
+  {{> moviesFilters label='à partir de' urls=hoursUrls}}
+  {{> moviesFilters label='+ de filtres' urls=filtersUrls}}
 </nav>
 <div class='movies'>
   {{#each movies}}
-    <div class='movie overlay-container'>
+    <div class='movie overlay-container expander-container'>
       {{#with movie}}
         <h3 class='movie-heading'>
           {{title}}
@@ -40,30 +25,22 @@
       {{/with}}
 
       <div class='movie-showtimes'>
-        {{#each showtimes}}
-          <div class='movie-showtime overlay-container'>
-            <h4>
-              {{time startTime}}
-            </h4>
-            <div class="overlay">
-              {{> addToCalendar showtime=_id}}
-              <p class="extra-info">
-                <span>
-                  {{cinema.name}}
-                </span>
-              </p>
-            </div>
-          </div>
-        {{/each}}
-      </div>
-
-      {{#ifGreaterThan showtimes.length 4}}
-        <div class="overlay">
-          <button class="expand-showtimes">
+        {{#ifGreaterThan showtimes.length 6}}
+          {{#eachSlice ../showtimes 0 5}}
+            {{> showtimeCard this=this}}
+          {{/eachSlice}}
+          {{#eachSlice ../showtimes 5 showtimes.length}}
+            {{> showtimeCard this=this class='expanded-only'}}
+          {{/eachSlice}}
+          <div class="movie-showtime expander">
             Show more
-          </button>
-        </div>
-      {{/ifGreaterThan}}
+          </div>
+        {{else}}
+          {{#each ../showtimes}}
+            {{> showtimeCard this=this}}
+          {{/each}}
+        {{/ifGreaterThan}}
+      </div>
     </div>
   {{/each}}
 </div>
