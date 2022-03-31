@@ -5,7 +5,7 @@ function expand({ target }) {
   target.textContent = isExpanded ? 'Hide' : 'Show more'
   container.scrollIntoView({
     behavior: 'smooth',
-    block: isExpanded ? 'end' : 'start',
+    block: 'center',
   })
 }
 

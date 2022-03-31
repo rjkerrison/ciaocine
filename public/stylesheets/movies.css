@@ -124,6 +124,8 @@ section.movies-section h2 {
   gap: 0.25rem;
   margin: 0.25rem;
   justify-content: center;
+  list-style: none;
+  padding: 0;
 }
 
 .movies-filter {
@@ -133,6 +135,7 @@ section.movies-section h2 {
   justify-content: center;
   background-color: #3f3275;
   padding: 1rem;
+  margin: 0;
   transition: all 1s;
   border-radius: 0.25rem;
   color: white;
@@ -142,12 +145,12 @@ section.movies-section h2 {
   background-color: #725cc9;
 }
 
-.movies-filter.selected {
+.selected .movies-filter {
   background-color: #73c973;
   color: #3f3275;
 }
 
-.movies-filter.selected:hover {
+.selected .movies-filter:hover {
   background-color: #725cc9;
   color: white;
 }

@@ -3,15 +3,11 @@ const {
 } = require('../db/aggregations/movies-showing-by-date')
 const { filterCinemaToUgcIllimite } = require('../db/aggregations/steps')
 const { APP_URL } = require('../utils/consts')
-const {
-  formatDate,
-  dateFormat,
-  weekdayDateMonthFormat,
-} = require('../utils/formatDate')
+const { formatDate, weekdayDateMonthFormat } = require('../utils/formatDate')
 const router = require('express').Router()
 
 const getDateHour = (d, hour) => {
-  const date = new Date(Date.now())
+  const date = new Date(d)
   date.setHours(hour)
   date.setMinutes(0)
   date.setSeconds(0)
@@ -29,9 +25,16 @@ const appendSearchParams = (url, params) => {
 }
 
 const getMovieUrl = (params) => {
+  let date
+  try {
+    date = params.date.toISOString()
+  } catch {
+    date = new Date(Date.now()).toISOString()
+  }
+
   return appendSearchParams(new URL(`${APP_URL}/movies`), {
     ...params,
-    date: formatDate(params.date, dateFormat),
+    date,
   })
 }
 
@@ -81,7 +84,7 @@ const getHourUrlInfo = (hour, options) => {
     fromHour: hour,
   })
 
-  return { url, label }
+  return { url, label, class: 'expanded-only' }
 }
 
 const getHoursUrls = (options) => {
@@ -128,6 +131,7 @@ router.get('/', async (req, res, next) => {
   } = req.query
   const fromDate = getDateHour(date, fromHour)
   const toDate = getDateHour(date, toHour)
+  console.log({ date, query: req.query, fromDate, toDate })
 
   const additionalFilters = []
   if (Boolean(ugcIllimiteOnly)) {
