@@ -1,6 +1,10 @@
+const {
+  getCalendarForUserGroupByDate,
+} = require('../db/aggregations/calendar-by-date')
 const isLoggedIn = require('../middleware/isLoggedIn')
 const Calendar = require('../models/Calendar.model')
 const Showtime = require('../models/Showtime.model')
+const { formatDate } = require('../utils/formatDate')
 
 const router = require('express').Router()
 
@@ -48,7 +52,11 @@ router.delete('/:calendarId', isLoggedIn, async (req, res, next) => {
 
 router.get('/', isLoggedIn, async (req, res, next) => {
   try {
-    const calendarByDay = await getUserCalendarByDay(req.user._id)
+    const calendarDays = await getCalendarForUserGroupByDate(req.user._id)
+    const calendarByDay = Object.fromEntries(
+      calendarDays.map(({ _id, showtimes }) => [_id, showtimes])
+    )
+
     const profilePictureUrl =
       req.user.profilePictureUrl || 'https://www.fillmurray.com/200/200'
 
@@ -73,16 +81,17 @@ const getUserCalendarByDay = async (userId) => {
 }
 
 const groupByDay = (dict, seance) => {
+  seance.showtime
+
   const date = seance.showtime.startTime.toLocaleDateString('en-GB')
   if (!dict[date]) {
     dict[date] = []
   }
-  let { format } = Intl.DateTimeFormat('fr-FR', {
+
+  seance.showtime.timeString = formatDate(seance.showtime.startTime, {
     hour: 'numeric',
     minute: 'numeric',
   })
-
-  seance.showtime.timeString = format(seance.showtime.startTime)
   dict[date].push(seance)
   dict[date].sort(bySeanceTime)
   return dict
