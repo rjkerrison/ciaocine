@@ -1,0 +1,23 @@
+:root {
+  --dark: #1c153a;
+  --mid: #34276c;
+  --light: #533ea7;
+  --text: #e6e3f4;
+  --link: #00b7ff;
+
+  --contrast: #8ad38a;
+  --contrast-shadow: #8ad38a67;
+
+  --splash-gradient-start: var(--dark);
+  --splash-gradient-midpoint: var(--mid);
+  --splash-gradient-end: var(--light);
+  --splash-shadow: var(--dark);
+  --popup-background-color: var(--contrast);
+  --popup-shadow: var(--contrast-shadow);
+
+  --popup-text-color: #3f3275;
+
+  --button-hover-background: #96dc96;
+  --button-shadow: #533ea791;
+  --button-border: #3d2a8a;
+}

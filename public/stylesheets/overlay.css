@@ -5,7 +5,7 @@
   left: 0;
   width: 100%;
   text-align: center;
-  background-color: #1c153a;
+  background-color: var(--dark);
   padding: 0.25rem;
   transition: all 500ms;
   z-index: 1;

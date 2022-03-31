@@ -21,10 +21,14 @@ body {
   padding: 0;
   margin: 0;
   font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
-  background-image: linear-gradient(#1c153a 0, #34276c 50%, #533ea7 100%);
+  background-image: linear-gradient(
+    var(--dark) 0,
+    var(--mid) 50%,
+    var(--light) 100%
+  );
   background-attachment: fixed;
   background-position: center bottom;
-  color: #e6e3f4;
+  color: var(--text);
   max-width: 100vw;
   overflow-x: hidden;
 }
@@ -34,7 +38,7 @@ section {
 }
 
 a {
-  color: #00b7ff;
+  color: var(--link);
 }
 
 h2,
@@ -57,21 +61,21 @@ picture img {
 
 button {
   font-size: 1.25rem;
-  color: #1c153a;
+  color: var(--dark);
   padding: 0.25rem;
   margin: 0.125rem;
   border-radius: 0.25rem;
   transition: all 500ms;
   cursor: pointer;
-  background-color: #8ad38a;
-  border: 1px solid #533ea7;
-  box-shadow: 0rem 0.5rem 0.5rem -0.25rem #e5ccf091;
+  background-color: var(--contrast);
+  border: 1px solid var(--light);
+  box-shadow: 0rem 0.5rem 0.5rem -0.25rem var(--button-shadow);
 }
 button:hover {
-  background-color: #96dc96;
+  background-color: var(--button-hover-background);
   transform: translateY(-0.125rem);
-  border: 1px solid #3d2a8a;
-  box-shadow: 0rem 0.75rem 0.5rem -0.25rem #e5ccf091;
+  border: 1px solid var(--button-border);
+  box-shadow: 0rem 0.75rem 0.5rem -0.25rem var(--button-shadow);
 }
 
 .sr-only {

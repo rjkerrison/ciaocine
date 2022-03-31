@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: stretch;
-  background-color: #34276c;
+  background-color: var(--mid);
   font-family: Courier, 'Courier New', monospace;
   font-size: 1.25rem;
   position: fixed;
@@ -48,7 +48,7 @@ body {
   display: flex;
   height: 4rem;
   gap: 1rem;
-  background-image: linear-gradient(90deg, #597823, #29a929);
+  background: var(--contrast);
   padding: 0.5rem;
 }
 
@@ -56,7 +56,7 @@ body {
   height: 100%;
   border-radius: 0.5rem;
   overflow: hidden;
-  border: 0.125rem solid #533ea7;
+  border: 0.125rem solid var(--light);
 }
 
 .account-header picture img {

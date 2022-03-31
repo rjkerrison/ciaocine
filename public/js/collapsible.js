@@ -1,11 +1,13 @@
-const toggleCollapsed = (collapsible) => {
+const toggleCollapsed = (collapsible, toggler) => {
   collapsible.classList.toggle('collapsed')
+  toggler.classList.toggle('active')
 }
 
 const setupToggle = (toggleElement) => {
   const { target } = toggleElement.dataset
   const targetElement = document.getElementById(target)
-  const toggleTarget = () => toggleCollapsed(targetElement)
+
+  const toggleTarget = () => toggleCollapsed(targetElement, toggleElement)
 
   console.log(toggleElement, targetElement)
 

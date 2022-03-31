@@ -7,7 +7,7 @@
 
 .cinema-list .cinema {
   position: relative;
-  box-shadow: 0.25rem 0.25rem 0.75rem -0.25rem #8ad38a67;
+  box-shadow: 0.25rem 0.25rem 0.75rem -0.25rem var(--contrast-shadow);
   border-radius: 1rem;
   padding: 0.5rem 0.5rem 2rem;
   overflow: hidden;
@@ -29,7 +29,7 @@
 .member-card {
   padding: 0.125rem;
   border-radius: 0.25rem;
-  background-color: black;
+  background-color: var(--dark);
   color: white;
 }
 
@@ -63,15 +63,15 @@ button.favourite-cinema.liked:hover {
 }
 button.favourite-cinema.liked,
 button.favourite-cinema:hover {
-  color: #1c153a;
-  background-color: #8ad38a;
+  color: var(--dark);
+  background-color: var(--contrast);
 }
 
 .showtime {
   display: grid;
   grid-template-rows: subgrid;
   grid-row: span 3;
-  background: black;
+  background: var(--dark);
   color: white;
   border-radius: 4px;
 }

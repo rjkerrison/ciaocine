@@ -26,7 +26,7 @@ section.movies-section h2 {
   grid-area: poster;
   justify-self: center;
   align-self: center;
-  box-shadow: 0.5rem 0.5rem 1rem -0.25rem black;
+  box-shadow: 0.5rem 0.5rem 1rem -0.25rem var(--dark);
 }
 
 .movie .movie-heading {

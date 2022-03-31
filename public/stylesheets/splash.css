@@ -1,6 +1,10 @@
 .splash {
   background-image: url('https://i.pinimg.com/originals/ac/09/db/ac09dbaaebf77d6e928d355e1b528325.jpg');
-  background-image: linear-gradient(#1c153a 0, #34276c 50%, #533ea7 100%),
+  background-image: linear-gradient(
+      var(--splash-gradient-start) 0,
+      var(--splash-gradient-midpoint) 50%,
+      var(--splash-gradient-end) 100%
+    ),
     url('https://i.pinimg.com/originals/ac/09/db/ac09dbaaebf77d6e928d355e1b528325.jpg');
   background-position: center 85%;
   background-size: cover;
@@ -17,13 +21,13 @@
   justify-content: center;
   text-align: center;
 
-  text-shadow: 0.1em 0.1em 0.1em #1c153a;
+  text-shadow: 0.1em 0.1em 0.1em var(--splash-shadow);
   width: 100%;
 }
 
 .splash h2 {
   font-size: calc(3rem + 2vw);
-  text-shadow: 0.1em 0.1em 0.1em #1c153a;
+  text-shadow: 0.1em 0.1em 0.1em var(--splash-shadow);
   margin: 0;
 }
 .splash p {
@@ -45,7 +49,7 @@
 
 .random-screening picture {
   max-width: 20rem;
-  box-shadow: 2rem 2rem 2rem -1rem black;
+  box-shadow: 2rem 2rem 2rem -1rem var(--splash-shadow);
 }
 
 .random-screening button .sr-only {

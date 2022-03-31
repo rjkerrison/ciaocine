@@ -12,9 +12,9 @@
 }
 
 .popup {
-  background: #8ad38a;
-  color: #3f3275;
-  box-shadow: 0.5rem 0.5rem 0.25rem -0.25rem #8ad38a67;
+  background: var(--popup-background-color);
+  color: var(--popup-text-color);
+  box-shadow: 0.5rem 0.5rem 0.25rem -0.25rem var(--popup-shadow);
   padding: 1rem;
   border-radius: 1rem;
 }
