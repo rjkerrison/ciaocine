@@ -50,6 +50,7 @@ body {
   gap: 1rem;
   background: var(--contrast);
   padding: 0.5rem;
+  color: var(--mid);
 }
 
 .account-header picture {
@@ -70,6 +71,10 @@ body {
   padding: 0;
   margin: 0;
   list-style: none;
+}
+
+.account-header a {
+  color: inherit;
 }
 
 @media screen and (min-width: 600px) {

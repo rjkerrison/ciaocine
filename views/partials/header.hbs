@@ -14,29 +14,16 @@
   <div class="account-header">
     {{#if @root.user.isLoggedIn}}
       <nav aria-label='account navigation'>
-        <ul>
-          <li>
-            <a href='/calendar'>My Calendar</a>
-          </li>
-          <li>
-            <a href='/auth/logout'>Logout</a>
-          </li>
-        </ul>
+        <a href='/calendar'>Calendar</a>
+        <a href='/auth/logout'>Logout</a>
       </nav>
       {{> profilePicture }}
     {{else}}
       <nav aria-label='login or signup'>
-        <ul>
-          <li>
-            <a href='/auth/login'>Login</a>
-          </li>
-          <li>
-            <a href='/auth/signup'>Signup</a>
-          </li>
-        </ul>
+        <a href='/auth/login'>Login</a>
+        <a href='/auth/signup'>Signup</a>
       </nav>
     {{/if}}
-
   </div>
   </div>
 </header>
