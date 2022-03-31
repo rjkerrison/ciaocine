@@ -1,3 +1,4 @@
+const { getRandomPosterUrl } = require('../config/fakeposters')
 const {
   getMoviesBetweenTimes,
 } = require('../db/aggregations/movies-showing-by-date')
@@ -143,6 +144,8 @@ router.get('/', async (req, res, next) => {
     toDate,
     additionalFilters
   )
+
+  movies.forEach((movie) => (movie.poster ||= getRandomPosterUrl()))
 
   res.render('movies', {
     movies,

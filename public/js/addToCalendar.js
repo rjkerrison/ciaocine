@@ -1,9 +1,9 @@
 const setup = ({ popupWithMessage }) => {
-  function addToCalendar(event) {
-    const button = event.target
-    const { showtime } = button.dataset
-
+  function addToCalendar({ showtime }) {
     console.log('add to calendar', showtime)
+    if (!showtime) {
+      console.error('No showtime is present')
+    }
     makeCalendarCall(showtime)
   }
 
@@ -27,7 +27,9 @@ const setup = ({ popupWithMessage }) => {
 
   document
     .querySelectorAll('button.add-to-calendar[data-showtime]')
-    .forEach((button) => button.addEventListener('click', addToCalendar))
+    .forEach((button) =>
+      button.addEventListener('click', () => addToCalendar(button.dataset))
+    )
 }
 
 export default { setup }

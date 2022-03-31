@@ -11,6 +11,13 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     const userId = req.user._id
 
     const showtime = await Showtime.findById(id)
+
+    if (!showtime) {
+      res
+        .status(400)
+        .json({ error: 'The showtime does not exist', showtime: id })
+    }
+
     const calendarEntry = {
       user: userId,
       showtime: showtime.id,
@@ -19,7 +26,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     const calendar = await Calendar.findOneAndUpdate(
       calendarEntry,
       calendarEntry,
-      { upsert: true }
+      { upsert: true, new: true }
     )
 
     res.json(calendar)

@@ -5,6 +5,7 @@ const {
   dateFormat,
   weekdayDateFormat,
 } = require('../utils/formatDate')
+const { getRandomPosterUrl } = require('./fakeposters')
 
 hbs.registerPartials('views/partials')
 
@@ -21,6 +22,11 @@ hbs.registerHelper('ifGreaterThan', (v1, v2, options) => {
   return options.inverse(this)
 })
 hbs.registerHelper('stripProtocol', (url) => {
+  if (!url) {
+    console.error('URL was not provided')
+    url = getRandomPosterUrl()
+  }
+
   return url?.replace(/^http(s?):\/\//, '//')
 })
 
