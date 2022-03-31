@@ -5,24 +5,9 @@
   </h2>
    <p>{{movies.length}} movies are showing on {{weekdaydate chosenDate}} matching your filters</p>
 <nav>
-  <div class="movies-filters">
-    <p>sur le</p>
-    {{#each calendarUrls}}
-      <a class="movies-filter {{class}}" href="{{url}}">{{label}}</a>
-    {{/each}}
-  </div>
-  <div class="movies-filters">
-    <p>à partir de</p>
-    {{#each hoursUrls}}
-      <a class="movies-filter {{class}}" href="{{url}}">{{label}}</a>
-    {{/each}}
-  </div>
-  <div class="movies-filters">
-    <p>+ de filtres:</p>
-    {{#each filtersUrls}}
-      <a class="movies-filter {{class}}" href="{{url}}">{{label}}</a>
-    {{/each}}
-  </div>
+  {{> moviesFilters label='sur le' urls=calendarUrls}}
+  {{> moviesFilters label='à partir de' urls=hoursUrls}}
+  {{> moviesFilters label='+ de filtres' urls=filtersUrls}}
 </nav>
 <div class='movies'>
   {{#each movies}}

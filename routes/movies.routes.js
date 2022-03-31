@@ -41,7 +41,7 @@ const adjustDateByDays = (date, days) => {
   return newDate
 }
 
-const getDaysUrls = (options, step, count) => {
+const getDaysUrls = (options, step, count, classname) => {
   const dates = []
 
   for (let i = 1; i <= count; i++) {
@@ -57,7 +57,7 @@ const getDaysUrls = (options, step, count) => {
     })
     const label = formatDate(date, weekdayDateMonthFormat)
 
-    return { url, label }
+    return { url, label, class: classname }
   })
   return results
 }
@@ -99,13 +99,13 @@ const getUrls = (options) => {
 
   return {
     calendarUrls: [
-      ...getDaysUrls(options, -1, 3),
+      ...getDaysUrls(options, -1, 3, 'expanded-only'),
       {
         url: getMovieUrl(options),
         label: formatDate(options.date, weekdayDateMonthFormat),
         class: 'selected',
       },
-      ...getDaysUrls(options, 1, 3),
+      ...getDaysUrls(options, 1, 3, 'expanded-only'),
     ],
     hoursUrls: getHoursUrls(options),
     filtersUrls: [
