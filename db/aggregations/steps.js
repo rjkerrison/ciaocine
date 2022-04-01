@@ -134,7 +134,12 @@ const filterCinemaToUgcIllimite = {
 }
 
 const riveGaucheArrondissements = [
-  ['75005', '75006', '75007', '75013', '75014', '75015'],
+  '75005',
+  '75006',
+  '75007',
+  '75013',
+  '75014',
+  '75015',
 ]
 
 const filterCinemaToRiveGauche = {

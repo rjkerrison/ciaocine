@@ -5,6 +5,7 @@ const {
 const {
   filterCinemaToUgcIllimite,
   filterCinemaToRiveGauche,
+  filterCinemaToRiveDroite,
 } = require('../../db/aggregations/steps')
 const { APP_URL } = require('../../utils/consts')
 const { formatDate, weekdayDateMonthFormat } = require('../../utils/formatDate')
@@ -102,6 +103,14 @@ const getUrls = (options) => {
     // deselection
     ugcIllimiteOnly: !options.ugcIllimiteOnly,
   })
+  const riveDroiteUrl = getMovieUrl({
+    ...options,
+    rive: options.rive === 'droite' ? 'niq' : 'droite',
+  })
+  const riveGaucheUrl = getMovieUrl({
+    ...options,
+    rive: options.rive === 'gauche' ? 'niq' : 'gauche',
+  })
 
   return {
     calendarUrls: [
@@ -120,6 +129,16 @@ const getUrls = (options) => {
         label: 'Accepts UGC Illimité',
         class: options.ugcIllimiteOnly ? 'selected' : null,
       },
+      {
+        url: riveDroiteUrl,
+        label: 'Rive Droite',
+        class: options.rive === 'droite' ? 'selected' : null,
+      },
+      {
+        url: riveGaucheUrl,
+        label: 'Rive Gauche',
+        class: options.rive === 'gauche' ? 'selected' : null,
+      },
     ],
   }
 }
@@ -127,9 +146,6 @@ const getUrls = (options) => {
 const getAdditionalFilters = (ugcIllimiteOnly, rive) => {
   const additionalFilters = []
 
-  if (Boolean(ugcIllimiteOnly)) {
-    additionalFilters.push(filterCinemaToUgcIllimite)
-  }
   switch (rive) {
     case 'niq':
       break
@@ -140,6 +156,11 @@ const getAdditionalFilters = (ugcIllimiteOnly, rive) => {
       additionalFilters.push(filterCinemaToRiveDroite)
       break
   }
+
+  if (Boolean(ugcIllimiteOnly)) {
+    additionalFilters.push(filterCinemaToUgcIllimite)
+  }
+
   return additionalFilters
 }
 
