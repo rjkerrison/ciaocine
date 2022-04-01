@@ -133,6 +133,26 @@ const filterCinemaToUgcIllimite = {
   },
 }
 
+const riveGaucheArrondissements = [
+  ['75005', '75006', '75007', '75013', '75014', '75015'],
+]
+
+const filterCinemaToRiveGauche = {
+  $match: {
+    'cinema.zipcode': {
+      $in: riveGaucheArrondissements,
+    },
+  },
+}
+
+const filterCinemaToRiveDroite = {
+  $match: {
+    'cinema.zipcode': {
+      $nin: riveGaucheArrondissements,
+    },
+  },
+}
+
 module.exports = {
   match,
   matchDate,
@@ -150,4 +170,6 @@ module.exports = {
   unwindShowtime,
   groupByMovie,
   filterCinemaToUgcIllimite,
+  filterCinemaToRiveGauche,
+  filterCinemaToRiveDroite,
 }

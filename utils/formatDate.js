@@ -3,7 +3,7 @@ const formatDate = (datetime, targetFormat) => {
     let { format } = Intl.DateTimeFormat('fr-FR', targetFormat)
     return format(datetime)
   } catch (error) {
-    console.error('uhohohohoh', datetime)
+    console.error('uhohohohoh', datetime, targetFormat)
     return datetime
   }
 }
