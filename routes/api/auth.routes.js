@@ -5,43 +5,56 @@ const mongoose = require('mongoose')
 const { ALGORITHM } = require('../../config/jwt')
 const { isAuthenticated } = require('../../middleware/jwt.middleware')
 const User = require('../../models/User.model')
-const { createUser } = require('../helpers/user')
+const { createUser, validateUserInputs } = require('../helpers/user')
+
+const sendBadRequestResponse = (res, ...errorMessages) => {
+  return res.status(400).json({
+    errorMessages,
+    // backwards compatibility
+    errorMessage: errorMessages.join(' '),
+  })
+}
 
 router.post('/signup', async (req, res) => {
-  const { username, password, profilePictureUrl } = req.body
+  const { username, password, profilePictureUrl, email } = req.body
 
-  if (!username) {
-    return res.status(400).json({
-      errorMessage: 'Please provide your username.',
-    })
+  const validationErrors = Array.from(
+    ...validateUserInputs({ username, email, password })
+  )
+  if (validationErrors.length > 0) {
+    return sendBadRequestResponse(res, ...validationErrors)
   }
 
-  if (password.length < 8) {
-    return res.status(400).json({
-      errorMessage: 'Your password needs to be at least 8 characters long.',
-    })
-  }
-
-  const foundUser = await User.findOne({ username })
+  const foundUser = await User.findOne({ $or: [{ username }, { email }] })
   if (foundUser) {
-    return res.status(400).json({ errorMessage: 'Username already taken.' })
+    const errorMessages = []
+    if (foundUser.email === email) {
+      errorMessages.push(`"${email}" already has an account.`)
+    }
+    if (foundUser.username === username) {
+      errorMessages.push(`Username "${username}" is already taken.`)
+    }
+
+    return sendBadRequestResponse(res, ...errorMessages)
   }
+
   try {
     const user = await createUser({
       username,
       profilePictureUrl,
       password,
+      email,
     })
     res.status(201).json(user)
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      return res.status(400).json({ errorMessage: error.message })
+      return sendBadRequestResponse(res, error.message)
     }
     if (error.code === 11000) {
-      return res.status(400).json({
-        errorMessage:
-          'Username need to be unique. The username you chose is already in use.',
-      })
+      return sendBadRequestResponse(
+        res,
+        'Username needs to be unique. The username you chose is already in use.'
+      )
     }
     return res.status(500).json({ errorMessage: error.message })
   }
@@ -51,31 +64,26 @@ router.post('/login', async (req, res, next) => {
   const { username, password } = req.body
 
   if (!username) {
-    return res.status(400).json({
-      errorMessage: 'Please provide your username.',
-    })
+    return sendBadRequestResponse(res, 'Please provide your username.')
   }
 
   if (password.length < 8) {
-    return res.status(400).json({
-      errorMessage: 'Your password needs to be at least 8 characters long.',
-    })
+    return sendBadRequestResponse(
+      res,
+      'Your password needs to be at least 8 characters long.'
+    )
   }
   try {
     const user = await User.findOne({ username })
 
     if (!user) {
-      return res.status(400).json({
-        errorMessage: 'Wrong credentials.',
-      })
+      return sendBadRequestResponse(res, 'Wrong credentials.')
     }
 
     const isCorrectPassword = await bcrypt.compare(password, user.password)
 
     if (!isCorrectPassword) {
-      return res.status(400).json({
-        errorMessage: 'Wrong credentials.',
-      })
+      return sendBadRequestResponse(res, 'Wrong credentials.')
     }
 
     const payload = { username, profilePictureUrl: user.profilePictureUrl }
