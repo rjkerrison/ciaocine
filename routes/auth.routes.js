@@ -25,11 +25,15 @@ router.post(
   isLoggedOut,
   fileUploader.single('profile-picture'),
   (req, res) => {
-    const { username, password } = req.body
+    const { username, password, email } = req.body
     const errorMessages = []
 
     if (!username) {
       errorMessages.push('Please provide your username.')
+    }
+
+    if (!email) {
+      errorMessages.push('Please provide your email address.')
     }
 
     if (password.length < 8) {
@@ -43,7 +47,7 @@ router.post(
     }
 
     // Search the database for a user with the username submitted in the form
-    User.findOne({ $or: { username, email } }).then((found) => {
+    User.findOne({ $or: [{ username }, { email }] }).then((found) => {
       // If the user is found, send an appropriate message
       if (found) {
         if (found.email === email) {
@@ -98,7 +102,7 @@ router.get('/login', isLoggedOut, (req, res) => {
 })
 
 const sendBadRequestResponse = (res, view, ...errorMessages) => {
-  res.status(400).render(view, {
+  return res.status(400).render(view, {
     errorMessages,
   })
 }
