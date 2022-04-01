@@ -26,38 +26,34 @@ router.post(
   fileUploader.single('profile-picture'),
   (req, res) => {
     const { username, password } = req.body
+    const errorMessages = []
 
     if (!username) {
-      return res.status(400).render('auth/signup', {
-        errorMessage: 'Please provide your username.',
-      })
+      errorMessages.push('Please provide your username.')
     }
 
     if (password.length < 8) {
-      return res.status(400).render('auth/signup', {
-        errorMessage: 'Your password needs to be at least 8 characters long.',
-      })
+      errorMessages.push(
+        'Your password needs to be at least 8 characters long.'
+      )
     }
 
-    //   ! This use case is using a regular expression to control for special characters and min length
-    /*
-  const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
-
-  if (!regex.test(password)) {
-    return res.status(400).render("signup", {
-      errorMessage:
-        "Password needs to have at least 8 chars and must contain at least one number, one lowercase and one uppercase letter.",
-    });
-  }
-  */
+    if (errorMessages.length > 0) {
+      return sendBadRequestResponse(res, 'auth/signup', ...errorMessages)
+    }
 
     // Search the database for a user with the username submitted in the form
-    User.findOne({ username }).then((found) => {
-      // If the user is found, send the message username is taken
+    User.findOne({ $or: { username, email } }).then((found) => {
+      // If the user is found, send an appropriate message
       if (found) {
-        return res
-          .status(400)
-          .render('auth.signup', { errorMessage: 'Username already taken.' })
+        if (found.email === email) {
+          errorMessages.push(`"${email}" already has an account.`)
+        }
+        if (found.username === username) {
+          errorMessages.push(`Username "${username}" is already taken.`)
+        }
+
+        return sendBadRequestResponse(res, 'auth/signup', ...errorMessages)
       }
 
       // if user is not found, create a new user - start with hashing the password
@@ -70,6 +66,7 @@ router.post(
             username,
             profilePictureUrl: req.file?.path,
             password: hashedPassword,
+            email,
           })
         })
         .then((user) => {
@@ -79,19 +76,18 @@ router.post(
         })
         .catch((error) => {
           if (error instanceof mongoose.Error.ValidationError) {
-            return res
-              .status(400)
-              .render('auth/signup', { errorMessage: error.message })
+            errorMessages.push(error.message)
+            return sendBadRequestResponse(res, 'auth/signup', ...errorMessages)
           }
           if (error.code === 11000) {
-            return res.status(400).render('auth/signup', {
-              errorMessage:
-                'Username need to be unique. The username you chose is already in use.',
-            })
+            errorMessages.push(
+              'Username need to be unique. The username you chose is already in use.'
+            )
+            return sendBadRequestResponse(res, 'auth/signup', ...errorMessages)
           }
-          return res
-            .status(500)
-            .render('auth/signup', { errorMessage: error.message })
+          errorMessages.push(error.message)
+
+          return res.status(500).render('auth/signup', { errorMessages })
         })
     })
   }
@@ -101,21 +97,26 @@ router.get('/login', isLoggedOut, (req, res) => {
   res.render('auth/login')
 })
 
+const sendBadRequestResponse = (res, view, ...errorMessages) => {
+  res.status(400).render(view, {
+    errorMessages,
+  })
+}
+
 router.post('/login', isLoggedOut, (req, res, next) => {
   const { username, password } = req.body
+  const errorMessages = []
 
   if (!username) {
-    return res.status(400).render('auth/login', {
-      errorMessage: 'Please provide your username.',
-    })
+    errorMessages.push('Please provide your username.')
   }
 
-  // Here we use the same logic as above
-  // - either length based parameters or we check the strength of a password
   if (password.length < 8) {
-    return res.status(400).render('auth/login', {
-      errorMessage: 'Your password needs to be at least 8 characters long.',
-    })
+    errorMessages.push('Your password needs to be at least 8 characters long.')
+  }
+
+  if (errorMessages.length > 0) {
+    return sendBadRequestResponse(res, 'auth/login', ...errorMessages)
   }
 
   // Search the database for a user with the username submitted in the form
@@ -123,17 +124,13 @@ router.post('/login', isLoggedOut, (req, res, next) => {
     .then((user) => {
       // If the user isn't found, send the message that user provided wrong credentials
       if (!user) {
-        return res.status(400).render('auth/login', {
-          errorMessage: 'Wrong credentials.',
-        })
+        return sendBadRequestResponse(res, 'auth/login', 'Wrong credentials.')
       }
 
       // If user is found based on the username, check if the in putted password matches the one saved in the database
       bcrypt.compare(password, user.password).then((isSamePassword) => {
         if (!isSamePassword) {
-          return res.status(400).render('auth/login', {
-            errorMessage: 'Wrong credentials.',
-          })
+          return sendBadRequestResponse(res, 'auth/login', 'Wrong credentials.')
         }
         req.session.user = user
         // req.session.user = user._id; // ! better and safer but in this case we saving the entire user object
@@ -145,7 +142,7 @@ router.post('/login', isLoggedOut, (req, res, next) => {
       // in this case we are sending the error handling to the error handling middleware that is defined in the error handling file
       // you can just as easily run the res.status that is commented out below
       next(err)
-      // return res.status(500).render("login", { errorMessage: err.message });
+      // return res.status(500).render("login", { errorMessages: [err.message] });
     })
 })
 
@@ -154,7 +151,7 @@ router.get('/logout', isLoggedIn, (req, res) => {
     if (err) {
       return res
         .status(500)
-        .render('auth/logout', { errorMessage: err.message })
+        .render('auth/logout', { errorMessages: [err.message] })
     }
     res.redirect('/')
   })

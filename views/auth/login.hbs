@@ -10,7 +10,7 @@
    <button type="submit">Submit</button>
 </form>
 
-{{#if errorMessage}}
-   {{errorMessage}}
-{{/if}}
+{{#each errorMessages}}
+   <p class="error-message">{{this}}</p>
+{{/each}}
 <section>
