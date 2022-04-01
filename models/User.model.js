@@ -17,6 +17,10 @@ const userSchema = new Schema(
       type: Schema.Types.String,
       required: false,
     },
+    email: {
+      type: Schema.Types.String,
+      unique: true,
+    },
   },
   {
     timestamps: true,
