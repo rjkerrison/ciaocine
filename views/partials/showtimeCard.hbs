@@ -1,7 +1,11 @@
 <div class='movie-showtime overlay-container {{class}}'>
     <h4>
         {{time startTime}}
+        {{#if showDate}}
+            {{date startTime}}
+        {{/if}}
     </h4>
+    {{#if cinema.name}}
     <div class="overlay">
         {{> addToCalendar showtime=this}}
         <p class="extra-info">
@@ -10,4 +14,5 @@
         </span>
         </p>
     </div>
+    {{/if}}
 </div>

@@ -32,14 +32,17 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     let cinema = await Cinema.findById(req.params.id)
-    const showtimes = await getShowtimesForCinemaGroupByMovie(cinema.id)
+    const movies = await getShowtimesForCinemaGroupByMovie(cinema.id)
 
     if (req.session.user) {
       const likedCinemas = await getUserLikedCinemas(req.session.user._id)
       cinema = addLikedToCinema(likedCinemas, cinema)
     }
 
-    res.render('cinema/view', { cinema, showtimes })
+    res.render('cinema/view', {
+      cinema,
+      movies,
+    })
   } catch (error) {
     console.error('ERROR OCCURRED IN CINEMA ROUTE')
     next(error)
@@ -50,14 +53,14 @@ router.get('/:id', async (req, res, next) => {
 router.get('/:id/byDate', async (req, res, next) => {
   try {
     let cinema = await Cinema.findById(req.params.id)
-    const showtimes = await getShowtimesForCinemaGroupByDate(cinema.id)
+    const movies = await getShowtimesForCinemaGroupByDate(cinema.id)
 
     if (req.session.user) {
       const likedCinemas = await getUserLikedCinemas(req.session.user._id)
       cinema = addLikedToCinema(likedCinemas, cinema)
     }
 
-    res.render('cinema/viewByDate', { cinema, showtimes })
+    res.render('cinema/viewByDate', { cinema, movies })
   } catch (error) {
     next(error)
   }
