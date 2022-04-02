@@ -3,10 +3,10 @@
   --mid: #34276c;
   --light: #533ea7;
   --text: #e6e3f4;
-  --link: #00b7ff;
-
-  --contrast: #8ad38a;
-  --contrast-shadow: #8ad38a67;
+  --link: #ff6969;
+  --contrast: #ff6969;
+  --contrast-dark: #cd3737;
+  --contrast-shadow: #ff696967;
 
   --splash-gradient-start: var(--dark);
   --splash-gradient-midpoint: var(--mid);
@@ -17,7 +17,7 @@
 
   --popup-text-color: #3f3275;
 
-  --button-hover-background: #96dc96;
+  --button-hover-background: var(--contrast-dark);
   --button-shadow: #533ea791;
   --button-border: #3d2a8a;
 }

@@ -39,6 +39,7 @@ section {
 
 a {
   color: var(--link);
+  text-decoration: none;
 }
 
 h2,
