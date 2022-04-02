@@ -42,7 +42,7 @@ section.movies-section h2 {
 .movie .movie-showtimes {
   grid-area: showtimes;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(33%, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
   grid-auto-rows: 4rem;
   grid-gap: 0.5rem;
   justify-content: center;
@@ -81,7 +81,7 @@ section.movies-section h2 {
   margin: 0;
 }
 .movie-showtime h4 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 
 .movie-showtime:hover .extra-info,
@@ -133,25 +133,25 @@ section.movies-section h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #3f3275;
+  background-color: var(--mid);
   padding: 1rem;
   margin: 0;
-  transition: all 1s;
+  transition: all 0.5s;
   border-radius: 0.25rem;
   color: white;
 }
 
 .movies-filter:hover {
-  background-color: #725cc9;
+  background-color: var(--contrast);
 }
 
 .selected .movies-filter {
-  background-color: #73c973;
+  background-color: var(--contrast);
   color: #3f3275;
 }
 
 .selected .movies-filter:hover {
-  background-color: #725cc9;
+  background-color: var(--mid);
   color: white;
 }
 
