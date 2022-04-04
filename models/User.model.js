@@ -23,6 +23,11 @@ const userSchema = new Schema(
       unique: true,
       required: true,
     },
+    // for an email verification flow
+    isVerified: {
+      type: Schema.Types.Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
