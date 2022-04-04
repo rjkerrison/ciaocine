@@ -12,35 +12,8 @@
 <div class='movies'>
   {{#each movies}}
     <div class='movie overlay-container expander-container'>
-      {{#with movie}}
-        <h3 class='movie-heading'>
-          {{title}}
-        </h3>
-        <picture class="poster">
-          <img
-            src='{{stripProtocol poster}}'
-            alt='{{title}}'
-          />
-        </picture>
-      {{/with}}
-
-      <div class='movie-showtimes'>
-        {{#ifGreaterThan showtimes.length 6}}
-          {{#eachSlice ../showtimes 0 5}}
-            {{> showtimeCard this=this}}
-          {{/eachSlice}}
-          {{#eachSlice ../showtimes 5 showtimes.length}}
-            {{> showtimeCard this=this class='expanded-only'}}
-          {{/eachSlice}}
-          <div class="movie-showtime expander">
-            Show more
-          </div>
-        {{else}}
-          {{#each ../showtimes}}
-            {{> showtimeCard this=this}}
-          {{/each}}
-        {{/ifGreaterThan}}
-      </div>
+      {{> movieHeading movie=movie}}
+      {{> movieShowtimes showtimes=showtimes}}
     </div>
   {{/each}}
 </div>

@@ -21,29 +21,11 @@
   </p>
 {{/with}}
 
-<div class='showtimes-grouping'>
-  {{#each showtimes}}
-    <div class='showtime-for-group'>
-      <div class='group-heading'>
-        <h3>
-          {{movie.title}}
-        </h3>
-        <picture>
-          <img src='{{stripProtocol movie.poster}}' alt='{{movie.title}}' />
-        </picture>
-      </div>
-      <ul class='showtimes'>
-        {{#each showtimes}}
-          <li class='showtime'>
-            <h3>
-              {{date startTime}}
-              at
-              {{time startTime}}
-            </h3>
-            {{> addToCalendar showtime=this}}
-          </li>
-        {{/each}}
-      </ul>
+<div class='movies'>
+  {{#each movies}}
+    <div class='movie overlay-container expander-container'>
+      {{> movieHeading movie=movie}}
+      {{> movieShowtimes showtimes=showtimes showDate=true}}
     </div>
   {{/each}}
 </div>
