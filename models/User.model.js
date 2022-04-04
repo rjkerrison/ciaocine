@@ -18,6 +18,11 @@ const userSchema = new Schema(
       required: true,
     },
     profilePictureUrl: String,
+    // for an email verification flow
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
