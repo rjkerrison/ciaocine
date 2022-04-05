@@ -1,3 +1,4 @@
+const { ObjectId } = require('bson')
 const { default: mongoose } = require('mongoose')
 
 const match = (value, name = 'cinema') => ({
@@ -133,6 +134,12 @@ const filterCinemaToUgcIllimite = {
   },
 }
 
+const filterCinemaById = (...cinemaIds) => ({
+  $match: {
+    'cinema._id': { $in: cinemaIds.map((id) => new ObjectId(id)) },
+  },
+})
+
 const riveGaucheArrondissements = [
   '75005',
   '75006',
@@ -177,4 +184,5 @@ module.exports = {
   filterCinemaToUgcIllimite,
   filterCinemaToRiveGauche,
   filterCinemaToRiveDroite,
+  filterCinemaById,
 }

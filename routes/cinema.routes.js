@@ -1,5 +1,7 @@
 const getShowtimesForCinemaGroupByDate = require('../db/aggregations/showtimes-by-date')
 const getShowtimesForCinemaGroupByMovie = require('../db/aggregations/showtimes-by-movie')
+const { getMovies, getUrls } = require('./helpers/movies')
+
 const Cinema = require('../models/Cinema.model')
 const FavouriteCinema = require('../models/FavouriteCinema.model')
 
@@ -32,7 +34,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     let cinema = await Cinema.findById(req.params.id)
-    const movies = await getShowtimesForCinemaGroupByMovie(cinema.id)
+    const movies = await getMovies({ cinema: cinema.id })
 
     if (req.session.user) {
       const likedCinemas = await getUserLikedCinemas(req.session.user._id)

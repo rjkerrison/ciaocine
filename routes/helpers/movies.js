@@ -6,6 +6,7 @@ const {
   filterCinemaToUgcIllimite,
   filterCinemaToRiveGauche,
   filterCinemaToRiveDroite,
+  filterCinemaById,
 } = require('../../db/aggregations/steps')
 const { APP_URL } = require('../../utils/consts')
 const { formatDate, weekdayDateMonthFormat } = require('../../utils/formatDate')
@@ -143,8 +144,13 @@ const getUrls = (options) => {
   }
 }
 
-const getAdditionalFilters = (ugcIllimiteOnly, rive) => {
+const getAdditionalFilters = (ugcIllimiteOnly, rive, cinema) => {
   const additionalFilters = []
+
+  if (cinema) {
+    // override any other filters if a cinema id is specified
+    return [filterCinemaById(cinema)]
+  }
 
   switch (rive) {
     case 'niq':
@@ -170,11 +176,14 @@ const getMovies = async ({
   date = new Date(),
   ugcIllimiteOnly = false,
   rive = 'niq',
+  cinema = null,
 }) => {
   const fromDate = getDateHour(date, fromHour)
   const toDate = getDateHour(date, toHour)
 
-  const additionalFilters = getAdditionalFilters(ugcIllimiteOnly, rive)
+  const additionalFilters = getAdditionalFilters(ugcIllimiteOnly, rive, cinema)
+
+  console.log(...additionalFilters)
 
   const movies = await getMoviesBetweenTimes(
     fromDate,
