@@ -3,6 +3,7 @@ const {
   formatDate,
   timeFormat,
   dateFormat,
+  dateMonthFormat,
   weekdayDateFormat,
 } = require('../utils/formatDate')
 const { getRandomPosterUrl } = require('./fakeposters')
@@ -11,6 +12,9 @@ hbs.registerPartials('views/partials')
 
 hbs.registerHelper('time', (datetime) => formatDate(datetime, timeFormat))
 hbs.registerHelper('date', (datetime) => formatDate(datetime, dateFormat))
+hbs.registerHelper('dateMonth', (datetime) =>
+  formatDate(datetime, dateMonthFormat)
+)
 hbs.registerHelper('weekdaydate', (datetime) =>
   formatDate(datetime, weekdayDateFormat)
 )
