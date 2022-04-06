@@ -15,12 +15,10 @@
       </li>
     {{/each}}
   </ul>
-  <p>
-    <a href='/cinema/{{_id}}/byDate'>
-      View listings by date
-    </a>
-  </p>
 {{/with}}
+<nav>
+  {{> moviesFilters label='sur le' urls=calendarUrls}}
+</nav>
 
 <div class='movies'>
   {{#each movies}}
