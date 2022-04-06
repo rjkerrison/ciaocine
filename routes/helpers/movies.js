@@ -9,24 +9,8 @@ const {
 } = require('../../db/aggregations/steps')
 const { APP_URL } = require('../../utils/consts')
 const { formatDate, weekdayDateMonthFormat } = require('../../utils/formatDate')
-
-const getDateHour = (d, hour) => {
-  const date = new Date(d)
-  date.setHours(hour)
-  date.setMinutes(0)
-  date.setSeconds(0)
-  date.setMilliseconds(0)
-  return date
-}
-
-const appendSearchParams = (url, params) => {
-  for (let [k, v] of Object.entries(params)) {
-    if (v) {
-      url.searchParams.append(k, v)
-    }
-  }
-  return url
-}
+const { adjustDateByDays } = require('./dates')
+const { appendSearchParams } = require('./params')
 
 const getMovieUrl = (params) => {
   let date
@@ -40,12 +24,6 @@ const getMovieUrl = (params) => {
     ...params,
     date,
   })
-}
-
-const adjustDateByDays = (date, days) => {
-  const newDate = new Date(date)
-  newDate.setDate(date.getDate() + days)
-  return newDate
 }
 
 const getDaysUrls = (options, step, count, classname) => {
@@ -97,6 +75,18 @@ const getHoursUrls = (options) => {
   return results
 }
 
+const getCalendarUrls = (options) => {
+  return [
+    ...getDaysUrls(options, -1, 3, 'expanded-only'),
+    {
+      url: getMovieUrl(options),
+      label: formatDate(options.date, weekdayDateMonthFormat),
+      class: 'selected',
+    },
+    ...getDaysUrls(options, 1, 3, 'expanded-only'),
+  ]
+}
+
 const getUrls = (options) => {
   const ugcIllimiteUrl = getMovieUrl({
     ...options,
@@ -113,15 +103,7 @@ const getUrls = (options) => {
   })
 
   return {
-    calendarUrls: [
-      ...getDaysUrls(options, -1, 3, 'expanded-only'),
-      {
-        url: getMovieUrl(options),
-        label: formatDate(options.date, weekdayDateMonthFormat),
-        class: 'selected',
-      },
-      ...getDaysUrls(options, 1, 3, 'expanded-only'),
-    ],
+    calendarUrls: getCalendarUrls(options),
     hoursUrls: getHoursUrls(options),
     filtersUrls: [
       {
@@ -143,7 +125,7 @@ const getUrls = (options) => {
   }
 }
 
-const getAdditionalFilters = (ugcIllimiteOnly, rive) => {
+const getAdditionalFilters = (ugcIllimiteOnly, rive, cinema) => {
   const additionalFilters = []
 
   switch (rive) {
@@ -165,16 +147,13 @@ const getAdditionalFilters = (ugcIllimiteOnly, rive) => {
 }
 
 const getMovies = async ({
-  fromHour = 0,
-  toHour = 24,
-  date = new Date(),
+  fromDate,
+  toDate,
   ugcIllimiteOnly = false,
   rive = 'niq',
+  cinema = null,
 }) => {
-  const fromDate = getDateHour(date, fromHour)
-  const toDate = getDateHour(date, toHour)
-
-  const additionalFilters = getAdditionalFilters(ugcIllimiteOnly, rive)
+  const additionalFilters = getAdditionalFilters(ugcIllimiteOnly, rive, cinema)
 
   const movies = await getMoviesBetweenTimes(
     fromDate,
@@ -183,7 +162,7 @@ const getMovies = async ({
   )
 
   movies.forEach((movie) => (movie.poster ||= getRandomPosterUrl()))
-  return { movies, fromDate }
+  return movies
 }
 
-module.exports = { getMovies, getUrls }
+module.exports = { getMovies, getUrls, getCalendarUrls }

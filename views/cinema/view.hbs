@@ -1,4 +1,4 @@
-<section>
+<section class='movies-section'>
 {{#with cinema}}
   <h2>Showtimes for {{name}}</h2>
   <p>
@@ -6,6 +6,7 @@
     {{city}}
     {{zipcode}}
   </p>
+  <p>{{../movies.length}} films are showing at {{name}}.</p>
   {{> favouriteCinema cinema=this liked=liked}}
   <ul>
     {{#each member_cards}}
@@ -14,18 +15,16 @@
       </li>
     {{/each}}
   </ul>
-  <p>
-    <a href='/cinema/{{_id}}/byDate'>
-      View listings by date
-    </a>
-  </p>
 {{/with}}
+<nav>
+  {{> moviesFilters label='sur le' urls=calendarUrls}}
+</nav>
 
 <div class='movies'>
   {{#each movies}}
     <div class='movie overlay-container expander-container'>
       {{> movieHeading movie=movie}}
-      {{> movieShowtimes showtimes=showtimes showDate=true}}
+      {{> movieShowtimes showtimes=showtimes}}
     </div>
   {{/each}}
 </div>
