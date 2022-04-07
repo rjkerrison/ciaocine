@@ -1,5 +1,6 @@
 const { default: axios } = require('axios')
 const Cinema = require('../models/Cinema.model')
+const Movie = require('../models/Movie.model')
 const baseUrl = process.env.BASE_URL
 const partnerKey = process.env.PARTNER_KEY
 
@@ -15,6 +16,18 @@ const getShowtimeListConfig = (allocineCinemaId) => {
       theaters: allocineCinemaId,
       page,
       count,
+      format: 'json',
+    },
+  }
+}
+
+const getMovieConfig = (allocineMovieId) => {
+  return {
+    baseURL: baseUrl,
+    url: '/movie',
+    params: {
+      partner: partnerKey,
+      code: allocineMovieId,
       format: 'json',
     },
   }
@@ -44,6 +57,17 @@ const getShowtimes = async (allocineCinemaId) => {
 
   const showtimes = movieShowtimes.map(fromAllocineApiToShowtime)
   return showtimes
+}
+
+const getMovieInfo = async (movieId) => {
+  const movie = await Movie.findById(movieId)
+  if (!movie) {
+    return {}
+  }
+
+  const config = getMovieConfig(movie.allocineId)
+  const { data } = await axios(config)
+  const { synopsis, runtime, poster, castMember, castingShort } = data.movie
 }
 
 module.exports = {
