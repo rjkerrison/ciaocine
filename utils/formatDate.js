@@ -22,6 +22,11 @@ const dateFormat = {
   day: 'numeric',
 }
 
+const dateMonthFormat = {
+  month: 'long',
+  day: 'numeric',
+}
+
 const weekdayDateFormat = {
   year: 'numeric',
   month: 'long',
@@ -45,6 +50,7 @@ module.exports = {
   formatDate,
   timeFormat,
   dateFormat,
+  dateMonthFormat,
   shortDateFormat,
   weekdayDateFormat,
   weekdayDateMonthFormat,

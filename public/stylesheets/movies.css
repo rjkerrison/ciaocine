@@ -56,6 +56,7 @@ section.movies-section h2 {
 .movie-showtime {
   position: relative;
   display: flex;
+  flex-direction: column;
   height: 100%;
   align-items: center;
   justify-content: center;

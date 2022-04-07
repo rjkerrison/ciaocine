@@ -1,3 +1,4 @@
+const { getDateParams } = require('./helpers/dates')
 const { getMovies, getUrls } = require('./helpers/movies')
 
 const router = require('express').Router()
@@ -5,7 +6,9 @@ const router = require('express').Router()
 /* GET movies */
 router.get('/', async (req, res, next) => {
   try {
-    const { movies, fromDate } = await getMovies(req.query)
+    const { fromDate, toDate } = getDateParams(req.query)
+
+    const movies = await getMovies({ fromDate, toDate, ...req.query })
 
     res.render('movies', {
       movies,
