@@ -1,5 +1,4 @@
 const getShowtimesForCinemaGroupByDate = require('../db/aggregations/showtimes-by-date')
-const getShowtimesForCinemaGroupByMovie = require('../db/aggregations/showtimes-by-movie')
 const { getMovies, getUrls } = require('./helpers/movies')
 
 const Cinema = require('../models/Cinema.model')
@@ -16,7 +15,8 @@ const getUserLikedCinemas = async (userId) => {
 
 const addLikedToCinema = (likedCinemas, cinema) => {
   const liked = likedCinemas.some((lc) => lc.equals(cinema.id))
-  return { liked, ...cinema._doc }
+  cinema.liked = liked
+  return cinema
 }
 
 /* GET home page */
@@ -34,16 +34,22 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     let cinema = await Cinema.findById(req.params.id)
-    const movies = await getMovies({ cinema: cinema.id })
+    const { movies, fromDate } = await getMovies({
+      ...req.query,
+      cinema: cinema.id,
+    })
 
     if (req.session.user) {
       const likedCinemas = await getUserLikedCinemas(req.session.user._id)
       cinema = addLikedToCinema(likedCinemas, cinema)
     }
 
+    console.log(fromDate)
+
     res.render('cinema/view', {
       cinema,
       movies,
+      ...getUrls({ ...req.query, date: fromDate, url: `/cinema/${cinema.id}` }),
     })
   } catch (error) {
     console.error('ERROR OCCURRED IN CINEMA ROUTE')

@@ -29,7 +29,7 @@ const appendSearchParams = (url, params) => {
   return url
 }
 
-const getMovieUrl = (params) => {
+const getUrl = ({ url = '/movies', ...params }) => {
   let date
   try {
     date = params.date.toISOString()
@@ -37,7 +37,7 @@ const getMovieUrl = (params) => {
     date = new Date(Date.now()).toISOString()
   }
 
-  return appendSearchParams(new URL(`${APP_URL}/movies`), {
+  return appendSearchParams(new URL(`${APP_URL}${url}`), {
     ...params,
     date,
   })
@@ -59,7 +59,7 @@ const getDaysUrls = (options, step, count, classname) => {
 
   dates.sort((a, b) => a - b)
   const results = dates.map((date) => {
-    const url = getMovieUrl({
+    const url = getUrl({
       ...options,
       date,
     })
@@ -75,7 +75,7 @@ const getHourUrlInfo = (hour, options) => {
 
   if (hour === Number(options.fromHour)) {
     return {
-      url: getMovieUrl({
+      url: getUrl({
         ...options,
         fromHour: null,
       }),
@@ -84,7 +84,7 @@ const getHourUrlInfo = (hour, options) => {
     }
   }
 
-  const url = getMovieUrl({
+  const url = getUrl({
     ...options,
     fromHour: hour,
   })
@@ -99,16 +99,19 @@ const getHoursUrls = (options) => {
 }
 
 const getUrls = (options) => {
-  const ugcIllimiteUrl = getMovieUrl({
+  const ugcIllimiteUrl = getUrl({
+    url: '/movies',
     ...options,
     // deselection
     ugcIllimiteOnly: !options.ugcIllimiteOnly,
   })
-  const riveDroiteUrl = getMovieUrl({
+  const riveDroiteUrl = getUrl({
+    url: '/movies',
     ...options,
     rive: options.rive === 'droite' ? 'niq' : 'droite',
   })
-  const riveGaucheUrl = getMovieUrl({
+  const riveGaucheUrl = getUrl({
+    url: '/movies',
     ...options,
     rive: options.rive === 'gauche' ? 'niq' : 'gauche',
   })
@@ -117,7 +120,7 @@ const getUrls = (options) => {
     calendarUrls: [
       ...getDaysUrls(options, -1, 3, 'expanded-only'),
       {
-        url: getMovieUrl(options),
+        url: getUrl(options),
         label: formatDate(options.date, weekdayDateMonthFormat),
         class: 'selected',
       },
