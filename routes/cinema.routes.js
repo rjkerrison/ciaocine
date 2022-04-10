@@ -28,6 +28,7 @@ router.get('/', async (req, res, next) => {
   if (req.session.user) {
     const likedCinemas = await getUserLikedCinemas(req.session.user._id)
     cinemas = cinemas.map((c) => addLikedToCinema(likedCinemas, c))
+    cinemas.sort((a, b) => b.liked - a.liked)
     console.log({ cinema: cinemas[0], likedCinemas })
   }
   res.render('cinema', { cinemas, pageTitle: 'Cinemas' })
