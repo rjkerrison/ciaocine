@@ -16,3 +16,36 @@
   grid-row: 1;
   counter-increment: column;
 }
+
+.calendar .movies {
+  grid-gap: 0.25rem;
+}
+
+.calendar .movie {
+  grid-template-areas: 'showtimes heading';
+  grid-template-columns: auto 1fr;
+  grid-template-rows: subgrid;
+}
+
+.calendar .movie h3 {
+  margin: 0;
+}
+
+.movie-showtime {
+  grid-area: showtimes;
+}
+
+.calendar .movie .overlay {
+  display: flex;
+  align-items: center;
+  height: 2rem;
+  height: 100%;
+  top: 0;
+  transform: rotateX(0.5turn);
+  background: none;
+}
+
+.calendar .movie:hover .overlay,
+.calendar .movie.show-overlay .overlay {
+  transform: rotateX(1turn);
+}

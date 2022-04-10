@@ -1,9 +1,9 @@
 function setup({ popupWithMessage }) {
   function removeFromCalendar(event) {
     const button = event.target
-    const { calendar } = button.dataset
+    const { showtime } = button.dataset
 
-    makeDeleteCalendarCall(calendar)
+    makeDeleteCalendarCall(showtime)
   }
 
   async function makeDeleteCalendarCall(id) {
@@ -15,7 +15,7 @@ function setup({ popupWithMessage }) {
       const response = await axios(config)
       console.log(response.data)
       popupWithMessage('Successfully removed!')
-      document.querySelector(`.calendar-entry[data-calendar="${id}"]`).remove()
+      document.querySelector(`.calendar-entry[data-showtime="${id}"]`).remove()
     } catch (error) {
       console.log(error)
     }

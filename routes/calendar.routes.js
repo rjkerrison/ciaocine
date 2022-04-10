@@ -59,12 +59,14 @@ router.delete('/:showtimeId', isLoggedIn, async (req, res, next) => {
 router.get('/', isLoggedIn, async (req, res, next) => {
   try {
     const calendarDays = await getCalendarForUserGroupByDate(req.user._id)
-    const calendarByDay = Object.fromEntries(
-      calendarDays.map(({ _id, showtimes }) => [_id, showtimes])
-    )
+    const calendarByDay = calendarDays.map(({ _id, showtimes }) => ({
+      calendarDate: new Date(_id),
+      showtimes,
+    }))
 
     res.render('calendar', {
       calendarByDay,
+      showCinema: true,
       pageTitle: 'Your calendar',
     })
   } catch (error) {

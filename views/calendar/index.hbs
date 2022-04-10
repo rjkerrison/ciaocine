@@ -4,47 +4,31 @@
     {{#each calendarByDay}}
       <div class='calendar-date'>
         <h2 class='calendar-head'>
-          Date:
-          {{@key}}
+          {{date calendarDate}}
         </h2>
 
         <div class='movies'>
-          {{#each this}}
-            <div class='movie overlay-container expander-container'>
-              {{> movieHeading movie=movie}}
-              {{> showtimeCard this }}
+          {{#each showtimes}}
+            <div class='movie overlay-container expander-container calendar-entry' data-showtime="{{ _id }}">
+              <div class='movie-heading'>
+                <h3>
+                  {{movie.title}}
+                </h3>
+                {{ cinema.name }}
+              </div>
+              <div class='movie-showtime'>
+                <p>
+                  {{time startTime}}
+                </p>
+              </div>
+              <div class="overlay">
+                <button class="remove-from-calendar" data-showtime="{{ _id }}">
+                  Remove
+                </button>
+              </div>
             </div>
           {{/each}}
         </div>
-
-        {{#each this}}
-          <div class='calendar-entry' data-calendar='{{_id}}'>
-            <h3 class='showtime'>
-              {{movie.title}}
-              at
-              {{time startDate}}
-            </h3>
-            <picture>
-              <img src='{{stripProtocol movie.poster}}' alt='{{movie.title}}' />
-            </picture>
-
-            <p class='showtimes'>
-              <span class='showtime'>
-                {{cinema.name}}
-              </span>
-              <span class='showtime'>
-                {{cinema.address}}
-              </span>
-              <span class='showtime'>
-                {{cinema.zipcode}}
-              </span>
-            </p>
-            <button
-              class='remove-from-calendar'
-              data-calendar='{{this._id}}'
-            >Remove from calendar</button>
-          </div>
-        {{/each}}
       </div>
     {{/each}}
   </div>
