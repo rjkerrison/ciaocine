@@ -1,11 +1,8 @@
 .calendar {
   display: grid;
-  grid-auto-flow: column;
-  counter-reset: column;
 }
 
 .calendar-date {
-  grid-row: 1 / 100;
   display: grid;
   grid-template-columns: subgrid;
   grid-template-rows: subgrid;
@@ -69,4 +66,14 @@
 
 .calendar-head {
   grid-area: head;
+}
+
+@media screen and (min-width: 600px) {
+  .calendar {
+    grid-auto-flow: column;
+  }
+
+  .calendar-date {
+    grid-row: 1 / 100;
+  }
 }
