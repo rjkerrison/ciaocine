@@ -31,7 +31,7 @@
   margin: 0;
 }
 
-.movie-showtime {
+.calendar .movie-showtime {
   grid-area: showtimes;
 }
 
