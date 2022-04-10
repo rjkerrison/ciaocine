@@ -4,12 +4,7 @@ const Cinema = require('../models/Cinema.model')
 const { getShowtimes } = require('../api/allocine')
 const { default: mongoose } = require('mongoose')
 const { populateShowtimes } = require('../db/populate-showtimes')
-
-const sleep = (ms) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms)
-  })
-}
+const { sleep } = require('./enhanceMovies')
 
 const seedShowtimes = async () => {
   await require('../db/index')
