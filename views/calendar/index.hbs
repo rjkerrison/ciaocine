@@ -8,12 +8,21 @@
           {{@key}}
         </h2>
 
+        <div class='movies'>
+          {{#each this}}
+            <div class='movie overlay-container expander-container'>
+              {{> movieHeading movie=movie}}
+              {{> showtimeCard this }}
+            </div>
+          {{/each}}
+        </div>
+
         {{#each this}}
           <div class='calendar-entry' data-calendar='{{_id}}'>
             <h3 class='showtime'>
               {{movie.title}}
               at
-              {{timeString}}
+              {{time startDate}}
             </h3>
             <picture>
               <img src='{{stripProtocol movie.poster}}' alt='{{movie.title}}' />

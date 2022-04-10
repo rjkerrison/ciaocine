@@ -53,6 +53,12 @@ const sortByStartTime = {
   },
 }
 
+const sortBy = (key) => ({
+  $sort: {
+    [key]: 1,
+  },
+})
+
 const populateCinema = {
   $lookup: {
     from: 'cinemas',
@@ -164,6 +170,7 @@ module.exports = {
   groupByDate,
   sortById,
   sortByStartTime,
+  sortBy,
   populateMovie,
   populateCinema,
   populateMovieFromId,

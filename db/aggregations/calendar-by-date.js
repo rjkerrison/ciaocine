@@ -10,6 +10,7 @@ const {
   unwindMovie,
   unwindShowtime,
   unwindCinema,
+  sortBy,
 } = require('./steps')
 
 const getCalendarForUserGroupByDate = async (userId) => {
@@ -18,6 +19,7 @@ const getCalendarForUserGroupByDate = async (userId) => {
     populateShowtime,
     unwindShowtime,
     projectToShowtime,
+    sortBy('showtime.startTime'),
     populateMovie,
     unwindMovie,
     populateCinema,
