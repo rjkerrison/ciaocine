@@ -8,11 +8,14 @@
         </a>
       </h2>
 
-      <p>
-        {{address}}
-        {{zipcode}}
-        {{city}}
-      </p>
+      <div class="address">
+        <p>
+          {{address}}
+          {{zipcode}}
+          {{city}}
+        </p>
+        {{> favouriteCinema cinema=this liked=liked}}
+      </div>
       <ul class='member-card-list'>
         {{#each member_cards}}
           <li class='member-card' data-code='{{code}}'>
@@ -20,9 +23,6 @@
           </li>
         {{/each}}
       </ul>
-      <div class="overlay">
-        {{> favouriteCinema cinema=this liked=liked}}
-      </div>
     </li>
   {{/each}}
 </ul>

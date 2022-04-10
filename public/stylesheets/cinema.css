@@ -79,3 +79,43 @@ button.favourite-cinema:hover {
 .showtimes {
   display: contents;
 }
+
+/* cinema.css | http://localhost:3000/stylesheets/cinema.css */
+
+.cinema-list {
+  /* grid-template: auto / repeat(auto-fill, minmax(16rem, 1fr)); */
+  grid-template: auto / repeat(auto-fill, minmax(30rem, 1fr));
+  padding: 0;
+}
+
+.cinema-list .cinema {
+  display: grid;
+  grid-template-areas: 'name name' 'address cards';
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr 1fr;
+}
+
+.cinema-list .cinema h2 {
+  grid-area: name;
+  font-size: 2rem;
+}
+
+.member-card-list {
+  grid-area: cards;
+  align-self: center;
+  justify-self: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.member-card {
+  /* padding: 0.125rem; */
+  padding: 0.25rem;
+  text-align: center;
+}
+
+/* Inline #1 | http://localhost:3000/cinema */
+
+.cinema .address {
+  grid-area: address;
+}
