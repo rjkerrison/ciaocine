@@ -38,10 +38,17 @@ router.post('/', isLoggedIn, async (req, res, next) => {
   }
 })
 
-/* DELETE /calendar/:calendarId */
-router.delete('/:calendarId', isLoggedIn, async (req, res, next) => {
+/* DELETE /calendar/:showtimeId
+
+It is necessary to search by showtimeId and userId
+to prevent users from removing others' calendar
+entries simply by specifying an existing id.
+*/
+router.delete('/:showtimeId', isLoggedIn, async (req, res, next) => {
   try {
-    const deletion = await Calendar.findByIdAndDelete(req.params.calendarId)
+    const { showtimeId: showtime } = req.params
+    const { _id: user } = req.user
+    const deletion = await Calendar.findOneAndDelete({ showtime, user })
 
     res.json(deletion)
   } catch (error) {
