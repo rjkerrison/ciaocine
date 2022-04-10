@@ -41,23 +41,14 @@ const groupByDate = {
   },
 }
 
-const sortById = {
+const sortBy = (key, direction = 1) => ({
   $sort: {
-    _id: 1,
-  },
-}
-
-const sortByStartTime = {
-  $sort: {
-    startTime: 1,
-  },
-}
-
-const sortBy = (key) => ({
-  $sort: {
-    [key]: 1,
+    [key]: direction,
   },
 })
+
+const sortById = sortBy('_id')
+const sortByStartTime = sortBy('startTime')
 
 const populateCinema = {
   $lookup: {
