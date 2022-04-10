@@ -38,10 +38,17 @@ router.post('/', isLoggedIn, async (req, res, next) => {
   }
 })
 
-/* DELETE /calendar/:calendarId */
-router.delete('/:calendarId', isLoggedIn, async (req, res, next) => {
+/* DELETE /calendar/:showtimeId
+
+It is necessary to search by showtimeId and userId
+to prevent users from removing others' calendar
+entries simply by specifying an existing id.
+*/
+router.delete('/:showtimeId', isLoggedIn, async (req, res, next) => {
   try {
-    const deletion = await Calendar.findByIdAndDelete(req.params.calendarId)
+    const { showtimeId: showtime } = req.params
+    const { _id: user } = req.user
+    const deletion = await Calendar.findOneAndDelete({ showtime, user })
 
     res.json(deletion)
   } catch (error) {
@@ -52,12 +59,14 @@ router.delete('/:calendarId', isLoggedIn, async (req, res, next) => {
 router.get('/', isLoggedIn, async (req, res, next) => {
   try {
     const calendarDays = await getCalendarForUserGroupByDate(req.user._id)
-    const calendarByDay = Object.fromEntries(
-      calendarDays.map(({ _id, showtimes }) => [_id, showtimes])
-    )
+    const calendarByDay = calendarDays.map(({ _id, showtimes }) => ({
+      calendarDate: new Date(_id),
+      showtimes,
+    }))
 
     res.render('calendar', {
       calendarByDay,
+      showCinema: true,
       pageTitle: 'Your calendar',
     })
   } catch (error) {
