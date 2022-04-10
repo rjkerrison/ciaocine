@@ -49,3 +49,24 @@
 .calendar .movie.show-overlay .overlay {
   transform: rotateX(1turn);
 }
+
+.calendar .movies {
+  grid-template: auto / 1fr;
+  grid-area: shows;
+}
+
+.calendar {
+  grid-auto-columns: auto;
+  justify-content: center;
+  grid-template: auto 1fr / auto;
+}
+
+.calendar-date {
+  grid-row: auto;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: 'head' 'shows';
+}
+
+.calendar-head {
+  grid-area: head;
+}
