@@ -1,3 +1,6 @@
+const getShowtimesForCinemaGroupByDate = require('../db/aggregations/showtimes-by-date')
+const { getMovies, getUrls } = require('./helpers/movies')
+
 const getShowtimesForCinemaGroupByMovie = require('../db/aggregations/showtimes-by-movie')
 const Cinema = require('../models/Cinema.model')
 const FavouriteCinema = require('../models/FavouriteCinema.model')
@@ -15,7 +18,8 @@ const getUserLikedCinemas = async (userId) => {
 
 const addLikedToCinema = (likedCinemas, cinema) => {
   const liked = likedCinemas.some((lc) => lc.equals(cinema.id))
-  return { liked, ...cinema._doc }
+  cinema.liked = liked
+  return cinema
 }
 
 /* GET home page */
@@ -34,8 +38,9 @@ router.get('/:id', async (req, res, next) => {
   try {
     const { fromDate, toDate } = getDateParams(req.query)
     let cinema = await Cinema.findById(req.params.id)
-
-    const movies = await getShowtimesForCinemaGroupByMovie(cinema.id, {
+    const movies = await getMovies({
+      ...req.query,
+      cinema: cinema.id,
       fromDate,
       toDate,
     })
@@ -46,13 +51,9 @@ router.get('/:id', async (req, res, next) => {
     }
 
     res.render('cinema/view', {
-      calendarUrls: getCalendarUrls({
-        date: new Date(),
-        ...req.params,
-        ...req.query,
-      }),
       cinema,
       movies,
+      ...getUrls({ ...req.query, date: fromDate, url: `/cinema/${cinema.id}` }),
       showDate: true,
     })
   } catch (error) {

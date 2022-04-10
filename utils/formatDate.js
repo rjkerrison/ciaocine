@@ -11,6 +11,9 @@ const formatDate = (datetime, targetFormat) => {
 const timeFormat = {
   hour: 'numeric',
   minute: 'numeric',
+  // unfortunately the data we have is without timezone
+  // and we cannot afford to convert it, so we have to print UTC
+  timeZone: 'UTC',
 }
 
 const dateFormat = {

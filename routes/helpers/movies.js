@@ -6,13 +6,14 @@ const {
   filterCinemaToUgcIllimite,
   filterCinemaToRiveGauche,
   filterCinemaToRiveDroite,
+  filterCinemaById,
 } = require('../../db/aggregations/steps')
 const { APP_URL } = require('../../utils/consts')
 const { formatDate, weekdayDateMonthFormat } = require('../../utils/formatDate')
 const { adjustDateByDays } = require('./dates')
 const { appendSearchParams } = require('./params')
 
-const getMovieUrl = (params) => {
+const getUrl = ({ url = '/movies', ...params }) => {
   let date
   try {
     date = params.date.toISOString()
@@ -20,7 +21,7 @@ const getMovieUrl = (params) => {
     date = new Date(Date.now()).toISOString()
   }
 
-  return appendSearchParams(new URL(`${APP_URL}/movies`), {
+  return appendSearchParams(new URL(`${APP_URL}${url}`), {
     ...params,
     date,
   })
@@ -36,7 +37,7 @@ const getDaysUrls = (options, step, count, classname) => {
 
   dates.sort((a, b) => a - b)
   const results = dates.map((date) => {
-    const url = getMovieUrl({
+    const url = getUrl({
       ...options,
       date,
     })
@@ -52,7 +53,7 @@ const getHourUrlInfo = (hour, options) => {
 
   if (hour === Number(options.fromHour)) {
     return {
-      url: getMovieUrl({
+      url: getUrl({
         ...options,
         fromHour: null,
       }),
@@ -61,7 +62,7 @@ const getHourUrlInfo = (hour, options) => {
     }
   }
 
-  const url = getMovieUrl({
+  const url = getUrl({
     ...options,
     fromHour: hour,
   })
@@ -79,7 +80,10 @@ const getCalendarUrls = (options) => {
   return [
     ...getDaysUrls(options, -1, 3, 'expanded-only'),
     {
-      url: getMovieUrl(options),
+      url: getUrl({
+        url: '/movies',
+        ...options,
+      }),
       label: formatDate(options.date, weekdayDateMonthFormat),
       class: 'selected',
     },
@@ -88,16 +92,19 @@ const getCalendarUrls = (options) => {
 }
 
 const getUrls = (options) => {
-  const ugcIllimiteUrl = getMovieUrl({
+  const ugcIllimiteUrl = getUrl({
+    url: '/movies',
     ...options,
     // deselection
     ugcIllimiteOnly: !options.ugcIllimiteOnly,
   })
-  const riveDroiteUrl = getMovieUrl({
+  const riveDroiteUrl = getUrl({
+    url: '/movies',
     ...options,
     rive: options.rive === 'droite' ? 'niq' : 'droite',
   })
-  const riveGaucheUrl = getMovieUrl({
+  const riveGaucheUrl = getUrl({
+    url: '/movies',
     ...options,
     rive: options.rive === 'gauche' ? 'niq' : 'gauche',
   })
@@ -128,6 +135,11 @@ const getUrls = (options) => {
 const getAdditionalFilters = (ugcIllimiteOnly, rive, cinema) => {
   const additionalFilters = []
 
+  if (cinema) {
+    // override any other filters if a cinema id is specified
+    return [filterCinemaById(cinema)]
+  }
+
   switch (rive) {
     case 'niq':
       break
@@ -154,7 +166,6 @@ const getMovies = async ({
   cinema = null,
 }) => {
   const additionalFilters = getAdditionalFilters(ugcIllimiteOnly, rive, cinema)
-
   const movies = await getMoviesBetweenTimes(
     fromDate,
     toDate,

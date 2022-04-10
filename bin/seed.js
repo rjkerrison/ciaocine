@@ -14,6 +14,7 @@ const sleep = (ms) => {
 const seedShowtimes = async () => {
   await require('../db/index')
   const cinemas = await Cinema.find()
+  console.log(`${cinemas.length} cinemas found.`)
 
   for (let cinema of cinemas) {
     // Attempt to do a little rate limiting

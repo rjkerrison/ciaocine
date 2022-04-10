@@ -16,8 +16,10 @@
     {{/each}}
   </ul>
 {{/with}}
+
 <nav>
   {{> moviesFilters label='sur le' urls=calendarUrls}}
+  {{> moviesFilters label='à partir de' urls=hoursUrls}}
 </nav>
 
 <div class='movies'>
