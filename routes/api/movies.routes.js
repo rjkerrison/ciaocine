@@ -1,3 +1,5 @@
+const { default: axios } = require('axios')
+const { getMovies } = require('../../api/tmdb')
 const Movie = require('../../models/Movie.model')
 const Showtime = require('../../models/Showtime.model')
 
@@ -36,6 +38,7 @@ router.get('/:movieId', async (req, res, next) => {
     res.json({
       movie,
       showtimes,
+      tmdbInfo: await getMovies(movie.title),
     })
   } catch (error) {
     next(error)
@@ -45,8 +48,9 @@ router.get('/:movieId', async (req, res, next) => {
 /* GET movies/:movieid */
 router.get('/search/:term', async (req, res, next) => {
   try {
+    const { term } = req.params
     const movies = await Movie.find({
-      title: { $regex: req.params.term, $options: 'i' },
+      title: { $regex: term, $options: 'i' },
     })
     if (!movies) {
       res.status(404).json({ error: 'movie not found' })
@@ -55,6 +59,7 @@ router.get('/search/:term', async (req, res, next) => {
 
     res.json({
       movies,
+      tmdbInfo: await getMovies(term),
     })
   } catch (error) {
     next(error)
