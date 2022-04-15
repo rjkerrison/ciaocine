@@ -6,15 +6,13 @@ const mongoose = require('mongoose')
 
 const fileUploader = require('../config/cloudinary.config')
 
-// How many rounds should bcrypt run the salt (default [10 - 12 rounds])
-const saltRounds = 10
-
 // Require the User model in order to interact with the database
 const User = require('../models/User.model')
 
 // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
 const isLoggedOut = require('../middleware/isLoggedOut')
 const isLoggedIn = require('../middleware/isLoggedIn')
+const { createUser } = require('./helpers/user')
 
 router.get('/signup', isLoggedOut, (req, res) => {
   res.render('auth/signup')
@@ -61,17 +59,11 @@ router.post(
       }
 
       // if user is not found, create a new user - start with hashing the password
-      return bcrypt
-        .genSalt(saltRounds)
-        .then((salt) => bcrypt.hash(password, salt))
-        .then((hashedPassword) => {
-          // Create a user and save it in the database
-          return User.create({
-            username,
-            profilePictureUrl: req.file?.path,
-            password: hashedPassword,
-          })
-        })
+      createUser({
+        username,
+        profilePictureUrl: req.file?.path,
+        password,
+      })
         .then((user) => {
           // Bind the user to the session object
           req.session.user = user
