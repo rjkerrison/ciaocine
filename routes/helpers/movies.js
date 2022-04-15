@@ -132,12 +132,12 @@ const getUrls = (options) => {
   }
 }
 
-const getAdditionalFilters = (ugcIllimiteOnly, rive, cinema) => {
+const getAdditionalFilters = (ugcIllimiteOnly, rive, cinemaId) => {
   const additionalFilters = []
 
-  if (cinema) {
+  if (cinemaId) {
     // override any other filters if a cinema id is specified
-    return [filterCinemaById(cinema)]
+    return [filterCinemaById(cinemaId)]
   }
 
   switch (rive) {
