@@ -1,4 +1,3 @@
-const { default: axios } = require('axios')
 const { getMovies } = require('../../api/tmdb')
 const Movie = require('../../models/Movie.model')
 const Showtime = require('../../models/Showtime.model')
@@ -14,7 +13,7 @@ router.get('/', async (req, res, next) => {
       movies,
     })
   } catch (error) {
-    res.status(500).json({ error })
+    next(error)
   }
 })
 
