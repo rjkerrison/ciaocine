@@ -1,4 +1,5 @@
 const jwt = require('express-jwt')
+const User = require('../models/User.model')
 
 const isAuthenticated = jwt({
   secret: process.env.TOKEN_SECRET,
@@ -24,6 +25,14 @@ function getTokenFromHeaders(req) {
   return null
 }
 
+const includeUser = async (req, res, next) => {
+  const { username } = req.payload
+  const user = await User.findOne({ username })
+  req.user = user
+  next()
+}
+
 module.exports = {
   isAuthenticated,
+  includeUser,
 }

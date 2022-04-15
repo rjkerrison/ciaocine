@@ -1,15 +1,12 @@
 const router = require('express').Router()
-const { isAuthenticated } = require('../../middleware/jwt.middleware')
-const User = require('../../models/User.model')
+const {
+  isAuthenticated,
+  includeUser,
+} = require('../../middleware/jwt.middleware')
 const FavouriteCinema = require('../../models/FavouriteCinema.model')
 
 router.use(isAuthenticated)
-router.use(async (req, res, next) => {
-  const { username } = req.payload
-  const user = await User.findOne({ username })
-  req.user = user
-  next()
-})
+router.use(includeUser)
 
 /* GET /api/likes/cinemas */
 router.get('/cinemas', async (req, res, next) => {
