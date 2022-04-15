@@ -131,11 +131,20 @@ const filterCinemaToUgcIllimite = {
   },
 }
 
-const filterCinemaById = (...cinemaIds) => ({
-  $match: {
-    'cinema._id': { $in: cinemaIds.map((id) => new ObjectId(id)) },
-  },
-})
+const filterCinemaById = (...cinemaIds) => {
+  cinemaIds = cinemaIds.map((id) => {
+    if (typeof id === 'string') {
+      return new ObjectId(id)
+    }
+    return id
+  })
+
+  return {
+    $match: {
+      'cinema._id': { $in: cinemaIds },
+    },
+  }
+}
 
 const riveGaucheArrondissements = [
   '75005',

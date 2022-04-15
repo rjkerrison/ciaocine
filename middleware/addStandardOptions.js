@@ -6,6 +6,5 @@ module.exports = (req, res, next) => {
     ...req.session.user,
   }
 
-  console.log(`USER IS ${res.locals.user.isLoggedIn ? '' : 'NOT '}LOGGED IN`)
   next()
 }
