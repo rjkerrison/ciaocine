@@ -22,7 +22,7 @@ router.get('/:cinemaId', async (req, res, next) => {
     })
 
     res.status(200).json({
-      id: cinema._id,
+      cinema,
       movies,
     })
   } catch (error) {

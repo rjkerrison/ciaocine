@@ -3,11 +3,13 @@ const authRouter = require('./auth.routes')
 const moviesRouter = require('./movies.routes')
 const showtimesRouter = require('./showtimes.routes')
 const cinemasRouter = require('./cinemas.routes')
+const likesRouter = require('./likes.routes')
 
 router.use('/auth', authRouter)
 router.use('/movies', moviesRouter)
 router.use('/showtimes', showtimesRouter)
 router.use('/cinemas', cinemasRouter)
+router.use('/likes', likesRouter)
 
 router.use((req, res, next) => {
   // 404 for API
