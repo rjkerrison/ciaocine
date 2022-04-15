@@ -5,6 +5,7 @@ const cinemaRoutes = require('./cinema.routes')
 const calendarRoutes = require('./calendar.routes')
 const favouriteRoutes = require('./favourite.routes')
 const moviesRoutes = require('./movies.routes')
+const apiRouter = require('./api')
 
 const registerRoutes = (app) => {
   app.use('/', index)
@@ -13,6 +14,7 @@ const registerRoutes = (app) => {
   app.use('/calendar', calendarRoutes)
   app.use('/favourite', favouriteRoutes)
   app.use('/movies', moviesRoutes)
+  app.use('/api', apiRouter)
 }
 
 module.exports = registerRoutes
