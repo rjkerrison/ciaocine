@@ -7,4 +7,9 @@ router.use('/auth', authRouter)
 router.use('/movies', moviesRouter)
 router.use('/showtimes', showtimesRouter)
 
+router.use((error, req, res, next) => {
+  // Error handling for API
+  return res.status(500).json({ errorMessage: error.message })
+})
+
 module.exports = router
