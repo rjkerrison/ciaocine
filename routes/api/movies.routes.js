@@ -37,7 +37,7 @@ router.get('/:movieId', async (req, res, next) => {
     res.json({
       movie,
       showtimes,
-      tmdbInfo: await getMovies(movie.title),
+      tmdbInfo: await getMovies(movie.title, movie?.releaseDate?.getFullYear()),
     })
   } catch (error) {
     next(error)

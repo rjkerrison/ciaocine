@@ -12,6 +12,7 @@ const movieSchema = new Schema({
   synopsis: String,
   runtime: Number,
   castingShort: castingShortSchema,
+  releaseDate: { type: Schema.Types.Date },
 })
 
 const Movie = model('Movie', movieSchema)

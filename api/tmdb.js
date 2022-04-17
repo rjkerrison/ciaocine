@@ -2,8 +2,10 @@ const { default: axios } = require('axios')
 
 const baseUrl = 'https://api.themoviedb.org/3'
 
-const getMoviesConfig = (query) => {
+const getMoviesConfig = (query, year) => {
   const page = 1
+
+  console.log(query, year)
 
   return {
     baseURL: baseUrl,
@@ -14,6 +16,7 @@ const getMoviesConfig = (query) => {
       query,
       page,
       include_adult: false,
+      year,
     },
   }
 }
@@ -84,11 +87,10 @@ const enhanceMovie = async (movie) => {
     crew,
   }
 }
-
-const getMovies = async (searchTerm) => {
+const getMovies = async (searchTerm, year) => {
   const {
     data: { results: tmdbInfo },
-  } = await axios(getMoviesConfig(searchTerm))
+  } = await axios(getMoviesConfig(searchTerm, year))
 
   const movies = tmdbInfo.slice(0, 5)
 
