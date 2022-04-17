@@ -8,12 +8,18 @@ const Movie = require('../models/Movie.model')
 const seedMovies = async () => {
   await require('../db/index')
   const movies = await Movie.find()
+  console.log('Found %s movies.', movies.length)
 
   for (let movie of movies) {
+    if (movie.releaseDate) {
+      console.log('Skipping %s, released %s', movie.title, movie.releaseDate)
+      continue
+    }
+
     // Attempt to do a little rate limiting
     await sleep(250)
     const result = await enhanceMovie(movie)
-    console.log('Done.', result)
+    console.log('Found info:', result)
   }
 
   console.log(`Updated ${movies.length} movies.`)
