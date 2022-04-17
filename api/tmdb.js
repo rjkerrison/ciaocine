@@ -18,11 +18,24 @@ const getMoviesConfig = (query) => {
   }
 }
 
+const getCreditsConfig = (id) => {
+  return {
+    baseURL: baseUrl,
+    url: '/movie/' + id + '/credits',
+    params: {
+      api_key: process.env.TMDB_KEY,
+      language: 'fr-FR',
+    },
+  }
+}
+
 const getMovies = async (searchTerm) => {
   const {
     data: { results: tmdbInfo },
   } = await axios(getMoviesConfig(searchTerm))
-  return tmdbInfo
+  const { data } = await axios(getCreditsConfig(tmdbInfo[0].id))
+
+  return [{ ...tmdbInfo[0], ...data }]
 }
 
 module.exports = {
