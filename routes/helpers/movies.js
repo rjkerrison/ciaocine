@@ -151,7 +151,7 @@ const getAdditionalFilters = (ugcIllimiteOnly, rive, cinemaId) => {
       break
   }
 
-  if (Boolean(ugcIllimiteOnly)) {
+  if (ugcIllimiteOnly === 'true') {
     additionalFilters.push(filterCinemaToUgcIllimite)
   }
 
