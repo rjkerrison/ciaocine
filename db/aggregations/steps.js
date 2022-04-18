@@ -163,6 +163,14 @@ const filterCinemaToRiveGauche = {
   },
 }
 
+const filterCinemaToArrondissements = (arrondissements) => ({
+  $match: {
+    'cinema.zipcode': {
+      $in: arrondissements,
+    },
+  },
+})
+
 const filterCinemaToRiveDroite = {
   $match: {
     'cinema.zipcode': {
@@ -191,5 +199,6 @@ module.exports = {
   filterCinemaToUgcIllimite,
   filterCinemaToRiveGauche,
   filterCinemaToRiveDroite,
+  filterCinemaToArrondissements,
   filterCinemaById,
 }
