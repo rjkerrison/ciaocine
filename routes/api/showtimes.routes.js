@@ -1,5 +1,5 @@
 const { getDateParams } = require('../helpers/dates')
-const { getMovies, getUrls } = require('../helpers/movies')
+const { getMovies, getFilters } = require('../helpers/movies')
 
 const router = require('express').Router()
 
@@ -18,7 +18,9 @@ router.get('/:year/:month/:date', async (req, res, next) => {
       movies,
       fromDate,
       toDate,
-      ...getUrls({ ...req.query, date: fromDate, url: '/api/showtimes/' }),
+      filters: getFilters({
+        ...req.query,
+      }),
     })
   } catch (error) {
     next(error)

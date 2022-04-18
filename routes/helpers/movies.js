@@ -91,6 +91,22 @@ const getCalendarUrls = (options) => {
   ]
 }
 
+const getFilters = (options) => {
+  const ugcIllimite = {
+    name: 'ugcIllimite',
+    type: 'toggle',
+    value: options.ugcIllimiteOnly || false,
+  }
+  const rive = {
+    name: 'rive',
+    options: ['droite', 'gauche', 'niq'],
+    value: options.rive || 'niq',
+    type: 'switch',
+  }
+
+  return [ugcIllimite, rive]
+}
+
 const getUrls = (options) => {
   const ugcIllimiteUrl = getUrl({
     url: '/movies',
@@ -176,4 +192,4 @@ const getMovies = async ({
   return movies
 }
 
-module.exports = { getMovies, getUrls, getCalendarUrls }
+module.exports = { getMovies, getUrls, getCalendarUrls, getFilters }
