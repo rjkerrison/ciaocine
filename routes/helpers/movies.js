@@ -9,7 +9,7 @@ const {
   filterCinemaById,
   filterCinemaToArrondissements,
 } = require('../../db/aggregations/steps')
-const { APP_URL } = require('../../utils/consts')
+const { APP_URL, URL_SEPARATOR } = require('../../utils/consts')
 const { formatDate, weekdayDateMonthFormat } = require('../../utils/formatDate')
 const { adjustDateByDays } = require('./dates')
 const { appendSearchParams } = require('./params')
@@ -157,7 +157,7 @@ const getAdditionalFilters = (
     default:
       if (arrondissements) {
         additionalFilters.push(
-          filterCinemaToArrondissements(arrondissements.split(','))
+          filterCinemaToArrondissements(arrondissements.split(URL_SEPARATOR))
         )
       }
       break
