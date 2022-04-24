@@ -39,7 +39,9 @@ const saveShowtimesFromAllocine = async ({
   const result = await Promise.all(
     times.map(async ({ code, $ }) => {
       // this is far too hacky and needs to be changed
-      const startTime = new Date(date + ' ' + $)
+      // needs to meet format: '2022-04-25T14:00+02:00'
+      // currently hardcoded to CEST, which buys me a few months
+      const startTime = new Date(date + 'T' + $ + '+02:00')
 
       const result = await saveShowtimeFromAllocine({
         code,
