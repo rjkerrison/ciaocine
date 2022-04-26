@@ -77,11 +77,11 @@ router.post('/login', async (req, res, next) => {
       })
     }
 
-    const payload = { username }
+    const payload = { username, profilePictureUrl: user.profilePictureUrl }
 
     const authToken = jsonwebtoken.sign(payload, process.env.TOKEN_SECRET, {
       algorithm: 'HS256',
-      expiresIn: '1h',
+      expiresIn: '72h',
     })
 
     return res.status(200).json({ authToken })
