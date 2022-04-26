@@ -14,9 +14,6 @@ const populateShowtimes = async (showtimes, cinema) => {
   )
 
   const mappedShowtimes = await Promise.all(showtimePromises)
-  console.log(
-    `Populated ${mappedShowtimes.length} showtimes for ${cinema.name}`
-  )
   return mappedShowtimes
 }
 

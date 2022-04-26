@@ -19,9 +19,9 @@ const seedShowtimes = async () => {
   for (let cinema of cinemas) {
     // Attempt to do a little rate limiting
     await sleep(250)
-    const result = await findShowtimesAndSave(cinema)
-    if (result) {
-      console.log(`Finished importing showtimes for ${cinema.name}.`)
+    const showtimes = await findShowtimesAndSave(cinema)
+    if (showtimes) {
+      console.log(`Populated ${showtimes.length} showtimes for ${cinema.name}`)
     }
   }
 
@@ -32,8 +32,6 @@ const findShowtimesAndSave = async (cinema) => {
   try {
     const showtimes = await getShowtimes(cinema.allocine_id)
     const population = await populateShowtimes(showtimes, cinema)
-    //console.log('population', population)
-
     return population
   } catch (error) {
     console.error(`Error for cinema ${cinema.name}.`, error)
