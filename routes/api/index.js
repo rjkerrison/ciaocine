@@ -13,13 +13,6 @@ router.use('/cinemas', cinemasRouter)
 router.use('/likes', likesRouter)
 router.use('/calendar', calendarRouter)
 
-router.use((req, res, next) => {
-  // 404 for API
-  return res
-    .status(404)
-    .json({ errorMessage: `Cannot ${req.method} ${req.originalUrl}` })
-})
-
 router.use((error, req, res, next) => {
   if (error.status === 401) {
     return res.status(401).json({ errorMessage: error.message })

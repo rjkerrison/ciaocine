@@ -1,6 +1,9 @@
 module.exports = (app) => {
   app.use((req, res, next) => {
-    res.status(404).send()
+    // 404 for API
+    return res
+      .status(404)
+      .json({ errorMessage: `Cannot ${req.method} ${req.originalUrl}` })
   })
 
   app.use((err, req, res, next) => {
