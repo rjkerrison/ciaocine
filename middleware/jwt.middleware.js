@@ -1,9 +1,10 @@
 const jwt = require('express-jwt')
+const { ALGORITHM } = require('../config/jwt')
 const User = require('../models/User.model')
 
 const isAuthenticated = jwt({
   secret: process.env.TOKEN_SECRET,
-  algorithms: ['HS256'],
+  algorithms: [ALGORITHM],
   requestProperty: 'payload',
   getToken: getTokenFromHeaders,
 })
