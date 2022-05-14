@@ -29,13 +29,38 @@ const getCreditsConfig = (id) => {
   }
 }
 
+const getCrewDictionary = (crew) => {
+  const result = crew.reduce((dictionary, { job, name, id }) => {
+    if (!dictionary[job]) {
+      dictionary[job] = [{ name, id }]
+    } else {
+      dictionary[job].push({ name, id })
+    }
+    return dictionary
+  }, {})
+  return result
+}
+
+const getMovieCredits = async (movie) => {
+  const {
+    data: { cast, crew },
+  } = await axios(getCreditsConfig(movie.id))
+
+  return {
+    ...movie,
+    cast,
+    crew: getCrewDictionary(crew),
+  }
+}
+
 const getMovies = async (searchTerm) => {
   const {
     data: { results: tmdbInfo },
   } = await axios(getMoviesConfig(searchTerm))
-  const { data } = await axios(getCreditsConfig(tmdbInfo[0].id))
 
-  return [{ ...tmdbInfo[0], ...data }]
+  const movies = tmdbInfo.slice(0, 5)
+
+  return await Promise.all(movies.map(getMovieCredits))
 }
 
 module.exports = {
