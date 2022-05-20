@@ -1,3 +1,4 @@
+const getShowtimeById = require('../../db/aggregations/showtimes-by-id')
 const { getDateParams } = require('../helpers/dates')
 const { getMovies, getUrls } = require('../helpers/movies')
 
@@ -20,6 +21,17 @@ router.get('/:year/:month/:date', async (req, res, next) => {
       toDate,
       ...getUrls({ ...req.query, date: fromDate, url: '/api/showtimes/' }),
     })
+  } catch (error) {
+    next(error)
+  }
+})
+
+/* GET /api/showtimes/:showtimeId */
+router.get('/:showtimeId', async (req, res, next) => {
+  const { showtimeId } = req.params
+  try {
+    const showtime = await getShowtimeById(showtimeId)
+    res.json({ showtime })
   } catch (error) {
     next(error)
   }
