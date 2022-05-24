@@ -4,6 +4,9 @@ const Showtime = require('../models/Showtime.model')
 const populateShowtimes = async (showtimes, cinema) => {
   const showtimePromises = showtimes.flatMap(
     async ({ movie: fetchedMovie, scr }) => {
+      if (!scr) {
+        return []
+      }
       const movie = await saveMovieFromAllocine(fetchedMovie)
       const saveShowtimesPromises = scr.map((s) =>
         saveShowtimesFromAllocine({ ...s, movie, cinema })
