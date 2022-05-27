@@ -1,10 +1,6 @@
-const getShowtimesForCinemaGroupByDate = require('../db/aggregations/showtimes-by-date')
 const { getMovies, getUrls } = require('./helpers/movies')
-
-const getShowtimesForCinemaGroupByMovie = require('../db/aggregations/showtimes-by-movie')
 const Cinema = require('../models/Cinema.model')
 const FavouriteCinema = require('../models/FavouriteCinema.model')
-const { getCalendarUrls } = require('./helpers/cinema')
 const { getDateParams } = require('./helpers/dates')
 
 const router = require('express').Router()

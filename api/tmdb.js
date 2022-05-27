@@ -87,14 +87,50 @@ const enhanceMovie = async (movie) => {
     crew,
   }
 }
-const getMovies = async (searchTerm, year) => {
+
+const stringsMatch = (a, b) => {
+  return a.localeCompare(b, 'en', { sensitivity: 'base' }) === 0
+}
+
+const scoreMatch = (movie, { searchTerm, year, director }) => {
+  const {
+    title,
+    crew: { Director: movieDirector },
+    release_date,
+  } = movie
+
+  let score = 0
+  if (stringsMatch(title, searchTerm)) {
+    score += 45
+  }
+  if (movieDirector.some((x) => stringsMatch(x.name, director))) {
+    score += 50
+  }
+  if (new Date(release_date).getFullYear() === Number(year)) {
+    score += 25
+  }
+  return score
+}
+
+const compareScores = (a, b) => {
+  return b.score - a.score
+}
+
+const getMovies = async (searchTerm, { year, director }) => {
   const {
     data: { results: tmdbInfo },
   } = await axios(getMoviesConfig(searchTerm, year))
 
   const movies = tmdbInfo.slice(0, 5)
 
-  return await Promise.all(movies.map(enhanceMovie))
+  const enhancedMovies = await Promise.all(movies.map(enhanceMovie))
+
+  enhancedMovies.forEach(
+    (m) => (m.score = scoreMatch(m, { searchTerm, year, director }))
+  )
+
+  enhancedMovies.sort(compareScores)
+  return enhancedMovies
 }
 
 module.exports = {
