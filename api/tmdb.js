@@ -103,7 +103,7 @@ const scoreMatch = (movie, { searchTerm, year, director }) => {
   if (stringsMatch(title, searchTerm)) {
     score += 45
   }
-  if (movieDirector.some((x) => stringsMatch(x.name, director))) {
+  if (movieDirector?.some((x) => stringsMatch(x.name, director))) {
     score += 50
   }
   if (new Date(release_date).getFullYear() === Number(year)) {
