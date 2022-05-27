@@ -37,7 +37,10 @@ router.get('/:movieId', async (req, res, next) => {
     res.json({
       movie,
       showtimes,
-      tmdbInfo: await getMovies(movie.title),
+      tmdbInfo: await getMovies(movie.title, {
+        year: movie?.releaseDate?.getFullYear(),
+        director: movie?.castingShort?.directors,
+      }),
     })
   } catch (error) {
     next(error)
@@ -48,6 +51,7 @@ router.get('/:movieId', async (req, res, next) => {
 router.get('/search/:term', async (req, res, next) => {
   try {
     const { term } = req.params
+    const { year, director } = req.query
     const movies = await Movie.find({
       title: { $regex: term, $options: 'i' },
     })
@@ -58,7 +62,7 @@ router.get('/search/:term', async (req, res, next) => {
 
     res.json({
       movies,
-      tmdbInfo: await getMovies(term),
+      tmdbInfo: await getMovies(term, { year, director }),
     })
   } catch (error) {
     next(error)

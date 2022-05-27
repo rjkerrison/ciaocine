@@ -20,6 +20,18 @@ const getShowtimeListConfig = (allocineCinemaId) => {
   }
 }
 
+const getMovieConfig = (allocineMovieId) => {
+  return {
+    baseURL: baseUrl,
+    url: '/movie',
+    params: {
+      partner: partnerKey,
+      code: allocineMovieId,
+      format: 'json',
+    },
+  }
+}
+
 const fromAllocineApiToShowtime = ({ onShow, version, scr }) => {
   return {
     ...onShow,
@@ -46,6 +58,24 @@ const getShowtimes = async (allocineCinemaId) => {
   return showtimes
 }
 
+const getMovieInfo = async (allocineMovieId) => {
+  const config = getMovieConfig(allocineMovieId)
+  const { data } = await axios(config)
+  const { synopsis, runtime, release, castingShort, title } = data.movie
+
+  const date = release ? new Date(release.releaseDate) : null
+  console.log(title, date)
+
+  return {
+    synopsis,
+    runtime,
+    // castMember,
+    castingShort,
+    releaseDate: date,
+  }
+}
+
 module.exports = {
   getShowtimes,
+  getMovieInfo,
 }
