@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js -e js,hbs,css",
+    "dev": "nodemon server.js -e js,css",
     "seed": "node bin/seed.js",
     "seed:clean": "node bin/removeShowtimes.js",
     "seed:refresh": "npm run seed:clean && npm run seed"
@@ -20,7 +20,6 @@
     "express": "^4.17.3",
     "express-jwt": "^6.1.1",
     "express-session": "^1.17.2",
-    "hbs": "^4.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.8",
     "morgan": "^1.10.0",

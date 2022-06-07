@@ -2,6 +2,7 @@ const router = require('express').Router()
 const bcrypt = require('bcrypt')
 const jsonwebtoken = require('jsonwebtoken')
 const mongoose = require('mongoose')
+const { ALGORITHM } = require('../../config/jwt')
 const { isAuthenticated } = require('../../middleware/jwt.middleware')
 const User = require('../../models/User.model')
 const { createUser } = require('../helpers/user')
@@ -80,7 +81,7 @@ router.post('/login', async (req, res, next) => {
     const payload = { username, profilePictureUrl: user.profilePictureUrl }
 
     const authToken = jsonwebtoken.sign(payload, process.env.TOKEN_SECRET, {
-      algorithm: 'HS256',
+      algorithm: ALGORITHM,
       expiresIn: '72h',
     })
 

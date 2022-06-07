@@ -1,7 +1,9 @@
 module.exports = (app) => {
   app.use((req, res, next) => {
-    // this middleware runs whenever requested page is not available
-    res.status(404).render('not-found')
+    // 404 for API
+    return res
+      .status(404)
+      .json({ errorMessage: `Cannot ${req.method} ${req.originalUrl}` })
   })
 
   app.use((err, req, res, next) => {
@@ -9,9 +11,9 @@ module.exports = (app) => {
     // always logs the error
     console.error('ERROR: ', req.method, req.path, err)
 
-    // only render if the error ocurred before sending the response
+    // only render if the error occurred before sending the response
     if (!res.headersSent) {
-      res.status(500).render('error')
+      res.status(500).send({ error: err.message })
     } else {
       console.error('ERROR OCCURRED AFTER SENDING HEADER')
     }

@@ -8,7 +8,6 @@ const {
 const Calendar = require('../../models/Calendar.model')
 const Showtime = require('../../models/Showtime.model')
 const User = require('../../models/User.model')
-const isLoggedIn = require('../../middleware/isLoggedIn')
 
 const router = require('express').Router()
 

@@ -1,11 +1,8 @@
 const router = require('express').Router()
-const { getRandomShowtimePopulated } = require('../db/random-showtime')
 
-/* GET home page */
+/* Redirect to the real site */
 router.get('/', async (req, res, next) => {
-  const showtime = await getRandomShowtimePopulated()
-
-  res.render('index', { showtime })
+  res.redirect('https://www.ciaocine.com')
 })
 
 module.exports = router
