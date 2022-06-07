@@ -1,6 +1,6 @@
 # ciaocine
 
-Cinema viewing info, in an express app.
+Cinema viewing info, as a REST API.
 
 ## Example
 
@@ -10,16 +10,21 @@ View showtimes as JSON:
 curl --location --request GET 'https://ciaocine.herokuapp.com/api/showtimes/2022/7/6'
 ```
 
+## Documentation
+
+To understand how to use the API, please refer to the [Ciaocine documentation and examples on Postman][docs].
+
 ## Architecture
 
 This application is a REST API built with Express in NodeJs, with a MongoDB backend.
 
 It has some complex features, such as Mongo aggregations,
 but it is intended to remain close to the stack commonly used to teach new developers in intensive bootcamps,
-such as those at Ironhack and at General Assembly.
+such as those at [Ironhack](ironhack) and at [General Assembly](ga).
 
-## Documentation
-
-To better understand how to use the API, please refer to [Ciaocine documentation and examples on Postman][docs].
+It is deployed to [Heroku](heroku), a cloud deployment solution that's free for hobby projects.
 
 [docs]: https://documenter.getpostman.com/view/17470638/UyxnD4Kh "documenter.getpostman.com for Ciaocine"
+[heroku]: https://www.heroku.com/
+[ironhack]: https://www.ironhack.com/en/web-development "Ironhack Web Development Bootcamp"
+[ga]: https://generalassemb.ly/education/software-engineering-immersive "General Assembly Software Engineering Immersive"
