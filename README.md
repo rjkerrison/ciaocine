@@ -1,6 +1,8 @@
 # ciaocine
 
-Cinema viewing info, as a REST API.
+Cinema viewing info, as a REST API. A React frontend is available at [rjkerrison/ciaocine-react][react].
+
+To view the full website, go to [www.ciaocine.com][ciaocine].
 
 ## Example
 
@@ -24,7 +26,9 @@ such as those at [Ironhack][ironhack] and at [General Assembly][ga].
 
 It is deployed to [Heroku][heroku], a cloud deployment solution that's free for hobby projects.
 
+[react]: https://github.com/rjkerrison/ciaocine-react "Ciaocine React frontend on Github"
+[ciaocine]: https://www.ciaocine.com/ "Ciaocine Homepage"
 [docs]: https://documenter.getpostman.com/view/17470638/UyxnD4Kh "documenter.getpostman.com for Ciaocine"
-[heroku]: https://www.heroku.com/
+[heroku]: https://www.heroku.com/ "Heroku"
 [ironhack]: https://www.ironhack.com/en/web-development "Ironhack Web Development Bootcamp"
 [ga]: https://generalassemb.ly/education/software-engineering-immersive "General Assembly Software Engineering Immersive"
