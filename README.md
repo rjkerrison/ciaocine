@@ -20,9 +20,9 @@ This application is a REST API built with Express in NodeJs, with a MongoDB back
 
 It has some complex features, such as Mongo aggregations,
 but it is intended to remain close to the stack commonly used to teach new developers in intensive bootcamps,
-such as those at [Ironhack](ironhack) and at [General Assembly](ga).
+such as those at [Ironhack][ironhack] and at [General Assembly][ga].
 
-It is deployed to [Heroku](heroku), a cloud deployment solution that's free for hobby projects.
+It is deployed to [Heroku][heroku], a cloud deployment solution that's free for hobby projects.
 
 [docs]: https://documenter.getpostman.com/view/17470638/UyxnD4Kh "documenter.getpostman.com for Ciaocine"
 [heroku]: https://www.heroku.com/
