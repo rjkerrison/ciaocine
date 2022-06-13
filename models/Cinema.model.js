@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model, SchemaTypes } = require('mongoose')
+const { convertToSlug } = require('../utils/slug')
 
 const memberCardSchema = new Schema({
   code: Number,
@@ -12,6 +13,14 @@ const cinemaSchema = new Schema({
   zipcode: String,
   city: String,
   member_cards: [memberCardSchema],
+  slug: {
+    type: SchemaTypes.String,
+    required: true,
+    unique: true,
+    default: function () {
+      return convertToSlug(this.name)
+    },
+  },
 })
 
 const Cinema = model('Cinema', cinemaSchema)
