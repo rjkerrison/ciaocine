@@ -1,3 +1,4 @@
+const { isValidObjectId } = require('mongoose')
 const router = require('express').Router()
 const { getMovies } = require('../helpers/movies')
 const { getDateParams } = require('../helpers/dates')
@@ -10,10 +11,13 @@ router.get('/', async (req, res, next) => {
 })
 
 /* GET /api/cinemas/:cinemaId */
-router.get('/:cinemaId', async (req, res, next) => {
+router.get('/:cinemaIdOrSlug', async (req, res, next) => {
   try {
     const { fromDate, toDate } = getDateParams(req.query)
-    const cinema = await Cinema.findById(req.params.cinemaId)
+    const cinema = isValidObjectId(req.params.cinemaIdOrSlug)
+      ? await Cinema.findById(req.params.cinemaIdOrSlug)
+      : await Cinema.findOne({ slug: req.params.cinemaIdOrSlug })
+
     const movies = await getMovies({
       ...req.query,
       cinema: cinema._id,
