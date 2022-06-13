@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model, SchemaTypes } = require('mongoose')
 
 const castingShortSchema = new Schema({
   directors: String,
@@ -13,6 +13,14 @@ const movieSchema = new Schema({
   runtime: Number,
   castingShort: castingShortSchema,
   releaseDate: { type: Schema.Types.Date },
+  slug: {
+    type: SchemaTypes.String,
+    required: true,
+    unique: true,
+    default: function () {
+      return convertToSlug(this.title)
+    },
+  },
 })
 
 const Movie = model('Movie', movieSchema)
