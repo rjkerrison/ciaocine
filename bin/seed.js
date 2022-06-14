@@ -1,37 +1,85 @@
 require('dotenv/config')
-
-const Cinema = require('../models/Cinema.model')
-const { getShowtimes } = require('../api/allocine')
 const { default: mongoose } = require('mongoose')
-const { populateShowtimes } = require('../db/populate-showtimes')
-const { sleep } = require('./helpers')
+const { deleteAllCalendars } = require('./calendar/delete')
+const { addSlugsToCinemas } = require('./cinemas/slugs')
+const { deleteAllMovies } = require('./movies/delete')
+const { enhanceMovies } = require('./movies/enhance')
+const { addSlugsToMovies } = require('./movies/slugs')
+const { createShowtimes } = require('./showtimes/create')
+const { deleteAllShowtimes } = require('./showtimes/delete')
 
-const seedShowtimes = async () => {
+const seed = async () => {
   await require('../db/index')
-  const cinemas = await Cinema.find()
-  console.log(`${cinemas.length} cinemas found.`)
+  const args = process.argv.slice(2)
 
-  for (let cinema of cinemas) {
-    // Attempt to do a little rate limiting
-    await sleep(250)
-    const showtimes = await findShowtimesAndSave(cinema)
-    if (showtimes) {
-      console.log(`Populated ${showtimes.length} showtimes for ${cinema.name}`)
-    }
+  switch (args[0]) {
+    case 'showtimes':
+      await seedShowtimes(args)
+      break
+    case 'movies':
+      await seedMovies(args)
+      break
+    case 'cinemas':
+      await seedCinemas(args)
+      break
+    case 'calendars':
+      await seedCalendars(args)
+      break
+    default:
+      console.error(
+        `Please specify one of 'showtimes', 'movies', 'cinemas', or 'calendars'.`
+      )
   }
 
-  return await mongoose.connection.close()
+  return mongoose.connection.close()
 }
 
-const findShowtimesAndSave = async (cinema) => {
-  try {
-    const showtimes = await getShowtimes(cinema.allocine_id)
-    const population = await populateShowtimes(showtimes, cinema)
-    return population
-  } catch (error) {
-    console.error(`Error for cinema ${cinema.name}.`, error)
-    return
+const seedShowtimes = async (args) => {
+  switch (args[1]) {
+    case 'remove':
+      await deleteAllShowtimes()
+      break
+    case 'create':
+    default:
+      await createShowtimes()
+      break
   }
 }
 
-seedShowtimes()
+const seedMovies = async (args) => {
+  switch (args[1]) {
+    case 'remove':
+      await deleteAllMovies()
+      break
+    case 'slugs':
+      await addSlugsToMovies()
+      break
+    case 'enhance':
+      await enhanceMovies()
+      break
+    default:
+      console.error(`Please specify one of 'remove', 'enhance', or 'slugs'.`)
+  }
+}
+
+const seedCinemas = async (args) => {
+  switch (args[1]) {
+    case 'slugs':
+      await addSlugsToCinemas()
+      break
+    default:
+      console.error(`Please specify 'slugs'.`)
+  }
+}
+
+const seedCalendars = async (args) => {
+  switch (args[1]) {
+    case 'remove':
+      await deleteAllCalendars()
+      break
+    default:
+      console.error(`Please specify 'remove'.`)
+  }
+}
+
+seed()

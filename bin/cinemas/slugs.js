@@ -1,10 +1,6 @@
-require('dotenv/config')
+const Cinema = require('../../models/Cinema.model')
 
-const { default: mongoose } = require('mongoose')
-const Cinema = require('../models/Cinema.model')
-
-const seedCinemaSlugs = async () => {
-  await require('../db/index')
+const addSlugsToCinemas = async () => {
   // Rebuild indexes
   await Cinema.init()
   // Find
@@ -17,8 +13,8 @@ const seedCinemaSlugs = async () => {
   }
 
   console.log(`Updated ${cinemas.length} cinemas.`)
-
-  return await mongoose.connection.close()
 }
 
-seedCinemaSlugs()
+module.exports = {
+  addSlugsToCinemas,
+}
