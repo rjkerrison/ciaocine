@@ -141,7 +141,7 @@ const filterCinemaById = (...cinemaIds) => {
 
   return {
     $match: {
-      'cinema._id': { $in: cinemaIds },
+      cinema: { $in: cinemaIds },
     },
   }
 }

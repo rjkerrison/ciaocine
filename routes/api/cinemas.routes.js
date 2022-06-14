@@ -32,4 +32,35 @@ router.get('/:cinemaIdOrSlug', async (req, res, next) => {
   }
 })
 
+router.get(
+  '/:cinemaIdOrSlug/showtimes/:year/:month/:date',
+  async (req, res, next) => {
+    const cinema = await Cinema.findBySlugOrId(req.params.cinemaIdOrSlug)
+
+    const { year, month, date } = req.params
+    try {
+      const { fromDate, toDate } = getDateParams({
+        ...req.query,
+        date: new Date(year, month - 1, date),
+      })
+
+      const movies = await getMovies({
+        fromDate,
+        toDate,
+        cinema: cinema._id,
+        ...req.query,
+      })
+
+      res.json({
+        cinema,
+        movies,
+        fromDate,
+        toDate,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+)
+
 module.exports = router
