@@ -1,32 +1,55 @@
+const { getUniqueSlugForMovie } = require('../models/Movie.model')
 const Movie = require('../models/Movie.model')
 const Showtime = require('../models/Showtime.model')
 
-const populateShowtimes = async (showtimes, cinema) => {
-  const showtimePromises = showtimes.flatMap(
-    async ({ movie: fetchedMovie, scr }) => {
-      if (!scr) {
-        return []
-      }
-      const movie = await saveMovieFromAllocine(fetchedMovie)
-      const saveShowtimesPromises = scr.map((s) =>
-        saveShowtimesFromAllocine({ ...s, movie, cinema })
-      )
-      const result = await Promise.all(saveShowtimesPromises)
-      return result
-    }
+const populateShowtime = async ({ movie: fetchedMovie, scr }, cinema) => {
+  if (!scr) {
+    return []
+  }
+  const movie = await saveMovieFromAllocine(fetchedMovie)
+  const saveShowtimesPromises = scr.map((s) =>
+    saveShowtimesFromAllocine({ ...s, movie, cinema })
   )
-
-  const mappedShowtimes = await Promise.all(showtimePromises)
-  return mappedShowtimes
+  const result = await Promise.all(saveShowtimesPromises)
+  return result
 }
 
-const saveMovieFromAllocine = async ({ code: allocineId, title, poster }) => {
+const populateShowtimes = async (showtimes, cinema) => {
+  const results = []
+  for (let showtime of showtimes) {
+    // awaiting each individually to prevent race condition in movie creation
+    const result = await populateShowtime(showtime, cinema)
+    results.push(...result)
+  }
+
+  return results
+}
+
+const saveMovieFromAllocine = async ({
+  code: allocineId,
+  title,
+  poster,
+  release,
+  castingShort,
+  runtime,
+}) => {
   const href = poster?.href
-  const movie = await Movie.findOneAndUpdate(
-    { allocineId },
-    { allocineId, title, poster: href },
-    { upsert: true, new: true }
-  )
+  const releaseDate = release?.releaseDate
+  let movie = (await Movie.findOne({ allocineId })) || new Movie({ allocineId })
+
+  const isInvalidatingSlug = movie.title !== title
+
+  movie.title = title
+  movie.poster = href
+  movie.releaseDate = releaseDate
+  movie.castingShort = castingShort
+  movie.runtime = runtime
+
+  if (isInvalidatingSlug || !movie.slug) {
+    movie.slug = await getUniqueSlugForMovie(movie)
+  }
+
+  await movie.save()
   return movie
 }
 

@@ -1,12 +1,8 @@
-require('dotenv/config')
+const Movie = require('../../models/Movie.model')
+const { sleep } = require('../helpers')
+const { getMovieInfo } = require('../../api/allocine')
 
-const { getMovieInfo } = require('../api/allocine')
-const { default: mongoose } = require('mongoose')
-const { sleep } = require('./helpers')
-const Movie = require('../models/Movie.model')
-
-const seedMovies = async () => {
-  await require('../db/index')
+const enhanceMovies = async () => {
   const movies = await Movie.find()
   console.log('Found %s movies.', movies.length)
 
@@ -23,8 +19,6 @@ const seedMovies = async () => {
   }
 
   console.log(`Updated ${movies.length} movies.`)
-
-  return await mongoose.connection.close()
 }
 
 const enhanceMovie = async (movie) => {
@@ -40,4 +34,6 @@ const enhanceMovie = async (movie) => {
   }
 }
 
-seedMovies()
+module.exports = {
+  enhanceMovies,
+}
