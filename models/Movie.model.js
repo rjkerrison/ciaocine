@@ -1,4 +1,5 @@
 const { Schema, model, SchemaTypes } = require('mongoose')
+const { findBySlugOrId } = require('../utils/findBySlugOrId')
 const { convertToSlug } = require('../utils/slug')
 
 const castingShortSchema = new Schema({
@@ -44,5 +45,6 @@ movieSchema.pre('validate', async function () {
 const Movie = model('Movie', movieSchema)
 
 Movie.getUniqueSlugForMovie = getUniqueSlugForMovie
+Movie.findBySlugOrId = (slugOrId) => findBySlugOrId(Movie, slugOrId)
 
 module.exports = Movie
