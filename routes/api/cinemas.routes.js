@@ -1,4 +1,3 @@
-const { isValidObjectId } = require('mongoose')
 const router = require('express').Router()
 const { getMovies } = require('../helpers/movies')
 const { getDateParams } = require('../helpers/dates')
@@ -14,9 +13,8 @@ router.get('/', async (req, res, next) => {
 router.get('/:cinemaIdOrSlug', async (req, res, next) => {
   try {
     const { fromDate, toDate } = getDateParams(req.query)
-    const cinema = isValidObjectId(req.params.cinemaIdOrSlug)
-      ? await Cinema.findById(req.params.cinemaIdOrSlug)
-      : await Cinema.findOne({ slug: req.params.cinemaIdOrSlug })
+
+    const cinema = await Cinema.findBySlugOrId(req.params.cinemaIdOrSlug)
 
     const movies = await getMovies({
       ...req.query,

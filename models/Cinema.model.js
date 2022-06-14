@@ -1,4 +1,5 @@
 const { Schema, model, SchemaTypes } = require('mongoose')
+const { findBySlugOrId } = require('../utils/findBySlugOrId')
 const { convertToSlug } = require('../utils/slug')
 
 const memberCardSchema = new Schema({
@@ -24,5 +25,6 @@ const cinemaSchema = new Schema({
 })
 
 const Cinema = model('Cinema', cinemaSchema)
+Cinema.findBySlugOrId = (slugOrId) => findBySlugOrId(Cinema, slugOrId)
 
 module.exports = Cinema
