@@ -11,6 +11,8 @@ router.get('/', async (req, res, next) => {
   res.status(200).json({ cinemas })
 })
 
+const twoKm = 2000
+
 /* GET /api/cinemas */
 router.get('/nearby', async (req, res, next) => {
   try {
@@ -31,7 +33,7 @@ router.get('/nearby', async (req, res, next) => {
     }
 
     const cinemas = await Cinema.find({
-      geolocation: { $near: { $geometry: location } },
+      geolocation: { $near: { $geometry: location, $maxDistance: twoKm } },
     })
     res.status(200).json({ cinemas })
   } catch (error) {
