@@ -15,6 +15,15 @@ const point = new Schema({
   osmId: Number,
 })
 
+const latLonToPoint = ({ lat, lon, ...other }) => {
+  return {
+    type: 'Point',
+    coordinates: [lat, lon],
+    ...other,
+  }
+}
+
 module.exports = {
   point,
+  latLonToPoint,
 }
