@@ -1,6 +1,7 @@
 const { Schema, model, SchemaTypes } = require('mongoose')
 const { findBySlugOrId } = require('../utils/findBySlugOrId')
 const { convertToSlug } = require('../utils/slug')
+const { point } = require('./schemas/geolocation')
 
 const memberCardSchema = new Schema({
   code: Number,
@@ -21,6 +22,10 @@ const cinemaSchema = new Schema({
     default: function () {
       return convertToSlug(this.name)
     },
+  },
+  geolocation: {
+    type: point,
+    index: '2dsphere',
   },
 })
 

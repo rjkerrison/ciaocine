@@ -1,6 +1,7 @@
 require('dotenv/config')
 const { default: mongoose } = require('mongoose')
 const { deleteAllCalendars } = require('./calendar/delete')
+const { addLocationsToCinemas } = require('./cinemas/locations')
 const { addSlugsToCinemas } = require('./cinemas/slugs')
 const { deleteAllMovies } = require('./movies/delete')
 const { enhanceMovies } = require('./movies/enhance')
@@ -8,78 +9,72 @@ const { addSlugsToMovies } = require('./movies/slugs')
 const { createShowtimes } = require('./showtimes/create')
 const { deleteAllShowtimes } = require('./showtimes/delete')
 
+const showtimes = {
+  remove: deleteAllShowtimes,
+  create: createShowtimes,
+  fallback,
+}
+
+const movies = {
+  remove: deleteAllMovies,
+  slugs: addSlugsToMovies,
+  enhance: enhanceMovies,
+  fallback,
+}
+
+function fallback() {
+  console.error(
+    `Please specify one of: ${Object.keys(this)
+      .filter((x) => x !== 'fallback')
+      .join(', ')}.`
+  )
+}
+const cinemas = {
+  slugs: addSlugsToCinemas,
+  locations: addLocationsToCinemas,
+  fallback,
+}
+
+const calendars = {
+  remove: deleteAllCalendars,
+  fallback,
+}
+
+const actions = {
+  cinemas,
+  calendars,
+  movies,
+  showtimes,
+  fallback,
+}
+
+const chooseAction = async (args) => {
+  const requestedSubsection = args[0]
+  const subsection = actions[requestedSubsection]
+
+  if (!subsection) {
+    await actions.fallback()
+    return
+  }
+
+  const requestedAction = args[1]
+  const action = subsection[requestedAction]
+  if (!action) {
+    await subsection.fallback()
+    return
+  }
+
+  await action()
+  return
+}
+
 const seed = async () => {
   await require('../db/index')
   const args = process.argv.slice(2)
 
-  switch (args[0]) {
-    case 'showtimes':
-      await seedShowtimes(args)
-      break
-    case 'movies':
-      await seedMovies(args)
-      break
-    case 'cinemas':
-      await seedCinemas(args)
-      break
-    case 'calendars':
-      await seedCalendars(args)
-      break
-    default:
-      console.error(
-        `Please specify one of 'showtimes', 'movies', 'cinemas', or 'calendars'.`
-      )
-  }
+  await chooseAction(args)
 
   return mongoose.connection.close()
-}
-
-const seedShowtimes = async (args) => {
-  switch (args[1]) {
-    case 'remove':
-      await deleteAllShowtimes()
-      break
-    case 'create':
-    default:
-      await createShowtimes()
-      break
-  }
-}
-
-const seedMovies = async (args) => {
-  switch (args[1]) {
-    case 'remove':
-      await deleteAllMovies()
-      break
-    case 'slugs':
-      await addSlugsToMovies()
-      break
-    case 'enhance':
-      await enhanceMovies()
-      break
-    default:
-      console.error(`Please specify one of 'remove', 'enhance', or 'slugs'.`)
-  }
-}
-
-const seedCinemas = async (args) => {
-  switch (args[1]) {
-    case 'slugs':
-      await addSlugsToCinemas()
-      break
-    default:
-      console.error(`Please specify 'slugs'.`)
-  }
-}
-
-const seedCalendars = async (args) => {
-  switch (args[1]) {
-    case 'remove':
-      await deleteAllCalendars()
-      break
-    default:
-      console.error(`Please specify 'remove'.`)
-  }
 }
 
 seed()
