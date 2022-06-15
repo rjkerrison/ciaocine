@@ -33,9 +33,6 @@ const getLocation = async (...qs) => {
   return await getLocation(...qs)
 }
 
-module.exports = {
-  getLocation,
-}
 function convertGeocodeToLocation(geocode) {
   const {
     lat,
@@ -47,9 +44,13 @@ function convertGeocodeToLocation(geocode) {
 
   return {
     type: 'Point',
-    coordinates: [lat, lon],
+    coordinates: [parseFloat(lat), parseFloat(lon)],
     displayName,
     placeId,
     osmId,
   }
+}
+
+module.exports = {
+  getLocation,
 }
