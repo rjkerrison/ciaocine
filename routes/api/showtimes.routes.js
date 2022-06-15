@@ -1,4 +1,6 @@
+const { getMoviesNear } = require('../../db/aggregations/movies-near')
 const getShowtimeById = require('../../db/aggregations/showtimes-by-id')
+const { readGeolocation } = require('../../middleware/readGeolocation')
 const { getDateParams } = require('../helpers/dates')
 const { getMovies, getUrls } = require('../helpers/movies')
 
@@ -21,6 +23,28 @@ router.get('/:year/:month/:date', async (req, res, next) => {
       toDate,
       ...getUrls({ ...req.query, date: fromDate, url: '/api/showtimes/' }),
     })
+  } catch (error) {
+    next(error)
+  }
+})
+
+/* GET /api/showtimes/nearby/soon */
+router.get('/nearby/soon', readGeolocation, async (req, res, next) => {
+  try {
+    const fromDate = new Date()
+    const minute = fromDate.getMinutes()
+    fromDate.setMinutes(minute - 15)
+
+    const toDate = new Date(fromDate)
+    toDate.setHours(fromDate.getHours() + 2)
+
+    const { showtimes, cinemas, movies } = await getMoviesNear(
+      req.geolocation,
+      fromDate,
+      toDate
+    )
+
+    res.json({ showtimes, cinemas, movies })
   } catch (error) {
     next(error)
   }
