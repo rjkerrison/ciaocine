@@ -18,7 +18,7 @@ const point = new Schema({
 const latLonToPoint = ({ lat, lon, ...other }) => {
   return {
     type: 'Point',
-    coordinates: [lat, lon],
+    coordinates: [parseFloat(lat), parseFloat(lon)],
     ...other,
   }
 }
