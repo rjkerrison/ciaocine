@@ -61,17 +61,18 @@ const getShowtimes = async (allocineCinemaId) => {
 const getMovieInfo = async (allocineMovieId) => {
   const config = getMovieConfig(allocineMovieId)
   const { data } = await axios(config)
-  const { synopsis, runtime, release, castingShort, title } = data.movie
+  const { synopsis, runtime, release, castingShort, title, originalTitle } =
+    data.movie
 
   const date = release ? new Date(release.releaseDate) : null
-  console.log(title, date)
 
   return {
     synopsis,
     runtime,
-    // castMember,
     castingShort,
     releaseDate: date,
+    originalTitle,
+    title,
   }
 }
 

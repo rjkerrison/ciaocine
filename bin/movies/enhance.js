@@ -3,29 +3,32 @@ const { sleep } = require('../helpers')
 const { getMovieInfo } = require('../../api/allocine')
 
 const enhanceMovies = async () => {
+  await Movie.init()
   const movies = await Movie.find()
   console.log('Found %s movies.', movies.length)
 
-  for (let movie of movies) {
-    if (movie.releaseDate) {
-      console.log('Skipping %s, released %s', movie.title, movie.releaseDate)
-      continue
-    }
+  const filteredMovies = movies.filter(
+    (movie) => !(movie.releaseDate && movie.originalTitle)
+  )
 
+  for (let movie of filteredMovies) {
     // Attempt to do a little rate limiting
     await sleep(250)
-    const result = await enhanceMovie(movie)
-    console.log('Found info:', result)
+    await enhanceMovie(movie)
+    // console.log('Found info:', result)
   }
 
-  console.log(`Updated ${movies.length} movies.`)
+  console.log(`Updated ${filteredMovies.length} movies.`)
+  console.log(`Skipped ${movies.length} movies.`)
 }
 
 const enhanceMovie = async (movie) => {
   try {
     const movieInfo = await getMovieInfo(movie.allocineId)
-    await movie.update({ ...movie._doc, ...movieInfo })
+    movie.set(movieInfo)
+
     const updatedMovie = await movie.save({ new: true })
+    console.log(`Updated ${updatedMovie.title}.`)
 
     return updatedMovie
   } catch (error) {

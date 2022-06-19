@@ -10,6 +10,7 @@ const castingShortSchema = new Schema({
 const movieSchema = new Schema({
   allocineId: Number,
   title: String,
+  originalTitle: String,
   poster: String,
   synopsis: String,
   runtime: Number,
@@ -19,6 +20,15 @@ const movieSchema = new Schema({
     type: SchemaTypes.String,
     required: true,
     unique: true,
+  },
+  originalTitleSlug: {
+    select: true,
+    type: SchemaTypes.String,
+    get: function () {
+      const slug = convertToSlug(this.originalTitle)
+      console.log(this.originalTitle, slug)
+      return slug
+    },
   },
 })
 
