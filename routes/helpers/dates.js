@@ -13,9 +13,24 @@ const getDateHour = (d, hour) => {
   return date
 }
 
-const getDateParams = ({ date = new Date(), fromHour = 0, toHour = 24 }) => {
+const getDateParams = ({
+  date = new Date(),
+  fromHour = 0,
+  toHour = 24,
+  delorean = false,
+}) => {
   const fromDate = getDateHour(date, fromHour)
   const toDate = getDateHour(date, toHour)
+
+  if (!delorean) {
+    const now = new Date()
+
+    return {
+      fromDate: fromDate > now ? fromDate : now,
+      toDate,
+    }
+  }
+
   return {
     fromDate,
     toDate,
