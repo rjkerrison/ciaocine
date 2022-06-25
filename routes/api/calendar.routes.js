@@ -68,7 +68,10 @@ router.delete(
 
 const getCalendarForUsername = async (req, res, next) => {
   try {
-    const calendarDays = await getCalendarForUserGroupByDate(req.user._id)
+    const calendarDays = await getCalendarForUserGroupByDate(
+      req.user._id,
+      req.query
+    )
     const calendarByDay = calendarDays.map(({ _id, showtimes }) => ({
       calendarDate: new Date(_id),
       showtimes,
