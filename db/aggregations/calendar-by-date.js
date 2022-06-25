@@ -11,12 +11,16 @@ const {
   unwindShowtime,
   unwindCinema,
   sortById,
+  populateFutureShowtimes,
 } = require('./steps')
 
-const getCalendarForUserGroupByDate = async (userId) => {
+const getCalendarForUserGroupByDate = async (
+  userId,
+  { delorean = false } = {}
+) => {
   const calendar = await Calendar.aggregate([
     match(userId, 'user'),
-    populateShowtime,
+    delorean ? populateShowtime : populateFutureShowtimes,
     unwindShowtime,
     projectToShowtime,
     sortByStartTime,

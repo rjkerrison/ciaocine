@@ -95,6 +95,27 @@ const populateShowtime = {
   },
 }
 
+const populateFutureShowtimes = {
+  $lookup: {
+    from: 'showtimes',
+    localField: 'showtime',
+    foreignField: '_id',
+    as: 'showtime',
+    let: {
+      fromDate: new Date(),
+    },
+    pipeline: [
+      {
+        $match: {
+          $expr: {
+            $and: [{ $gte: ['$startTime', '$$fromDate'] }],
+          },
+        },
+      },
+    ],
+  },
+}
+
 const unwindShowtime = {
   $unwind: '$showtime',
 }
@@ -190,6 +211,7 @@ module.exports = {
   populateCinema,
   populateMovieFromId,
   populateShowtime,
+  populateFutureShowtimes,
   flattenShowtimeMovie,
   projectToShowtime,
   unwindMovie,
