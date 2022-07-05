@@ -28,7 +28,7 @@ router.get('/:movieIdOrSlug', async (req, res, next) => {
     }
 
     const showtimes = await Showtime.find({ movie: movie._id })
-      .select('cinema startTime -_id')
+      .select('cinema startTime')
       .sort({ startTime: -1 })
       .populate({
         path: 'cinema',
@@ -38,7 +38,7 @@ router.get('/:movieIdOrSlug', async (req, res, next) => {
     res.json({
       movie,
       showtimes,
-      tmdbInfo: await getMovies(movie.originalTitle, {
+      tmdbInfo: await getMovies(movie.originalTitle || movie.title, {
         year: movie?.releaseDate?.getFullYear(),
         director: movie?.castingShort?.directors,
       }),
