@@ -1,6 +1,15 @@
 const { ObjectId } = require('bson')
 const { default: mongoose } = require('mongoose')
 
+const dollarise = (name) => (name.startsWith('$') ? name : `$${name}`)
+const selectFields = (...names) =>
+  Object.fromEntries(names.map((name) => [name, dollarise(name)]))
+
+const selectPrefixedFields = (prefix, ...names) =>
+  Object.fromEntries(
+    names.map((name) => [name, dollarise(`${prefix}.${name}`)])
+  )
+
 const match = (value, name = 'cinema') => ({
   $match: {
     [name]: new mongoose.Types.ObjectId(value),
@@ -32,12 +41,7 @@ const groupByDate = {
       },
     },
     showtimes: {
-      $push: {
-        _id: '$_id',
-        cinema: '$cinema',
-        startTime: '$startTime',
-        movie: '$movie',
-      },
+      $push: selectFields('_id', 'cinema', 'startTime', 'movie'),
     },
   },
 }
@@ -79,9 +83,7 @@ const populateMovieFromId = {
 
 const flattenShowtimeMovie = {
   $project: {
-    _id: '$_id',
-    cinema: '$cinema',
-    startTime: '$startTime',
+    ...selectFields('_id', 'cinema', 'startTime'),
     movie: { $arrayElemAt: ['$movie', 0] },
   },
 }
@@ -116,32 +118,28 @@ const populateFutureShowtimes = {
   },
 }
 
-const unwindShowtime = {
-  $unwind: '$showtime',
-}
+const unwind = (name) => ({
+  $unwind: dollarise(name),
+})
+const unwindShowtime = unwind('showtime')
+const unwindCinema = unwind('cinema')
+const unwindMovie = unwind('movie')
 
 const projectToShowtime = {
-  $project: {
-    _id: '$showtime._id',
-    movie: '$showtime.movie',
-    cinema: '$showtime.cinema',
-    startTime: '$showtime.startTime',
-  },
-}
-
-const unwindCinema = {
-  $unwind: '$cinema',
-}
-
-const unwindMovie = {
-  $unwind: '$movie',
+  $project: selectPrefixedFields(
+    'showtime',
+    '_id',
+    'movie',
+    'cinema',
+    'startTime'
+  ),
 }
 
 const groupByMovie = {
   $group: {
     _id: '$movie',
     showtimes: {
-      $push: { _id: '$_id', cinema: '$cinema', startTime: '$startTime' },
+      $push: selectFields('_id', 'cinema', 'startTime'),
     },
   },
 }
@@ -217,10 +215,12 @@ module.exports = {
   unwindMovie,
   unwindCinema,
   unwindShowtime,
+  unwind,
   groupByMovie,
   filterCinemaToUgcIllimite,
   filterCinemaToRiveGauche,
   filterCinemaToRiveDroite,
   filterCinemaToArrondissements,
   filterCinemaById,
+  selectFields,
 }

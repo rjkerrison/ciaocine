@@ -1,4 +1,5 @@
 const Cinema = require('../../models/Cinema.model')
+const { unwind, selectFields } = require('./steps')
 
 const twoKilometres = 2000
 const geoNearGeolocation = (geolocation) => {
@@ -37,12 +38,7 @@ const showtimesWithinDateRange = (fromDate, toDate) => {
           },
         },
         {
-          $project: {
-            // _id: 0,
-            cinema: '$cinema',
-            movie: '$movie',
-            startTime: '$startTime',
-          },
+          $project: selectFields('cinema', 'movie', 'startTime'),
         },
       ],
     },
@@ -53,7 +49,7 @@ const groupShowtimes = {
   $group: {
     _id: 1,
     cinemas: {
-      $push: { _id: '$_id', name: '$name' },
+      $push: selectFields('_id', 'name'),
     },
     showtimes: {
       $push: '$showtimes',
@@ -63,7 +59,7 @@ const groupShowtimes = {
 
 const flattenShowtimes = {
   $project: {
-    cinemas: '$cinemas',
+    ...selectFields('cinemas'),
     showtimes: [
       {
         $reduce: {
@@ -77,10 +73,6 @@ const flattenShowtimes = {
     ],
   },
 }
-
-const unwind = (field) => ({
-  $unwind: field,
-})
 
 const groupFields = {
   $group: {
@@ -120,11 +112,11 @@ const getMoviesNear = async (geolocation, fromDate, toDate) => {
     showtimesWithinDateRange(fromDate, toDate),
     groupShowtimes,
     flattenShowtimes,
-    unwind('$showtimes'),
+    unwind('showtimes'),
     groupFields,
-    unwind('$showtimes'),
-    unwind('$cinemas'),
-    unwind('$movies'),
+    unwind('showtimes'),
+    unwind('cinemas'),
+    unwind('movies'),
     lookupMovies,
   ])
   return showtimes[0]
