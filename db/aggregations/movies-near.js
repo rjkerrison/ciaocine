@@ -1,5 +1,5 @@
 const Cinema = require('../../models/Cinema.model')
-const { unwind, selectFields } = require('./steps')
+const { unwind, selectFields, flatten } = require('./steps')
 
 const twoKilometres = 2000
 const geoNearGeolocation = (geolocation) => {
@@ -60,17 +60,7 @@ const groupShowtimes = {
 const flattenShowtimes = {
   $project: {
     ...selectFields('cinemas'),
-    showtimes: [
-      {
-        $reduce: {
-          input: '$showtimes',
-          initialValue: [],
-          in: {
-            $concatArrays: ['$$value', '$$this'],
-          },
-        },
-      },
-    ],
+    showtimes: flatten('showtimes'),
   },
 }
 
@@ -112,14 +102,13 @@ const getMoviesNear = async (geolocation, fromDate, toDate) => {
     showtimesWithinDateRange(fromDate, toDate),
     groupShowtimes,
     flattenShowtimes,
-    unwind('showtimes'),
     groupFields,
     unwind('showtimes'),
     unwind('cinemas'),
     unwind('movies'),
     lookupMovies,
   ])
-  return showtimes[0]
+  return showtimes[0] || { showtimes: [], movies: [], cinemas: [] }
 }
 
 module.exports = {

@@ -99,10 +99,7 @@ const populateShowtime = {
 
 const populateFutureShowtimes = {
   $lookup: {
-    from: 'showtimes',
-    localField: 'showtime',
-    foreignField: '_id',
-    as: 'showtime',
+    ...populateShowtime.$lookup,
     let: {
       fromDate: new Date(),
     },
@@ -198,6 +195,16 @@ const filterCinemaToRiveDroite = {
   },
 }
 
+const flatten = (name) => ({
+  $reduce: {
+    input: dollarise(name),
+    initialValue: [],
+    in: {
+      $concatArrays: ['$$value', '$$this'],
+    },
+  },
+})
+
 module.exports = {
   match,
   matchDate,
@@ -211,6 +218,7 @@ module.exports = {
   populateShowtime,
   populateFutureShowtimes,
   flattenShowtimeMovie,
+  flatten,
   projectToShowtime,
   unwindMovie,
   unwindCinema,
