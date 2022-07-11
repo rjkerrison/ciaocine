@@ -1,6 +1,5 @@
 const { getMovies } = require('../../api/tmdb')
 const Movie = require('../../models/Movie.model')
-const Showtime = require('../../models/Showtime.model')
 
 const router = require('express').Router()
 
