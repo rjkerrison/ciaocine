@@ -1,9 +1,9 @@
 const { isValidObjectId } = require('mongoose')
 
-const findBySlugOrId = async (model, idOrSlug) => {
+const findBySlugOrId = (model, idOrSlug) => {
   return (
-    (isValidObjectId(idOrSlug) && (await model.findById(idOrSlug))) ||
-    (await model.findOne({ slug: idOrSlug }))
+    (isValidObjectId(idOrSlug) && model.findById(idOrSlug)) ||
+    model.findOne({ slug: idOrSlug })
   )
 }
 

@@ -20,24 +20,17 @@ router.get('/', async (req, res, next) => {
 /* GET movies/:movieid */
 router.get('/:movieIdOrSlug', async (req, res, next) => {
   try {
-    const movie = await Movie.findBySlugOrId(req.params.movieIdOrSlug)
+    const movie = await Movie.findBySlugOrId(req.params.movieIdOrSlug).populate(
+      'showtimes pastShowtimeCount'
+    )
 
     if (!movie) {
       res.status(404).json({ error: 'movie not found' })
       return
     }
 
-    const showtimes = await Showtime.find({ movie: movie._id })
-      .select('cinema startTime')
-      .sort({ startTime: -1 })
-      .populate({
-        path: 'cinema',
-        select: 'name -_id',
-      })
-
     res.json({
       movie,
-      showtimes,
       tmdbInfo: await getMovies(movie.originalTitle || movie.title, {
         year: movie?.releaseDate?.getFullYear(),
         director: movie?.castingShort?.directors,
@@ -52,19 +45,29 @@ router.get('/:movieIdOrSlug', async (req, res, next) => {
 router.get('/search/:term', async (req, res, next) => {
   try {
     const { term } = req.params
-    const { year, director } = req.query
+    const { page = 1 } = req.query
+    const query = { $regex: term, $options: 'i' }
+
     const movies = await Movie.find({
-      title: { $regex: term, $options: 'i' },
+      $or: [
+        'title',
+        'originalTitle',
+        'castingShort.directors',
+        'castingShort.actors',
+      ].map((field) => ({
+        [field]: query,
+      })),
     })
+      .limit(25)
+      .skip(25 * (page - 1))
+      .populate('showtimes pastShowtimeCount')
+
     if (!movies) {
       res.status(404).json({ error: 'movie not found' })
       return
     }
 
-    res.json({
-      movies,
-      tmdbInfo: await getMovies(term, { year, director }),
-    })
+    res.json({ movies })
   } catch (error) {
     next(error)
   }
