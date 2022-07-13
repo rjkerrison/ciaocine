@@ -32,6 +32,12 @@ router.get('/:cinemaIdOrSlug', async (req, res, next) => {
     const { fromDate, toDate } = getDateParams(req.query)
 
     const cinema = await Cinema.findBySlugOrId(req.params.cinemaIdOrSlug)
+    if (!cinema) {
+      res.status(404).json({
+        message: `No cinema matches "${req.params.cinemaIdOrSlug}".`,
+      })
+      return
+    }
 
     const movies = await getMovies({
       ...req.query,
