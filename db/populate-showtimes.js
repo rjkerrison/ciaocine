@@ -1,28 +1,67 @@
 const { getUniqueSlugForMovie } = require('../models/Movie.model')
 const Movie = require('../models/Movie.model')
 const Showtime = require('../models/Showtime.model')
+const {
+  formatDate,
+  dateMonthFormat,
+  timeFormat,
+} = require('../utils/formatDate')
 
-const populateShowtime = async ({ movie: fetchedMovie, scr }, cinema) => {
-  if (!scr) {
-    return []
-  }
-  const movie = await saveMovieFromAllocine(fetchedMovie)
-  const saveShowtimesPromises = scr.map((s) =>
+const saveShowtimeToDatabase = async ({ movie, screenings, cinema }) => {
+  const saveShowtimesPromises = screenings.map((s) =>
     saveShowtimesFromAllocine({ ...s, movie, cinema })
   )
-  const result = await Promise.all(saveShowtimesPromises)
-  return result
+  const savedShowtimes = await Promise.all(saveShowtimesPromises)
+  return savedShowtimes
 }
 
-const populateShowtimes = async (showtimes, cinema) => {
-  const results = []
-  for (let showtime of showtimes) {
-    // awaiting each individually to prevent race condition in movie creation
-    const result = await populateShowtime(showtime, cinema)
-    results.push(...result)
-  }
+const saveShowtimesToDatabase = async (
+  showtimesForMovieGroupedByDay,
+  cinema
+) => {
+  const showtimes = []
 
-  return results
+  for (let {
+    movie: fetchedMovie,
+    scr: screenings,
+    version,
+  } of showtimesForMovieGroupedByDay) {
+    if (!screenings) {
+      continue
+    }
+
+    // awaiting movie save to prevent race condition in movie creation
+    const movie = await saveMovieFromAllocine(fetchedMovie)
+
+    if (!screenings) {
+      return []
+    }
+    const savedShowtimes = await saveShowtimeToDatabase({
+      movie,
+      screenings,
+      cinema,
+    })
+
+    const versionString = `V${version.original === 'true' ? 'O' : ''}${
+      version.$ === 'Français' ? 'F' : 'stF ' + version.$
+    }`
+    console.log(
+      `- ${movie.title} (${versionString}): ${
+        savedShowtimes.flat().length
+      } showtimes over ${savedShowtimes.length} days at ${cinema.name}.`
+    )
+    savedShowtimes.flat().forEach((showtime) => {
+      console.log(
+        `-- ${formatDate(showtime.startTime, timeFormat)} on ${formatDate(
+          showtime.startTime,
+          dateMonthFormat
+        )}`
+      )
+    })
+
+    showtimes.push(...savedShowtimes.flat())
+  }
+  return showtimes
 }
 
 const saveMovieFromAllocine = async ({
@@ -63,24 +102,24 @@ const saveShowtimesFromAllocine = async ({
     return []
   }
 
-  const result = await Promise.all(
+  const showtimes = await Promise.all(
     times?.map(async ({ code, $ }) => {
       // this is far too hacky and needs to be changed
       // needs to meet format: '2022-04-25T14:00+02:00'
       // currently hardcoded to CEST, which buys me a few months
       const startTime = new Date(date + 'T' + $ + '+02:00')
 
-      const result = await saveShowtimeFromAllocine({
+      const showtime = await saveShowtimeFromAllocine({
         code,
         startTime,
         movie,
         cinema,
       })
 
-      return result
+      return showtime
     })
   )
-  return result
+  return showtimes
 }
 
 const saveShowtimeFromAllocine = async ({
@@ -98,5 +137,5 @@ const saveShowtimeFromAllocine = async ({
 }
 
 module.exports = {
-  populateShowtimes,
+  saveShowtimesToDatabase,
 }

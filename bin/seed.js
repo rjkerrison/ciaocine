@@ -9,60 +9,70 @@ const { addSlugsToMovies } = require('./movies/slugs')
 const { createShowtimes } = require('./showtimes/create')
 const { deleteAllShowtimes } = require('./showtimes/delete')
 
+const readline = require('readline').createInterface({
+  input: process.stdin,
+  output: process.stdout,
+})
+
+function question(query) {
+  return new Promise((resolve) => {
+    readline.question(query, resolve)
+  })
+}
+
+async function ask() {
+  return await question(
+    `Please specify one of: ${Object.keys(this)
+      .filter((x) => x !== 'ask')
+      .join(', ')}:\n\- `
+  )
+}
+
 const showtimes = {
   remove: deleteAllShowtimes,
   create: createShowtimes,
-  fallback,
+  ask,
 }
 
 const movies = {
   remove: deleteAllMovies,
   slugs: addSlugsToMovies,
   enhance: enhanceMovies,
-  fallback,
+  ask,
 }
 
-function fallback() {
-  console.error(
-    `Please specify one of: ${Object.keys(this)
-      .filter((x) => x !== 'fallback')
-      .join(', ')}.`
-  )
-}
 const cinemas = {
   slugs: addSlugsToCinemas,
   locations: addLocationsToCinemas,
-  fallback,
+  ask,
 }
 
 const calendars = {
   remove: deleteAllCalendars,
-  fallback,
+  ask,
 }
 
-const actions = {
+const subsections = {
   cinemas,
   calendars,
   movies,
   showtimes,
-  fallback,
+  ask,
 }
 
 const chooseAction = async (args) => {
-  const requestedSubsection = args[0]
-  const subsection = actions[requestedSubsection]
+  let requestedSubsection = args[0]
 
-  if (!subsection) {
-    await actions.fallback()
-    return
+  while (!subsections[requestedSubsection]) {
+    requestedSubsection = await subsections.ask()
   }
+  const actions = subsections[requestedSubsection]
 
-  const requestedAction = args[1]
-  const action = subsection[requestedAction]
-  if (!action) {
-    await subsection.fallback()
-    return
+  let requestedAction = args[1]
+  while (!actions[requestedAction]) {
+    requestedAction = await actions.ask()
   }
+  const action = actions[requestedAction]
 
   await action()
   return
@@ -74,7 +84,8 @@ const seed = async () => {
 
   await chooseAction(args)
 
-  return mongoose.connection.close()
+  await mongoose.connection.close()
+  return
 }
 
 seed()
