@@ -5,19 +5,13 @@ const Movie = require('../../models/Movie.model')
 const router = require('express').Router()
 
 /* GET movies */
-router.get('/', async (req, res, next) => {
-  try {
-    const movies = await Movie.find()
+router.get('/', async (_req, res, _next) => {
+  const movies = await Movie.find()
 
-    res.json({
-      movies,
-    })
-  } catch (error) {
-    next(error)
-  }
+  res.json({
+    movies,
+  })
 })
-
-router.use('/:movieIdOrSlug', getMovie, require('./movie-relationships.routes'))
 
 /* GET movies/:movieid */
 router.get('/:movieIdOrSlug', async (req, res, next) => {
@@ -40,35 +34,30 @@ router.get('/:movieIdOrSlug', async (req, res, next) => {
 })
 
 /* GET movies/:movieid */
-router.get('/search/:term', async (req, res, next) => {
-  try {
-    const { term } = req.params
-    const { page = 1 } = req.query
-    const query = { $regex: term, $options: 'i' }
+router.get('/search/:term', async (req, res, _next) => {
+  const { term } = req.params
+  const { page = 1 } = req.query
+  const query = { $regex: term, $options: 'i' }
 
-    const movies = await Movie.find({
-      $or: [
-        'title',
-        'originalTitle',
-        'castingShort.directors',
-        'castingShort.actors',
-      ].map((field) => ({
-        [field]: query,
-      })),
-    })
-      .limit(25)
-      .skip(25 * (page - 1))
-      .populate('showtimes pastShowtimeCount')
+  const movies = await Movie.find({
+    $or: [
+      'title',
+      'originalTitle',
+      'castingShort.directors',
+      'castingShort.actors',
+    ].map((field) => ({
+      [field]: query,
+    })),
+  })
+    .limit(25)
+    .skip(25 * (page - 1))
+    .populate('showtimes pastShowtimeCount')
 
-    if (!movies) {
-      res.status(404).json({ error: 'movie not found' })
-      return
-    }
-
-    res.json({ movies })
-  } catch (error) {
-    next(error)
-  }
+  res.json({
+    movies,
+  })
 })
+
+router.use('/:movieIdOrSlug', getMovie, require('./movie-relationships.routes'))
 
 module.exports = router

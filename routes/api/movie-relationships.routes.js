@@ -8,25 +8,6 @@ const router = require('express').Router()
 
 router.use(isAuthenticated, includeUser)
 
-// router.use(async (req, res, next) => {
-//   if (!req.params.movieId || !isValidObjectId(req.params.movieId)) {
-//     res.status(400).json({
-//       message: 'A movie id is required',
-//     })
-//   }
-//   const movie = await Movie.findById(req.params.id)
-//   req.movie = movie
-//   next()
-// })
-
-router.use((_req, _res, next) => {
-  try {
-    next()
-  } catch (error) {
-    next(error)
-  }
-})
-
 const upsertRelationship = async (relationshipModel, req, res) => {
   const relationship = await relationshipModel.findOneAndReplace(
     {
