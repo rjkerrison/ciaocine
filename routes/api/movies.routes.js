@@ -1,4 +1,5 @@
 const { getMovies } = require('../../api/tmdb')
+const getMovie = require('../../middleware/getMovie.middleware')
 const Movie = require('../../models/Movie.model')
 
 const router = require('express').Router()
@@ -16,28 +17,26 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+router.use('/:movieIdOrSlug', getMovie, require('./movie-relationships.routes'))
+
 /* GET movies/:movieid */
 router.get('/:movieIdOrSlug', async (req, res, next) => {
-  try {
-    const movie = await Movie.findBySlugOrId(req.params.movieIdOrSlug).populate(
-      'showtimes pastShowtimeCount'
-    )
+  const movie = await Movie.findBySlugOrId(req.params.movieIdOrSlug).populate(
+    'showtimes pastShowtimeCount'
+  )
 
-    if (!movie) {
-      res.status(404).json({ error: 'movie not found' })
-      return
-    }
-
-    res.json({
-      movie,
-      tmdbInfo: await getMovies(movie.originalTitle || movie.title, {
-        year: movie?.releaseDate?.getFullYear(),
-        director: movie?.castingShort?.directors,
-      }),
-    })
-  } catch (error) {
-    next(error)
+  if (!movie) {
+    res.status(404).json({ error: 'movie not found' })
+    return
   }
+
+  res.json({
+    movie,
+    tmdbInfo: await getMovies(movie.originalTitle || movie.title, {
+      year: movie?.releaseDate?.getFullYear(),
+      director: movie?.castingShort?.directors,
+    }),
+  })
 })
 
 /* GET movies/:movieid */
