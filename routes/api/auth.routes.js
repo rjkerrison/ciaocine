@@ -7,7 +7,7 @@ const { isAuthenticated } = require('../../middleware/jwt.middleware')
 const User = require('../../models/User.model')
 const { createUser } = require('../helpers/user')
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', async (req, res, _next) => {
   const { username, password, profilePictureUrl } = req.body
 
   if (!username) {
@@ -47,7 +47,7 @@ router.post('/signup', async (req, res) => {
   }
 })
 
-router.post('/login', async (req, res, next) => {
+router.post('/login', async (req, res, _next) => {
   const { username, password } = req.body
 
   if (!username) {
@@ -62,15 +62,18 @@ router.post('/login', async (req, res, next) => {
     })
   }
   try {
-    const user = await User.findOne({ username })
+    const foundUser = await User.findOne({ username }).select(
+      '-_id password profilePictureUrl username'
+    )
 
-    if (!user) {
+    if (!foundUser) {
       return res.status(400).json({
         errorMessage: 'Wrong credentials.',
       })
     }
 
-    const isCorrectPassword = await bcrypt.compare(password, user.password)
+    const { password: foundPassword, ...payload } = foundUser._doc
+    const isCorrectPassword = await bcrypt.compare(password, foundPassword)
 
     if (!isCorrectPassword) {
       return res.status(400).json({
@@ -78,15 +81,13 @@ router.post('/login', async (req, res, next) => {
       })
     }
 
-    const payload = { username, profilePictureUrl: user.profilePictureUrl }
-
     const authToken = jsonwebtoken.sign(payload, process.env.TOKEN_SECRET, {
       algorithm: ALGORITHM,
-      expiresIn: '72h',
+      expiresIn: '168h',
     })
 
     return res.status(200).json({ authToken })
-  } catch (err) {
+  } catch (error) {
     return res.status(500).json({ errorMessage: error.message })
   }
 })

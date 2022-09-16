@@ -16,6 +16,11 @@ const findBySlugOrId = (model, idOrSlug) => {
   return model.findOne(slugFilter)
 }
 
+const findBySlugs = async (model, slugs) => {
+  return await model.find({ slug: { $in: slugs } })
+}
+
 module.exports = {
   findBySlugOrId,
+  findBySlugs,
 }

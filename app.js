@@ -13,16 +13,8 @@ async function startApp() {
 
   const app = express()
 
-  // ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
   require('./config')(app)
-
-  app.locals.appTitle = `Ciaocine`
-  app.locals.pageTitle = `Home`
-  app.locals.pageSubtitle = `Find cinema screenings in Paris`
-
   require('./routes')(app)
-
-  // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
   require('./error-handling')(app)
 
   return app
