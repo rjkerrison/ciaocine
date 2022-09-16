@@ -29,4 +29,4 @@ const Watch = UserMovieRelationship.discriminator('Watch', watchSchema)
 const Want = UserMovieRelationship.discriminator('Want', wantSchema)
 const Dismiss = UserMovieRelationship.discriminator('Dismiss', dismissSchema)
 
-module.exports = { Watch, Want, Dismiss }
+module.exports = { Watch, Want, Dismiss, UserMovieRelationship }

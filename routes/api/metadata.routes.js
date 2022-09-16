@@ -4,7 +4,7 @@ const {
   includeUser,
 } = require('../../middleware/jwt.middleware')
 const Movie = require('../../models/Movie.model')
-const { Watch } = require('../../models/UserMovieRelationship')
+const { Watch, Dismiss, Want } = require('../../models/UserMovieRelationship')
 const { findBySlugs } = require('../../utils/findBySlugOrId')
 
 router.use(isAuthenticated, includeUser)
@@ -21,17 +21,39 @@ router.get('/', async (req, res, _next) => {
 
   const foundMovies = await findBySlugs(Movie, movies)
   console.log(movies, foundMovies)
+  console.log(foundMovies.map((x) => x._id))
 
-  const watches = await Watch.find({
-    user: user._id,
-    movie: { $in: foundMovies },
-  })
+  // Parallelise these three searches.
+  const [watches, dismisses, wants] = await Promise.all(
+    [Watch, Dismiss, Want].map((model) =>
+      getSlugsForRelationship(model, foundMovies, user._id)
+    )
+  )
 
   res.json({
-    user,
+    username: user.username,
     movies,
     watches,
+    dismisses,
+    wants,
   })
 })
+
+const getSlugsForRelationship = async (model, foundMovies, userId) => {
+  const foundRelationships = await model
+    .find({
+      user: userId,
+      movie: { $in: foundMovies },
+    })
+    .select('movie')
+    .populate({
+      path: 'movie',
+      options: {
+        select: 'slug',
+      },
+    })
+
+  return foundRelationships.map(({ movie: { slug } }) => slug)
+}
 
 module.exports = router
