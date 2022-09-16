@@ -5,8 +5,7 @@ const {
 } = require('../../middleware/jwt.middleware')
 const FavouriteCinema = require('../../models/FavouriteCinema.model')
 
-router.use(isAuthenticated)
-router.use(includeUser)
+router.use(isAuthenticated, includeUser)
 
 /* GET /api/likes/cinemas */
 router.get('/cinemas', async (req, res, next) => {
@@ -45,6 +44,7 @@ const like = (favourite) => {
     new: true,
   })
 }
+
 const unlike = (favourite) => {
   return FavouriteCinema.findOneAndDelete(favourite)
 }
