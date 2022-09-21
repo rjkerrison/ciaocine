@@ -39,6 +39,16 @@ const movieSchema = new Schema(
       },
       tmdb: {
         id: Schema.Types.String,
+        title: Schema.Types.String,
+        originalTitle: Schema.Types.String,
+      },
+    },
+    images: {
+      poster: {
+        type: Schema.Types.String,
+      },
+      backdrop: {
+        type: Schema.Types.String,
       },
     },
   },

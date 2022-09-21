@@ -5,14 +5,12 @@ const baseUrl = 'https://api.themoviedb.org/3'
 const getMoviesConfig = (query, year) => {
   const page = 1
 
-  console.log(query, year)
-
   return {
     baseURL: baseUrl,
     url: '/search/movie',
     params: {
       api_key: process.env.TMDB_KEY,
-      language: 'fr-FR',
+      language: 'en-US',
       query,
       page,
       include_adult: false,
@@ -27,7 +25,7 @@ const getMovieInfoConfig = (id) => {
     url: `/movie/${id}`,
     params: {
       api_key: process.env.TMDB_KEY,
-      language: 'fr-FR',
+      language: 'en-US',
     },
   }
 }
@@ -38,7 +36,7 @@ const getCreditsConfig = (id) => {
     url: `/movie/${id}/credits`,
     params: {
       api_key: process.env.TMDB_KEY,
-      language: 'fr-FR',
+      language: 'en-US',
     },
   }
 }
@@ -116,7 +114,7 @@ const compareScores = (a, b) => {
   return b.score - a.score
 }
 
-const getMovies = async (searchTerm, { year, director }) => {
+const getMoviesFromTmdb = async (searchTerm, { year, director }) => {
   const {
     data: { results: tmdbInfo },
   } = await axios(getMoviesConfig(searchTerm, year))
@@ -134,5 +132,5 @@ const getMovies = async (searchTerm, { year, director }) => {
 }
 
 module.exports = {
-  getMovies,
+  getMoviesFromTmdb,
 }

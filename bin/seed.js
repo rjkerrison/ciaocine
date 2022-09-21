@@ -5,6 +5,7 @@ const { addLocationsToCinemas } = require('./cinemas/locations')
 const { addSlugsToCinemas } = require('./cinemas/slugs')
 const { deleteAllMovies } = require('./movies/delete')
 const { enhanceMovies } = require('./movies/enhance')
+const { enhanceMoviesFromTmdb } = require('./movies/enhanceFromTmdb')
 const { addSlugsToMovies } = require('./movies/slugs')
 const { createShowtimes } = require('./showtimes/create')
 const { deleteAllShowtimes } = require('./showtimes/delete')
@@ -38,6 +39,7 @@ const movies = {
   remove: deleteAllMovies,
   slugs: addSlugsToMovies,
   enhance: enhanceMovies,
+  tmdb: enhanceMoviesFromTmdb,
   ask,
 }
 

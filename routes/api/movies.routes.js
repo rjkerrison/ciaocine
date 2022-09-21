@@ -1,4 +1,4 @@
-const { getMovies } = require('../../api/tmdb')
+const { getMoviesFromTmdb } = require('../../api/tmdb')
 const getMovie = require('../../middleware/getMovie.middleware')
 const Movie = require('../../models/Movie.model')
 
@@ -26,7 +26,7 @@ router.get('/:movieIdOrSlug', async (req, res, next) => {
 
   res.json({
     movie,
-    tmdbInfo: await getMovies(movie.originalTitle || movie.title, {
+    tmdbInfo: await getMoviesFromTmdb(movie.originalTitle || movie.title, {
       year: movie?.releaseDate?.getFullYear(),
       director: movie?.castingShort?.directors,
     }),
