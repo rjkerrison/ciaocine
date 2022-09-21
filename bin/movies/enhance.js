@@ -15,7 +15,6 @@ const enhanceMovies = async () => {
     // Attempt to do a little rate limiting
     await sleep(250)
     await enhanceMovie(movie)
-    // console.log('Found info:', result)
   }
 
   console.log(`Updated ${filteredMovies.length} movies.`)

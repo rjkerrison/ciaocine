@@ -72,17 +72,19 @@ const saveMovieFromAllocine = async ({
   castingShort,
   runtime,
 }) => {
-  const href = poster?.href
-  const releaseDate = release?.releaseDate
-  let movie = (await Movie.findOne({ allocineId })) || new Movie({ allocineId })
-
+  const movie =
+    (await Movie.findOne({ allocineId })) || new Movie({ allocineId })
   const isInvalidatingSlug = movie.title !== title
 
-  movie.title = title
-  movie.poster = href
-  movie.releaseDate = releaseDate
-  movie.castingShort = castingShort
-  movie.runtime = runtime
+  Object.assign(movie, {
+    title,
+    poster: poster?.href,
+    // We don't override the releaseDate if it exists,
+    // because it may have been corrected by 'enhance' functionality.
+    releaseDate: movie.releaseDate || release?.releaseDate,
+    castingShort,
+    runtime,
+  })
 
   if (isInvalidatingSlug || !movie.slug) {
     movie.slug = await getUniqueSlugForMovie(movie)
