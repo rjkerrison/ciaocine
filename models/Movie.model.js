@@ -1,4 +1,4 @@
-const { Schema, model, SchemaTypes } = require('mongoose')
+const { Schema, model } = require('mongoose')
 const { findBySlugOrId } = require('../utils/findBySlugOrId')
 const { convertToSlug } = require('../utils/slug')
 const Showtime = require('./Showtime.model')
@@ -19,17 +19,26 @@ const movieSchema = new Schema(
     castingShort: castingShortSchema,
     releaseDate: { type: Schema.Types.Date },
     slug: {
-      type: SchemaTypes.String,
+      type: Schema.Types.String,
       required: true,
       unique: true,
     },
     originalTitleSlug: {
       select: true,
-      type: SchemaTypes.String,
+      type: Schema.Types.String,
       get: function () {
         const slug = convertToSlug(this.originalTitle)
         console.log(this.originalTitle, slug)
         return slug
+      },
+    },
+    externalIdentifiers: {
+      letterboxd: {
+        shortUrl: Schema.Types.String,
+        slug: Schema.Types.String,
+      },
+      tmdb: {
+        id: Schema.Types.String,
       },
     },
   },

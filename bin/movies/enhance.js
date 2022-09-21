@@ -19,7 +19,7 @@ const enhanceMovies = async () => {
   }
 
   console.log(`Updated ${filteredMovies.length} movies.`)
-  console.log(`Skipped ${movies.length} movies.`)
+  console.log(`Skipped ${movies.length - filteredMovies.length} movies.`)
 }
 
 const enhanceMovie = async (movie) => {
@@ -32,7 +32,7 @@ const enhanceMovie = async (movie) => {
 
     return updatedMovie
   } catch (error) {
-    console.error(`Error updating movie ${movie}.`, error)
+    console.error(`Error updating movie ${movie}.`, error.message)
     return
   }
 }
