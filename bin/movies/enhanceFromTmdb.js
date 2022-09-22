@@ -11,22 +11,23 @@ const TMDB_URLS = {
 
 const enhanceMoviesFromTmdb = async () => {
   await Movie.init()
-  const movies = await Movie.find()
-  console.log('Found %s movies.', movies.length)
+  const movies = await Movie.find({
+    'externalIdentifiers.letterboxd.slug': { $exists: 0 },
+  })
+  console.log(
+    'Found %s movies without a populated letterboxd slug.',
+    movies.length
+  )
 
-  const filteredMovies = movies
-  // .filter(
-  //   (movie) => !movie.externalIdentifiers.tmdb.id
-  // )
-
-  for (let movie of filteredMovies) {
+  let count = 0
+  for (let movie of movies) {
     // Attempt to do a little rate limiting
     await sleep(250)
+    console.log(`${count++} of ${movies.length}:`)
     await enhanceMovieFromTmdbSearch(movie)
   }
 
-  console.log(`Found TMDB info for ${filteredMovies.length} movies.`)
-  console.log(`Skipped ${movies.length - filteredMovies.length} movies.`)
+  console.log(`Found TMDB info for ${movies.length} movies.`)
 }
 
 const enhanceMovieFromTmdbSearch = async (movie) => {
@@ -39,6 +40,11 @@ const enhanceMovieFromTmdbSearch = async (movie) => {
       director,
     })
     if (!found || !found.length) {
+      console.log(
+        `No movie found named ${
+          movie.originalTitle || movie.title
+        } in year ${year} by director ${director}.`
+      )
       return
     }
     const {
@@ -78,7 +84,7 @@ const enhanceMovieFromTmdbSearch = async (movie) => {
     })
 
     const updatedMovie = await movie.save({ new: true })
-    console.log(`Updated ${updatedMovie.title}.`)
+    console.log(`Updated ${updatedMovie.title} with slug "${slug}".`)
 
     return
   } catch (error) {

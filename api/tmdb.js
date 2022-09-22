@@ -117,7 +117,7 @@ const compareScores = (a, b) => {
 const getMoviesFromTmdb = async (searchTerm, { year, director }) => {
   const {
     data: { results: tmdbInfo },
-  } = await axios(getMoviesConfig(searchTerm, year))
+  } = await axios(getMoviesConfig(searchTerm))
 
   const movies = tmdbInfo.slice(0, 5)
 
