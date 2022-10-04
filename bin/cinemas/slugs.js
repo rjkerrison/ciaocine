@@ -1,4 +1,4 @@
-const Cinema = require('../../models/Cinema.model')
+const { default: Cinema } = require('../../models/Cinema.model')
 
 const addSlugsToCinemas = async () => {
   // Find

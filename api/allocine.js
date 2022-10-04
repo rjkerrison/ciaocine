@@ -1,5 +1,5 @@
 const { default: axios } = require('axios')
-const Cinema = require('../models/Cinema.model')
+const { default: Cinema } = require('../models/Cinema.model')
 const baseUrl = process.env.BASE_URL
 const partnerKey = process.env.PARTNER_KEY
 

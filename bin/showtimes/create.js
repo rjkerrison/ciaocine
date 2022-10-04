@@ -1,4 +1,4 @@
-const Cinema = require('../../models/Cinema.model')
+const { default: Cinema } = require('../../models/Cinema.model')
 const { getShowtimes } = require('../../api/allocine')
 const { saveShowtimesToDatabase } = require('../../db/populate-showtimes')
 const { sleep } = require('../helpers')

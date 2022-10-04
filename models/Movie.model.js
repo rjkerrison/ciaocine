@@ -109,4 +109,24 @@ const Movie = model('Movie', movieSchema)
 Movie.getUniqueSlugForMovie = getUniqueSlugForMovie
 Movie.findBySlugOrId = (slugOrId) => findBySlugOrId(Movie, slugOrId)
 
+const searchableFields = [
+  'title',
+  'originalTitle',
+  'castingShort.directors',
+  'castingShort.actors',
+  'externalIdentifiers.tmdb.title',
+  'externalIdentifiers.tmdb.originalTitle',
+]
+
+// TODO replace searching with a search service which uses mapped keywords created on data change
+Movie.search = (term) => {
+  const query = { $regex: term, $options: 'i' }
+
+  return Movie.find({
+    $or: searchableFields.map((field) => ({
+      [field]: query,
+    })),
+  })
+}
+
 module.exports = Movie
