@@ -7,6 +7,7 @@ jobs:
   setting-summaries:
     name: 'Setting summaries'
     runs-on: ubuntu-latest
+    needs: []
     steps:
       - name: Set color
         id: random-color-generator
@@ -24,7 +25,10 @@ jobs:
   summary-script:
     name: 'Setting summaries from within a script'
     runs-on: ubuntu-latest
+    needs: []
     steps:
-      - name: Set color
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run script
         id: random-color-generator
         run: node .github/workflows/summary-generator.js
