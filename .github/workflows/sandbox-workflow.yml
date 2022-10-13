@@ -21,3 +21,10 @@ jobs:
           echo "- Lets add a bullet point" >> $GITHUB_STEP_SUMMARY
           echo "- Lets add a second bullet point" >> $GITHUB_STEP_SUMMARY
           echo "- How about a third one?" >> $GITHUB_STEP_SUMMARY
+  summary-script:
+    name: 'Setting summaries from within a script'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set color
+        id: random-color-generator
+        run: node .github/workflows/summary-generator.js
