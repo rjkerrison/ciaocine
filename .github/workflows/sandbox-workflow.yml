@@ -1,11 +1,12 @@
 name: Sandbox Workflow
-description: A Github workflow for me, Robin, to test new features.
+run-name: Workflow on ${{ github.ref }} by @${{ github.actor }}
 
 on: push
 
 jobs:
   setting-summaries:
     runs-on: ubuntu-latest
+    description: A Github workflow job testing step summaries.
     steps:
       - name: Set color
         id: random-color-generator
