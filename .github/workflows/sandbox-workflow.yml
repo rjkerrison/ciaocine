@@ -5,8 +5,8 @@ on: push
 
 jobs:
   setting-summaries:
+    name: 'Setting summaries'
     runs-on: ubuntu-latest
-    description: A Github workflow job testing step summaries.
     steps:
       - name: Set color
         id: random-color-generator
