@@ -1,0 +1,22 @@
+name: Sandbox Workflow
+description: A Github workflow for me, Robin, to test new features.
+
+on: push
+
+jobs:
+  setting-summaries:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set color
+        id: random-color-generator
+        run: echo "SELECTED_COLOR=green" >> $GITHUB_OUTPUT
+      - name: Get color
+        run: echo "The selected color is ${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
+      - name: Generate list using Markdown
+        run: |
+          echo "# Step Summary" >> $GITHUB_STEP_SUMMARY
+          echo "This is the lead in sentence for the list" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
+          echo "- Lets add a bullet point" >> $GITHUB_STEP_SUMMARY
+          echo "- Lets add a second bullet point" >> $GITHUB_STEP_SUMMARY
+          echo "- How about a third one?" >> $GITHUB_STEP_SUMMARY
