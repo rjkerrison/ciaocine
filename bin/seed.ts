@@ -9,19 +9,20 @@ const { enhanceMoviesFromTmdb } = require('./movies/enhanceFromTmdb')
 const { addSlugsToMovies } = require('./movies/slugs')
 const { createShowtimes } = require('./showtimes/create')
 const { deleteAllShowtimes } = require('./showtimes/delete')
+const { createShowtimesForAllMk2Cinemas } = require('./showtimes/mk2')
 
 const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
 })
 
-function question(query) {
+function question(query: string): Promise<string> {
   return new Promise((resolve) => {
     readline.question(query, resolve)
   })
 }
 
-async function ask() {
+async function ask(this: Object): Promise<string> {
   return await question(
     `Please specify one of: ${Object.keys(this)
       .filter((x) => x !== 'ask')
@@ -32,6 +33,7 @@ async function ask() {
 const showtimes = {
   remove: deleteAllShowtimes,
   create: createShowtimes,
+  mk2: createShowtimesForAllMk2Cinemas,
   ask,
 }
 
@@ -54,21 +56,36 @@ const calendars = {
   ask,
 }
 
-const subsections = {
+interface Subsection {
+  [a: string]: Function
+  ask: Function
+}
+
+interface SubsectionDictionary {
+  [a: string]: Subsection
+}
+
+const subsections: SubsectionDictionary = {
   cinemas,
   calendars,
   movies,
   showtimes,
-  ask,
+}
+const subsectionManager = {
+  subsections,
+  ask: ask.bind(subsections),
+  get(key: string) {
+    return this.subsections[key]
+  },
 }
 
-const chooseAction = async (args) => {
+const chooseAction = async (args: string[]) => {
   let requestedSubsection = args[0]
 
-  while (!subsections[requestedSubsection]) {
-    requestedSubsection = await subsections.ask()
+  while (!subsectionManager.subsections.hasOwnProperty(requestedSubsection)) {
+    requestedSubsection = await subsectionManager.ask()
   }
-  const actions = subsections[requestedSubsection]
+  const actions: Subsection = subsectionManager.get(requestedSubsection)
 
   let requestedAction = args[1]
   while (!actions[requestedAction]) {
@@ -81,12 +98,12 @@ const chooseAction = async (args) => {
 }
 
 const seed = async () => {
-  await require('../db/index')
+  const connection = await require('../db/index')
   const args = process.argv.slice(2)
 
   await chooseAction(args)
 
-  await mongoose.connection.close()
+  await connection.close()
   return
 }
 

@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const { getMovies } = require('../helpers/movies')
 const { getDateParams } = require('../helpers/dates')
-const Cinema = require('../../models/Cinema.model')
+const { default: Cinema } = require('../../models/Cinema.model')
 const { readGeolocation } = require('../../middleware/readGeolocation')
 
 /* GET /api/cinemas */

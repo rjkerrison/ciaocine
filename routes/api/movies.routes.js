@@ -37,18 +37,8 @@ router.get('/:movieIdOrSlug', async (req, res, next) => {
 router.get('/search/:term', async (req, res, _next) => {
   const { term } = req.params
   const { page = 1 } = req.query
-  const query = { $regex: term, $options: 'i' }
 
-  const movies = await Movie.find({
-    $or: [
-      'title',
-      'originalTitle',
-      'castingShort.directors',
-      'castingShort.actors',
-    ].map((field) => ({
-      [field]: query,
-    })),
-  })
+  const movies = await Movie.search(term)
     .limit(25)
     .skip(25 * (page - 1))
     .populate('showtimes pastShowtimeCount')
