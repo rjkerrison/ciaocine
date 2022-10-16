@@ -2,6 +2,7 @@ const { Schema, model } = require('mongoose')
 const { findBySlugOrId } = require('../utils/findBySlugOrId')
 const { convertToSlug } = require('../utils/slug')
 const Showtime = require('./Showtime.model')
+const { Want, Watch } = require('./UserMovieRelationship')
 
 const castingShortSchema = new Schema({
   directors: String,
@@ -54,6 +55,7 @@ const movieSchema = new Schema(
   },
   {
     toJSON: { virtuals: true },
+    timestamps: true,
   }
 )
 
@@ -104,6 +106,20 @@ movieSchema.virtual('pastShowtimeCount', {
   count: true,
 })
 
+movieSchema.virtual('wantCount', {
+  ref: Want,
+  localField: '_id',
+  foreignField: 'movie',
+  count: true,
+})
+
+movieSchema.virtual('watchCount', {
+  ref: Watch,
+  localField: '_id',
+  foreignField: 'movie',
+  count: true,
+})
+
 const Movie = model('Movie', movieSchema)
 
 Movie.getUniqueSlugForMovie = getUniqueSlugForMovie
@@ -119,7 +135,7 @@ const searchableFields = [
 ]
 
 // TODO replace searching with a search service which uses mapped keywords created on data change
-Movie.search = (term) => {
+Movie.search = (term = '') => {
   const query = { $regex: term, $options: 'i' }
 
   return Movie.find({

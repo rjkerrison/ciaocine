@@ -20,4 +20,4 @@ async function startApp() {
   return app
 }
 
-module.exports = startApp
+export default startApp

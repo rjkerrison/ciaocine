@@ -1,12 +1,23 @@
 const { getMoviesFromTmdb } = require('../../api/tmdb')
 const getMovie = require('../../middleware/getMovie.middleware')
 const Movie = require('../../models/Movie.model')
+const { Want } = require('../../models/UserMovieRelationship')
 
 const router = require('express').Router()
 
+const validTopByFields = ['want', 'watch']
+const isValidTopByField = (field) => validTopByFields.includes(field)
+
 /* GET movies */
-router.get('/', async (_req, res, _next) => {
-  const movies = await Movie.find()
+router.get('/top/by/released', async (req, res, _next) => {
+  const { page = 1 } = req.query
+  const movies = await Movie.find({
+    releaseDate: { $lt: new Date() },
+  })
+    .sort({ releaseDate: -1 })
+    .populate('showtimes pastShowtimeCount wantCount watchCount')
+    .limit(25)
+    .skip(25 * (page - 1))
 
   res.json({
     movies,

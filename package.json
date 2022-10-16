@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js -e js,css",
+    "start": "node server.ts",
+    "dev": "nodemon server.ts -e js,css",
     "seed": "ts-node bin/seed.ts",
     "seed:clean": "node bin/removeShowtimes.js",
     "seed:refresh": "npm run seed:clean && npm run seed"
