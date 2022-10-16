@@ -132,7 +132,18 @@ const saveShowtimeFromAllocine = async ({
 }) => {
   const showtime = await Showtime.findOneAndUpdate(
     { movie, cinema, startTime },
-    { allocineId, movie, cinema, startTime },
+    {
+      allocineId,
+      movie,
+      cinema,
+      startTime,
+      externalIds: {
+        $push: {
+          id: allocineId,
+          source: 'allocine',
+        },
+      },
+    },
     { upsert: true, new: true }
   )
   return showtime

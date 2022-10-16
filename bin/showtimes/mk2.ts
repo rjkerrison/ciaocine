@@ -68,7 +68,12 @@ const upsertShowtime = async (
 ) => {
   const showtime = await Showtime.findOneAndUpdate(
     { movie, cinema, startTime },
-    { movie, cinema, startTime, externalIdentifiers: { mk2: { id: mk2id } } },
+    {
+      movie,
+      cinema,
+      startTime,
+      externalIds: { $push: { id: mk2id, source: 'mk2' } },
+    },
     { upsert: true, new: true }
   )
   return showtime
