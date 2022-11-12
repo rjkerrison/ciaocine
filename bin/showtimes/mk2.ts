@@ -41,7 +41,7 @@ const createShowtimesForFilm = async (film, sessions, cinema: CinemaSchema) => {
       {
         slug,
       },
-      { title: { $regex: title, $options: 'i' } },
+      { title: { $regex: `^${title}`, $options: 'i' } },
     ],
   })
 

@@ -1,15 +1,14 @@
-const {
-  isAuthenticated,
-  includeUser,
-} = require('../../middleware/jwt.middleware')
-const { Watch, Dismiss, Want } = require('../../models/UserMovieRelationship')
+import { Model } from 'mongoose'
+import { Router } from 'express'
+import { isAuthenticated, includeUser } from '../../middleware/jwt.middleware'
+import { Watch, Dismiss, Want } from '../../models/UserMovieRelationship'
 
-const router = require('express').Router()
+const router = Router()
 
 router.use(isAuthenticated, includeUser)
 
-const upsertRelationship = async (relationshipModel, req, res) => {
-  const relationship = await relationshipModel.findOneAndReplace(
+const upsertRelationship = async <T>(relationshipModel: Model<T>, req, res) => {
+  const relationship = await relationshipModel.findOneAndUpdate(
     {
       user: req.user.id,
       movie: req.movie.id,
@@ -27,7 +26,7 @@ const upsertRelationship = async (relationshipModel, req, res) => {
   })
 }
 
-const removeRelationship = async (relationshipModel, req, res) => {
+const removeRelationship = async <T>(relationshipModel: Model<T>, req, res) => {
   await relationshipModel.findOneAndDelete({
     user: req.user.id,
     movie: req.movie.id,
@@ -36,7 +35,7 @@ const removeRelationship = async (relationshipModel, req, res) => {
   res.sendStatus(204)
 }
 
-router.post('/watch', (req, res, _next) => {
+router.post('/watch', (req, res, _next: any) => {
   upsertRelationship(Watch, req, res)
 })
 

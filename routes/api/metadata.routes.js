@@ -20,13 +20,12 @@ router.get('/', async (req, res, _next) => {
   } = req
 
   const foundMovies = await findBySlugs(Movie, movies)
-  console.log(movies, foundMovies)
-  console.log(foundMovies.map((x) => x._id))
+  const ids = foundMovies.map((x) => x._id)
 
   // Parallelise these three searches.
   const [watches, dismisses, wants] = await Promise.all(
     [Watch, Dismiss, Want].map((model) =>
-      getSlugsForRelationship(model, foundMovies, user._id)
+      getSlugsForRelationship(model, ids, user._id)
     )
   )
 
