@@ -23,7 +23,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-npm-${{ hashFiles(./package-lock.json) }}
+          key: ${{ runner.os }}-npm-${{ hashFiles('./package-lock.json') }}
       - name: Install dependencies
         run: npm install
       - name: Get latest showtimes
