@@ -14,7 +14,8 @@ const connection = mongoose
     return x.connections[0]
   })
   .catch((err) => {
-    console.error(`Error connecting to mongo: ${MONGO_URI}.`, err)
+    console.error(`Error connecting to mongo: ${MONGO_URI}.`)
+    throw err
   })
 
 module.exports = connection
