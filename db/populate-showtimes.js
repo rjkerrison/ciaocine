@@ -46,18 +46,21 @@ const saveShowtimesToDatabase = async (
       version.$ === 'Français' ? 'F' : 'stF ' + version.$
     }`
     console.log(
-      `- ${movie.title} (${versionString}): ${
+      `At ${cinema.name}, ${movie.title} (${versionString}) has ${
         savedShowtimes.flat().length
-      } showtimes over ${savedShowtimes.length} days at ${cinema.name}.`
+      } showtimes over ${savedShowtimes.length} days:
+        ${savedShowtimes
+          .flat()
+          .map(
+            (showtime) =>
+              `${formatDate(showtime.startTime, timeFormat)} on ${formatDate(
+                showtime.startTime,
+                dateMonthFormat
+              )}`
+          )
+          .join(', ')}
+      `
     )
-    savedShowtimes.flat().forEach((showtime) => {
-      console.log(
-        `-- ${formatDate(showtime.startTime, timeFormat)} on ${formatDate(
-          showtime.startTime,
-          dateMonthFormat
-        )}`
-      )
-    })
 
     showtimes.push(...savedShowtimes.flat())
   }
