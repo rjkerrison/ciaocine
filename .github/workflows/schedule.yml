@@ -6,6 +6,12 @@ on:
   schedule:
     - cron: '0 7 * * 1,2'
 
+env:
+  MONGODB_URI: ${{ secrets.MONGODB_URI }}
+  BASE_URL: ${{ secrets.BASE_URL }}
+  PARTNER_KEY: ${{ secrets.PARTNER_KEY }}
+  TMDB_KEY: ${{ secrets.TMDB_KEY }}
+
 jobs:
   automated-tasks:
     name: Automated tasks
@@ -17,7 +23,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-npm-{{ hash(package-lock.json) }}
+          key: ${{ runner.os }}-npm-${{ hash(package-lock.json) }}
       - name: Install dependencies
         run: npm install
       - name: Get latest showtimes
