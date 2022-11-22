@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "ts-node server.ts",
+    "start": "cd ./build && node server.js",
+    "build": "tsc",
     "dev": "nodemon server.ts -e js,css,ts",
     "seed": "ts-node bin/seed.ts",
     "seed:clean": "node bin/removeShowtimes.js",
