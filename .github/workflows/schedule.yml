@@ -2,9 +2,9 @@ name: Schedule
 run-name: Scheduled build
 
 on:
-  workflow_call:
+  workflow_dispatch:
   schedule:
-    - '0 7 * * 1,2'
+    - cron: '0 7 * * 1,2'
 
 jobs:
   automated-tasks:
