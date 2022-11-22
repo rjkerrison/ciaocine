@@ -14,6 +14,9 @@ router.use('/cinemas', cinemasRouter)
 router.use('/likes', likesRouter)
 router.use('/calendar', calendarRouter)
 router.use('/metadata', metadataRouter)
+router.get('/healthz', (_req, res, _next) => {
+  res.send('Ciaocine is running!')
+})
 
 router.use((error, req, res, next) => {
   console.error('ERROR: ', req.method, req.path, error)
