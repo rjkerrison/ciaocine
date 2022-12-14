@@ -6,5 +6,6 @@ const URL_SEPARATOR = '|'
 module.exports = {
   MONGO_URI,
   APP_URL,
+  PORT,
   URL_SEPARATOR,
 }

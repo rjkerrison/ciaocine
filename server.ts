@@ -1,10 +1,25 @@
 import startApp from './app'
+import { openConnection } from './db'
+import { PORT } from './utils/consts'
 
-startApp().then((app) => {
-  // ℹ️ Sets the PORT for our app to have access to it. If no env has been set, we hard code it to 3000
-  const PORT = process.env.PORT || 3000
+const startServer = async () => {
+  // First, we open the database connection
+  const dbConnection = await openConnection()
+  // We create the app
+  const app = await startApp()
 
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`Server listening on port http://localhost:${PORT}`)
   })
-})
+
+  process.on('SIGTERM', () => {
+    server.close(() => {
+      console.log('Express server closed')
+    })
+    dbConnection.close(() => {
+      console.log('Database connection closed')
+    })
+  })
+}
+
+startServer()
