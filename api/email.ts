@@ -1,7 +1,18 @@
-'use strict'
-const hbs = require('hbs')
-const fs = require('fs')
-const nodemailer = require('nodemailer')
+import fs from 'fs'
+import nodemailer from 'nodemailer'
+
+const replaceTemplateStrings = (
+  template: string,
+  replacements: { [x: string]: string }
+) => {
+  for (const key in replacements) {
+    const regex = new RegExp(`{{\\s*${key}\\s*}}`, 'i')
+    template = template.replace(regex, replacements[key])
+    console.log(regex, replacements[key])
+    console.log(template)
+  }
+  return template
+}
 
 // async..await is not allowed in global scope, must use a wrapper
 async function sendWelcomeEmail() {
@@ -21,17 +32,17 @@ async function sendWelcomeEmail() {
   })
 
   const name = 'Robin James Kerrison'
-  const templateFile = fs.readFileSync(
-    __dirname + '/../views/emails/welcome.hbs',
+  const template = fs.readFileSync(
+    __dirname + '/../views/emails/welcome.html',
     'utf8'
   )
 
-  const html = hbs.handlebars.compile(templateFile)({ username: 'rjkerrison' })
+  const html = replaceTemplateStrings(template, { username: 'rjkerrison' })
 
   // send mail with defined transport object
   const info = await transporter.sendMail({
     from: '"Ciaocine" <foo@ciaocine.com>', // sender address
-    to: 'bob@bobmail.bob', // list of receivers
+    to: 'rjk1994@gmail.com', // list of receivers
     subject: `Hello ${name}`, // Subject line
     html,
   })
@@ -44,6 +55,4 @@ async function sendWelcomeEmail() {
   // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
 
-module.exports = {
-  sendWelcomeEmail,
-}
+export { sendWelcomeEmail }
