@@ -2,6 +2,9 @@
   "name": "ciaocine",
   "version": "0.0.0",
   "private": true,
+  "bin": {
+    "seed": "./bin/seed.ts"
+  },
   "scripts": {
     "start": "cd ./build && node server.js",
     "build": "tsc",
