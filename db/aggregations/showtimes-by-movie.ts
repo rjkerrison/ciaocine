@@ -9,7 +9,7 @@ import {
   matchDate,
 } from './steps'
 
-const getShowtimesForCinemaGroupByMovie = async (
+export const getShowtimesForCinemaGroupByMovie = async (
   cinemaId,
   { fromDate, toDate }
 ) => {
@@ -24,5 +24,3 @@ const getShowtimesForCinemaGroupByMovie = async (
 
   return showtimes
 }
-
-module.exports = getShowtimesForCinemaGroupByMovie

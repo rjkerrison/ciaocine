@@ -1,11 +1,11 @@
 // ℹ️ package responsible to make the connection with mongodb
 // https://www.npmjs.com/package/mongoose
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
 // ℹ️ Sets the MongoDB URI for our app to have access to it.
 // If no env has been set, we dynamically set it to whatever the folder name was upon the creation of the app
 
-const { MONGO_URI } = require('../utils/consts')
+import { MONGO_URI } from '../utils/consts'
 
 const connection = mongoose
   .connect(MONGO_URI)
@@ -18,4 +18,4 @@ const connection = mongoose
     throw err
   })
 
-module.exports = connection
+export default connection

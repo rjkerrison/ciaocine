@@ -66,6 +66,4 @@ const findShowtimesAndSave = async (cinema: CinemaSchema) => {
   }
 }
 
-module.exports = {
-  createShowtimes,
-}
+export { createShowtimes }

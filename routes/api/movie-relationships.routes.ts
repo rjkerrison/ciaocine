@@ -59,4 +59,4 @@ router.delete('/want', async (req, res, _next) => {
   removeRelationship(Want, req, res)
 })
 
-module.exports = router
+export default router

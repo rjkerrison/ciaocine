@@ -10,7 +10,7 @@ const saveShowtimeToDatabase = async ({ movie, screenings, cinema }) => {
   return savedShowtimes
 }
 
-const saveShowtimesToDatabase = async (
+export const saveShowtimesToDatabase = async (
   showtimesForMovieGroupedByDay,
   cinema
 ) => {
@@ -145,8 +145,4 @@ const saveShowtimeFromAllocine = async ({
     { upsert: true, new: true }
   )
   return showtime
-}
-
-module.exports = {
-  saveShowtimesToDatabase,
 }

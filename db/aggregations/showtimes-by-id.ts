@@ -18,4 +18,4 @@ const getShowtimeById = async (showtimeId) => {
   return showtimes[0]
 }
 
-module.exports = getShowtimeById
+export default getShowtimeById

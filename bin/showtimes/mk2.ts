@@ -97,7 +97,7 @@ const upsertShowtime = async (
   return showtime
 }
 
-const _createShowtimesForAllMk2Cinemas = async () => {
+const createShowtimesForAllMk2Cinemas = async () => {
   const cinemas = await Cinema.find({ slug: { $regex: 'mk2' } })
 
   const now = Date.now()
@@ -113,6 +113,4 @@ const _createShowtimesForAllMk2Cinemas = async () => {
   )
 }
 
-module.exports = {
-  createShowtimesForAllMk2Cinemas: _createShowtimesForAllMk2Cinemas,
-}
+export { createShowtimesForAllMk2Cinemas }

@@ -111,6 +111,4 @@ const getMoviesNear = async (geolocation, fromDate, toDate) => {
   return showtimes[0] || { showtimes: [], movies: [], cinemas: [] }
 }
 
-module.exports = {
-  getMoviesNear,
-}
+export { getMoviesNear }

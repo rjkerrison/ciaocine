@@ -1,8 +1,7 @@
-const { default: mongoose } = require('mongoose')
+import { default as mongoose } from 'mongoose'
 const { getMoviesBetweenTimes } =
   require('./aggregations/movies-showing-by-date').default
 
-const cinemaId = '623b47d48f8dbba189a1a6cb'
 const date = new Date(2022, 2, 27)
 const endDate = new Date(2022, 2, 28)
 
