@@ -1,11 +1,8 @@
 const router = require('express').Router()
-const {
-  isAuthenticated,
-  includeUser,
-} = require('../../middleware/jwt.middleware')
-const Movie = require('../../models/Movie.model')
-const { Watch, Dismiss, Want } = require('../../models/UserMovieRelationship')
-const { findBySlugs } = require('../../utils/findBySlugOrId')
+import { isAuthenticated, includeUser } from '../../middleware/jwt.middleware'
+import Movie from '../../models/Movie.model'
+import { Watch, Dismiss, Want } from '../../models/UserMovieRelationship'
+import { findBySlugs } from '../../utils/findBySlugOrId'
 
 router.use(isAuthenticated, includeUser)
 
@@ -55,4 +52,4 @@ const getSlugsForRelationship = async (model, foundMovies, userId) => {
   return foundRelationships.map(({ movie: { slug } }) => slug)
 }
 
-module.exports = router
+export default router

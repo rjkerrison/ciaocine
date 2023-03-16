@@ -144,16 +144,16 @@ const searchableFields = [
   'externalIdentifiers.tmdb.originalTitle',
 ]
 
-Object.assign(Movie, {
-  getUniqueSlugForMovie,
-  findBySlugOrId: (slugOrId: string) => findBySlugOrId(Movie, slugOrId),
-  search,
-})
-
 type ExtendedMovie = typeof Movie & {
   getUniqueSlugForMovie: (movie: MovieSchema) => Promise<any>
   findBySlugOrId: (slugOrId: any) => any
   search: (term: string) => any
 }
+
+// This is silly. How do we extend a type nicely without destroying the original?
+;(Movie as ExtendedMovie).getUniqueSlugForMovie = getUniqueSlugForMovie
+;(Movie as ExtendedMovie).findBySlugOrId = (slugOrId: string) =>
+  findBySlugOrId(Movie, slugOrId)
+;(Movie as ExtendedMovie).search = search
 
 export default Movie as ExtendedMovie
