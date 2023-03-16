@@ -1,5 +1,5 @@
-const index = require('./index.routes')
-const apiRouter = require('./api')
+import index from './index.routes'
+import apiRouter from './api'
 
 const registerRoutes = (app) => {
   // Two base routes for compatibility
@@ -9,4 +9,4 @@ const registerRoutes = (app) => {
   app.use('/', index)
 }
 
-module.exports = registerRoutes
+export default registerRoutes
