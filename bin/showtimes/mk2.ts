@@ -1,7 +1,11 @@
-import { getShowtimesForCinemaAndDate } from '../../api/mk2'
+import {
+  getShowtimesForCinemaAndDate,
+  Mk2Film,
+  Mk2Session,
+} from '../../api/mk2'
 import Cinema, { CinemaSchema } from '../../models/Cinema.model'
-import Movie from '../../models/Movie.model'
-import Showtime from '../../models/Showtime.model'
+import Movie, { MovieSchema } from '../../models/Movie.model'
+import Showtime, { ShowtimeSchema } from '../../models/Showtime.model'
 import { Ymd } from '../../utils/types'
 
 const createShowtimesForCinemaAndDate = async (
@@ -33,9 +37,11 @@ const createShowtimesForCinema = async (cinema: CinemaSchema, dates: Ymd[]) => {
   )
 }
 
-const createShowtimesForFilm = async (film, sessions, cinema: CinemaSchema) => {
-  const { slug, title, id } = film
-
+const createShowtimesForFilm = async (
+  { slug, title, id }: Mk2Film,
+  sessions: Mk2Session[],
+  cinema: CinemaSchema
+) => {
   const movie = await Movie.findOne({
     $or: [
       {
@@ -45,27 +51,39 @@ const createShowtimesForFilm = async (film, sessions, cinema: CinemaSchema) => {
     ],
   })
 
+  if (movie === null) {
+    return []
+  }
+
   console.log({ title, id, foundId: movie?._id }, sessions.length)
 
   return Promise.all(
-    sessions.map((session) => upsertShowtimeFromSession(session, movie, cinema))
+    sessions.map((session: Mk2Session) =>
+      upsertShowtimeFromSession(session, movie, cinema)
+    )
   )
 }
 
-const upsertShowtimeFromSession = async (session, movie, cinema) => {
-  const { showTime, mk2ShowtimeId: id } = session
-
-  await upsertShowtime(movie, cinema, showTime, id).then((showtime) =>
-    console.log(showtime)
+const upsertShowtimeFromSession = async (
+  session: Mk2Session,
+  movie: MovieSchema,
+  cinema: CinemaSchema
+): Promise<ShowtimeSchema> => {
+  const showtime = await upsertShowtime(
+    movie,
+    cinema,
+    session.showTime,
+    session.mk2ShowtimeId
   )
+  return showtime
 }
 
 const upsertShowtime = async (
-  movie: typeof Movie,
-  cinema: typeof Cinema,
+  movie: MovieSchema,
+  cinema: CinemaSchema,
   startTime: string,
   mk2id: string
-) => {
+): Promise<ShowtimeSchema> => {
   const showtime = await Showtime.findOneAndUpdate(
     { movie, cinema, startTime },
     {

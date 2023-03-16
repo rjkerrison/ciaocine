@@ -1,55 +1,55 @@
-const { Schema, model } = require('mongoose')
-const { findBySlugOrId } = require('../utils/findBySlugOrId')
-const { convertToSlug } = require('../utils/slug')
-const Showtime = require('./Showtime.model')
-const { Want, Watch } = require('./UserMovieRelationship')
+import { InferSchemaType, SchemaTypes } from 'mongoose'
+
+import { Schema, model } from 'mongoose'
+import { findBySlugOrId } from '../utils/findBySlugOrId'
+import { convertToSlug } from '../utils/slug'
+import Showtime from './Showtime.model'
+import { Want, Watch } from './UserMovieRelationship'
 
 const castingShortSchema = new Schema({
   directors: String,
   actors: String,
 })
 
-const movieSchema = new Schema(
+export const movieSchema = new Schema(
   {
-    allocineId: Number,
-    title: String,
-    originalTitle: String,
-    poster: String,
-    synopsis: String,
-    runtime: Number,
+    allocineId: SchemaTypes.Number,
+    title: SchemaTypes.String,
+    originalTitle: SchemaTypes.String,
+    poster: SchemaTypes.String,
+    synopsis: SchemaTypes.String,
+    runtime: SchemaTypes.Number,
     castingShort: castingShortSchema,
-    releaseDate: { type: Schema.Types.Date },
+    releaseDate: { type: SchemaTypes.Date },
     slug: {
-      type: Schema.Types.String,
+      type: SchemaTypes.String,
       required: true,
       unique: true,
     },
     originalTitleSlug: {
       select: true,
-      type: Schema.Types.String,
-      get: function () {
-        const slug = convertToSlug(this.originalTitle)
-        console.log(this.originalTitle, slug)
-        return slug
+      type: SchemaTypes.String,
+      get: function (this: { originalTitle: string }) {
+        return convertToSlug(this.originalTitle)
       },
     },
     externalIdentifiers: {
       letterboxd: {
-        shortUrl: Schema.Types.String,
-        slug: Schema.Types.String,
+        shortUrl: SchemaTypes.String,
+        slug: SchemaTypes.String,
       },
       tmdb: {
-        id: Schema.Types.String,
-        title: Schema.Types.String,
-        originalTitle: Schema.Types.String,
+        id: SchemaTypes.String,
+        title: SchemaTypes.String,
+        originalTitle: SchemaTypes.String,
       },
     },
     images: {
       poster: {
-        type: Schema.Types.String,
+        type: SchemaTypes.String,
       },
       backdrop: {
-        type: Schema.Types.String,
+        type: SchemaTypes.String,
       },
     },
   },
@@ -59,7 +59,9 @@ const movieSchema = new Schema(
   }
 )
 
-const getUniqueSlugForMovie = async (movie) => {
+export type MovieSchema = InferSchemaType<typeof movieSchema>
+
+const getUniqueSlugForMovie = async (movie: MovieSchema) => {
   const slug = convertToSlug(movie.title)
 
   const moviesWithSameSlug = await Movie.find({ slug })
@@ -122,8 +124,16 @@ movieSchema.virtual('watchCount', {
 
 const Movie = model('Movie', movieSchema)
 
-Movie.getUniqueSlugForMovie = getUniqueSlugForMovie
-Movie.findBySlugOrId = (slugOrId) => findBySlugOrId(Movie, slugOrId)
+// TODO replace searching with a search service which uses mapped keywords created on data change
+const search = (term = '') => {
+  const query = { $regex: term, $options: 'i' }
+
+  return Movie.find({
+    $or: searchableFields.map((field) => ({
+      [field]: query,
+    })),
+  })
+}
 
 const searchableFields = [
   'title',
@@ -134,15 +144,16 @@ const searchableFields = [
   'externalIdentifiers.tmdb.originalTitle',
 ]
 
-// TODO replace searching with a search service which uses mapped keywords created on data change
-Movie.search = (term = '') => {
-  const query = { $regex: term, $options: 'i' }
+const MovieExtended: typeof Movie & {
+  getUniqueSlugForMovie?: (movie: MovieSchema) => Promise<any>
+  findBySlugOrId?: (slugOrId: any) => any
+  search?: (term: string) => any
+} = Movie
 
-  return Movie.find({
-    $or: searchableFields.map((field) => ({
-      [field]: query,
-    })),
-  })
-}
+Object.assign(MovieExtended, {
+  getUniqueSlugForMovie,
+  findBySlugOrId: (slugOrId: string) => findBySlugOrId(Movie, slugOrId),
+  search,
+})
 
-module.exports = Movie
+export default MovieExtended

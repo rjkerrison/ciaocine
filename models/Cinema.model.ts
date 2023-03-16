@@ -9,12 +9,12 @@ const memberCardSchema = new Schema({
   label: String,
 })
 
-const cinemaSchema: Schema<any> = new Schema({
-  allocine_id: String,
-  name: String,
-  address: String,
-  zipcode: String,
-  city: String,
+const cinemaSchema = new Schema({
+  allocine_id: SchemaTypes.String,
+  name: SchemaTypes.String,
+  address: SchemaTypes.String,
+  zipcode: SchemaTypes.String,
+  city: SchemaTypes.String,
   member_cards: [memberCardSchema],
   slug: {
     type: SchemaTypes.String,
@@ -36,6 +36,6 @@ const Cinema: Model<CinemaSchema> & {
   findBySlugOrId?: Function
 } = model('Cinema', cinemaSchema)
 
-Cinema.findBySlugOrId = (slugOrId) => findBySlugOrId(Cinema, slugOrId)
+Cinema.findBySlugOrId = (slugOrId: string) => findBySlugOrId(Cinema, slugOrId)
 
 export default Cinema

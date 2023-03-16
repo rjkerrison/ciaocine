@@ -17,9 +17,20 @@ const getShowtimesForCinemaConfig = (
 }
 
 interface SessionsByFilmAndCinema {
-  film: any
+  film: Mk2Film
   cinema: any
-  sessions: any
+  sessions: Mk2Session[]
+}
+
+export interface Mk2Film {
+  slug: string
+  title: string
+  id: string
+}
+
+export interface Mk2Session {
+  showTime: string
+  mk2ShowtimeId: string
 }
 
 export const getShowtimesForCinemaAndDate = async (
@@ -38,7 +49,11 @@ export const getShowtimesForCinemaAndDate = async (
     return sessionsByFilmAndCinema
   } catch (error: any) {
     const axiosError = error as AxiosError
-    console.log(axiosError.response?.data?.message, cinemaSlug)
+    console.error(
+      `Error occurred during ${getShowtimesForCinemaAndDate.name} for cinema ${cinemaSlug}:
+
+  ${axiosError.response?.data?.message}`
+    )
     return []
   }
 }
