@@ -5,7 +5,6 @@
   "bin": {
     "seed": "./bin/seed.ts"
   },
-  "type": "module",
   "scripts": {
     "start": "cd ./build && node server.js",
     "build": "tsc",

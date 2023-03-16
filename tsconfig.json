@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ES2022",
+    "target": "ES5",
+    "module": "CommonJS",
     "lib": ["ES2022", "DOM"],
     "allowJs": true,
     "outDir": "build",
@@ -10,7 +10,7 @@
     "noImplicitAny": false,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node16",
+    "moduleResolution": "node",
     "types": ["vitest"],
     "skipLibCheck": true
   }
