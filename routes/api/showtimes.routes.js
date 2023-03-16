@@ -2,7 +2,7 @@ const { getMoviesNear } = require('../../db/aggregations/movies-near')
 const getShowtimeById = require('../../db/aggregations/showtimes-by-id')
 const { readGeolocation } = require('../../middleware/readGeolocation')
 const { getDateParams } = require('../helpers/dates')
-const { getMovies, getUrls } = require('../helpers/movies')
+const { getMovies, getUrls } = require('../helpers/movies').default
 
 const router = require('express').Router()
 

@@ -1,11 +1,13 @@
-const router = require('express').Router()
-const authRouter = require('./auth.routes')
-const moviesRouter = require('./movies.routes')
-const showtimesRouter = require('./showtimes.routes')
-const cinemasRouter = require('./cinemas.routes')
-const likesRouter = require('./likes.routes')
-const calendarRouter = require('./calendar.routes')
-const metadataRouter = require('./metadata.routes')
+import { Router } from 'express'
+import authRouter from './auth.routes'
+import moviesRouter from './movies.routes'
+import showtimesRouter from './showtimes.routes'
+import cinemasRouter from './cinemas.routes'
+import likesRouter from './likes.routes'
+import calendarRouter from './calendar.routes'
+import metadataRouter from './metadata.routes'
+
+const router = Router()
 
 router.use('/auth', authRouter)
 router.use('/movies', moviesRouter)
@@ -30,4 +32,4 @@ router.use((error, req, res, next) => {
   return res.status(500).json({ errorMessage: error.message })
 })
 
-module.exports = router
+export default router

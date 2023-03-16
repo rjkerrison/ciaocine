@@ -1,7 +1,8 @@
-const { getMoviesFromTmdb } = require('../../api/tmdb')
-const getMovie = require('../../middleware/getMovie.middleware')
-const Movie = require('../../models/Movie.model')
-const { Want } = require('../../models/UserMovieRelationship')
+import { getMoviesFromTmdb } from '../../api/tmdb'
+import getMovie from '../../middleware/getMovie.middleware'
+import Movie from '../../models/Movie.model'
+
+import relationshipRoutes from './movie-relationships.routes'
 
 const router = require('express').Router()
 
@@ -59,6 +60,6 @@ router.get('/search/:term', async (req, res, _next) => {
   })
 })
 
-router.use('/:movieIdOrSlug', getMovie, require('./movie-relationships.routes'))
+router.use('/:movieIdOrSlug', getMovie, relationshipRoutes)
 
-module.exports = router
+export default router

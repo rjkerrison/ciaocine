@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { getMovies } = require('../helpers/movies')
+const { getMovies } = require('../helpers/movies').default
 const { getDateParams } = require('../helpers/dates')
 const { default: Cinema } = require('../../models/Cinema.model')
 const { readGeolocation } = require('../../middleware/readGeolocation')

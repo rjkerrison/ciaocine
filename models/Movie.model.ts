@@ -144,16 +144,16 @@ const searchableFields = [
   'externalIdentifiers.tmdb.originalTitle',
 ]
 
-const MovieExtended: typeof Movie & {
-  getUniqueSlugForMovie?: (movie: MovieSchema) => Promise<any>
-  findBySlugOrId?: (slugOrId: any) => any
-  search?: (term: string) => any
-} = Movie
-
-Object.assign(MovieExtended, {
+Object.assign(Movie, {
   getUniqueSlugForMovie,
   findBySlugOrId: (slugOrId: string) => findBySlugOrId(Movie, slugOrId),
   search,
 })
 
-export default MovieExtended
+type ExtendedMovie = typeof Movie & {
+  getUniqueSlugForMovie: (movie: MovieSchema) => Promise<any>
+  findBySlugOrId: (slugOrId: any) => any
+  search: (term: string) => any
+}
+
+export default Movie as ExtendedMovie

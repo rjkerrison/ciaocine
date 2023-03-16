@@ -85,7 +85,7 @@ const saveMovieFromAllocine = async ({
   })
 
   if (isInvalidatingSlug || !movie.slug) {
-    movie.slug = await Movie.getUniqueSlugForMovie?.(movie)
+    movie.slug = await Movie.getUniqueSlugForMovie(movie)
   }
 
   await movie.save()

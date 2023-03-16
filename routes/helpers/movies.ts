@@ -1,7 +1,7 @@
-const { getRandomPosterUrl } = require('../../config/fakeposters')
-const { getMoviesBetweenTimes } =
-  require('../../db/aggregations/movies-showing-by-date').default
-const {
+import { PipelineStage } from 'mongoose'
+import { getRandomPosterUrl } from '../../config/fakeposters'
+import { getMoviesBetweenTimes } from '../../db/aggregations/movies-showing-by-date'
+import {
   filterCinemaToUgcIllimite,
   filterCinemaToRiveGauche,
   filterCinemaToRiveDroite,
@@ -9,11 +9,11 @@ const {
   filterCinemaToArrondissements,
   populateCinema,
   unwindCinema,
-} = require('../../db/aggregations/steps')
-const { APP_URL, URL_SEPARATOR } = require('../../utils/consts')
-const { formatDate, weekdayDateMonthFormat } = require('../../utils/formatDate')
-const { adjustDateByDays } = require('./dates')
-const { appendSearchParams } = require('./params')
+} from '../../db/aggregations/steps'
+import { APP_URL, URL_SEPARATOR } from '../../utils/consts'
+import { formatDate, weekdayDateMonthFormat } from '../../utils/formatDate'
+import { adjustDateByDays } from './dates'
+import { appendSearchParams } from './params'
 
 const getUrl = ({ url = '/movies', ...params }) => {
   let date
@@ -30,14 +30,14 @@ const getUrl = ({ url = '/movies', ...params }) => {
 }
 
 const getDaysUrls = (options, step, count, classname) => {
-  const dates = []
+  const dates: Date[] = []
 
   for (let i = 1; i <= count; i++) {
     const date = adjustDateByDays(options.date, i * step)
     dates.push(date)
   }
 
-  dates.sort((a, b) => a - b)
+  dates.sort((a, b) => a.getTime() - b.getTime())
   const results = dates.map((date) => {
     const url = getUrl({
       ...options,
@@ -140,7 +140,7 @@ const getAdditionalFilters = (
   cinemaId,
   arrondissements
 ) => {
-  const additionalFilters = []
+  const additionalFilters: PipelineStage[] = []
 
   if (cinemaId) {
     // override any other filters if a cinema id is specified
@@ -199,4 +199,4 @@ const getMovies = async ({
   return movies
 }
 
-module.exports = { getMovies, getUrls, getCalendarUrls }
+export default { getMovies, getUrls, getCalendarUrls }
