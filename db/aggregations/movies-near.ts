@@ -1,5 +1,5 @@
 const Cinema = require('../../models/Cinema.model')
-const { unwind, selectFields, flatten } = require('./steps')
+import { unwind, selectFields, flatten } from './steps'
 
 const twoKilometres = 2000
 const geoNearGeolocation = (geolocation) => {

@@ -1,5 +1,5 @@
-const Calendar = require('../../models/Calendar.model')
-const {
+import Calendar from '../../models/Calendar.model'
+import {
   match,
   sortByStartTime,
   groupByDate,
@@ -12,10 +12,10 @@ const {
   unwindCinema,
   sortById,
   populateFutureShowtimes,
-} = require('./steps')
+} from './steps'
 
 const getCalendarForUserGroupByDate = async (
-  userId,
+  userId: string,
   { delorean = false } = {}
 ) => {
   const calendar = await Calendar.aggregate([
@@ -34,6 +34,4 @@ const getCalendarForUserGroupByDate = async (
   return calendar
 }
 
-module.exports = {
-  getCalendarForUserGroupByDate,
-}
+export { getCalendarForUserGroupByDate }

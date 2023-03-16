@@ -1,11 +1,6 @@
-const { getUniqueSlugForMovie } = require('../models/Movie.model')
-const Movie = require('../models/Movie.model')
-const Showtime = require('../models/Showtime.model')
-const {
-  formatDate,
-  dateMonthFormat,
-  timeFormat,
-} = require('../utils/formatDate')
+import Movie from '../models/Movie.model'
+import Showtime from '../models/Showtime.model'
+import { formatDate, dateMonthFormat, timeFormat } from '../utils/formatDate'
 
 const saveShowtimeToDatabase = async ({ movie, screenings, cinema }) => {
   const saveShowtimesPromises = screenings.map((s) =>
@@ -19,7 +14,7 @@ const saveShowtimesToDatabase = async (
   showtimesForMovieGroupedByDay,
   cinema
 ) => {
-  const showtimes = []
+  const showtimes: any[] = []
 
   for (let {
     movie: fetchedMovie,
@@ -90,7 +85,7 @@ const saveMovieFromAllocine = async ({
   })
 
   if (isInvalidatingSlug || !movie.slug) {
-    movie.slug = await getUniqueSlugForMovie(movie)
+    movie.slug = await Movie.getUniqueSlugForMovie?.(movie)
   }
 
   await movie.save()

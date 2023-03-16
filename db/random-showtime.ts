@@ -1,4 +1,4 @@
-const Showtime = require('../models/Showtime.model')
+import Showtime from '../models/Showtime.model'
 
 const getRandomShowtimePopulated = async () => {
   const count = await Showtime.estimatedDocumentCount()
@@ -7,6 +7,4 @@ const getRandomShowtimePopulated = async () => {
   return showtime
 }
 
-module.exports = {
-  getRandomShowtimePopulated,
-}
+export { getRandomShowtimePopulated }

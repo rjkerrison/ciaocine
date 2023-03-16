@@ -1,5 +1,5 @@
-const { ObjectId } = require('bson')
-const { default: mongoose } = require('mongoose')
+import { ObjectId } from 'bson'
+import { default as mongoose, PipelineStage } from 'mongoose'
 
 const dollarise = (name) => (name.startsWith('$') ? name : `$${name}`)
 const selectFields = (...names) =>
@@ -10,13 +10,13 @@ const selectPrefixedFields = (prefix, ...names) =>
     names.map((name) => [name, dollarise(`${prefix}.${name}`)])
   )
 
-const match = (value, name = 'cinema') => ({
+const match = (value: string, name = 'cinema') => ({
   $match: {
     [name]: new mongoose.Types.ObjectId(value),
   },
 })
 
-const matchDate = (fromDate, toDate, field = 'startTime') => {
+const matchDate = (fromDate, toDate, field = 'startTime'): PipelineStage => {
   if (!toDate) {
     toDate = new Date(fromDate)
     toDate.setDate(fromDate.getDate() + 1)
@@ -46,7 +46,7 @@ const groupByDate = {
   },
 }
 
-const sortBy = (key, direction = 1) => ({
+const sortBy = (key: string, direction: 1 | -1 = 1): PipelineStage => ({
   $sort: {
     [key]: direction,
   },
@@ -55,7 +55,7 @@ const sortBy = (key, direction = 1) => ({
 const sortById = sortBy('_id')
 const sortByStartTime = sortBy('startTime')
 
-const populateCinema = {
+const populateCinema: PipelineStage = {
   $lookup: {
     from: 'cinemas',
     localField: 'cinema',
@@ -64,7 +64,7 @@ const populateCinema = {
   },
 }
 
-const populateMovie = {
+const populateMovie: PipelineStage = {
   $lookup: {
     from: 'movies',
     localField: 'movie',
@@ -72,7 +72,7 @@ const populateMovie = {
     as: 'movie',
   },
 }
-const populateMovieFromId = {
+const populateMovieFromId: PipelineStage = {
   $lookup: {
     from: 'movies',
     localField: '_id',
@@ -81,14 +81,14 @@ const populateMovieFromId = {
   },
 }
 
-const flattenShowtimeMovie = {
+const flattenShowtimeMovie: PipelineStage = {
   $project: {
     ...selectFields('_id', 'cinema', 'startTime'),
     movie: { $arrayElemAt: ['$movie', 0] },
   },
 }
 
-const populateShowtime = {
+const populateShowtime: PipelineStage = {
   $lookup: {
     from: 'showtimes',
     localField: 'showtime',
@@ -97,7 +97,7 @@ const populateShowtime = {
   },
 }
 
-const populateFutureShowtimes = {
+const populateFutureShowtimes: PipelineStage = {
   $lookup: {
     ...populateShowtime.$lookup,
     let: {
@@ -115,7 +115,7 @@ const populateFutureShowtimes = {
   },
 }
 
-const unwind = (name) => ({
+const unwind = (name): PipelineStage => ({
   $unwind: dollarise(name),
 })
 const unwindShowtime = unwind('showtime')
@@ -205,7 +205,7 @@ const flatten = (name) => ({
   },
 })
 
-module.exports = {
+export {
   match,
   matchDate,
   groupByDate,

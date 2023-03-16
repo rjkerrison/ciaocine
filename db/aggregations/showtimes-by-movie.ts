@@ -1,13 +1,13 @@
-const Showtime = require('../../models/Showtime.model')
+import Showtime from '../../models/Showtime.model'
 
-const {
+import {
   match,
   sortByStartTime,
   populateMovieFromId,
   groupByMovie,
   unwindMovie,
   matchDate,
-} = require('./steps')
+} from './steps'
 
 const getShowtimesForCinemaGroupByMovie = async (
   cinemaId,
