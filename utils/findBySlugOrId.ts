@@ -1,6 +1,6 @@
-const { isValidObjectId } = require('mongoose')
+import { isValidObjectId, Model } from 'mongoose'
 
-const findBySlugOrId = (model, idOrSlug) => {
+const findBySlugOrId = <T>(model: Model<T>, idOrSlug: string) => {
   // This function must not use async await, because we must
   // return the full query so that additional query configuration can be done,
   // such as .populate(), .sort(), &c
@@ -16,11 +16,8 @@ const findBySlugOrId = (model, idOrSlug) => {
   return model.findOne(slugFilter)
 }
 
-const findBySlugs = async (model, slugs) => {
+const findBySlugs = async <T>(model: Model<T>, slugs: string[]) => {
   return await model.find({ slug: { $in: slugs } })
 }
 
-module.exports = {
-  findBySlugOrId,
-  findBySlugs,
-}
+export { findBySlugOrId, findBySlugs }
