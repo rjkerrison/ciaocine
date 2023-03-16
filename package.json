@@ -5,10 +5,11 @@
   "bin": {
     "seed": "./bin/seed.ts"
   },
+  "type": "module",
   "scripts": {
     "start": "cd ./build && node server.js",
     "build": "tsc",
-    "dev": "nodemon server.ts -e js,css,ts",
+    "dev": "vite server.ts",
     "test": "vitest run",
     "seed": "ts-node bin/seed.ts",
     "seed:clean": "node bin/removeShowtimes.js",
