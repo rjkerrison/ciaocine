@@ -1,13 +1,17 @@
-const Showtime = require('../../models/Showtime.model')
-const {
+import Showtime from '../../models/Showtime.model'
+import {
   matchDate,
   sortByStartTime,
   populateMovieFromId,
   groupByMovie,
   unwindMovie,
-} = require('./steps')
+} from './steps'
 
-const getMoviesBetweenTimes = async (fromDate, toDate, additionalFilters) => {
+export const getMoviesBetweenTimes = async (
+  fromDate,
+  toDate,
+  additionalFilters
+) => {
   const showtimes = await Showtime.aggregate([
     matchDate(fromDate, toDate),
     sortByStartTime,
@@ -17,8 +21,4 @@ const getMoviesBetweenTimes = async (fromDate, toDate, additionalFilters) => {
     unwindMovie,
   ])
   return showtimes
-}
-
-module.exports = {
-  getMoviesBetweenTimes,
 }

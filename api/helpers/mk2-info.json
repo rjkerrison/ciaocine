@@ -1,0 +1,86 @@
+{
+  "complexes": [
+    {
+      "slug": "mk2-bastille-beaumarchais-fg-st-antoine",
+      "cinemas": [
+        {
+          "slug": "mk2-bastille-fg-st-antoine",
+          "ciaocineSlug": "mk2-bastille-cote-fg-st-antoine"
+        },
+        {
+          "slug": "mk2-bastille-beaumarchais",
+          "ciaocineSlug": "mk2-bastille-cote-beaumarchais"
+        }
+      ]
+    },
+    {
+      "slug": "mk2-bibliotheque",
+      "cinemas": [
+        {
+          "slug": "mk2-bibliotheque"
+        },
+        {
+          "slug": "mk2-bibliotheque-bnf"
+        }
+      ]
+    },
+    {
+      "slug": "mk2-beaubourg",
+      "cinemas": [
+        {
+          "slug": "mk2-beaubourg"
+        }
+      ]
+    },
+    {
+      "slug": "mk2-parnasse",
+      "cinemas": [
+        {
+          "slug": "mk2-parnasse"
+        }
+      ]
+    },
+    {
+      "slug": "mk2-nation",
+      "cinemas": [
+        {
+          "slug": "mk2-nation"
+        }
+      ]
+    },
+    {
+      "slug": "mk2-odeon-st-germain-st-michel",
+      "cinemas": [
+        {
+          "slug": "mk2-odeon-st-germain",
+          "ciaocineSlug": "mk2-odeon-cote-st-germain"
+        },
+        {
+          "slug": "mk2-odeon-st-michel",
+          "ciaocineSlug": "mk2-odeon-cote-st-michel"
+        }
+      ]
+    },
+    {
+      "slug": "mk2-quai-seine-quai-loire",
+      "cinemas": [
+        {
+          "slug": "mk2-quai-seine",
+          "ciaocineSlug": "mk2-quai-de-seine"
+        },
+        {
+          "slug": "mk2-quai-loire",
+          "ciaocineSlug": "mk2-quai-de-loire"
+        }
+      ]
+    },
+    {
+      "slug": "mk2-gambetta",
+      "cinemas": [
+        {
+          "slug": "mk2-gambetta"
+        }
+      ]
+    }
+  ]
+}

@@ -27,12 +27,12 @@ jobs:
           key: ${{ runner.os }}-npm-${{ hashFiles('./package-lock.json') }}
       - id: install
         name: Install dependencies
-        run: npm install
+        run: yarn
       - id: mk2
         name: Get latest showtimes for MK2
-        run: npm run seed showtimes mk2
+        run: yarn run seed showtimes mk2
       - name: Get latest TMDB data
-        run: npm run seed movies tmdb
+        run: yarn run seed movies tmdb
   setting-summaries:
     name: 'Setting summaries'
     runs-on: ubuntu-latest

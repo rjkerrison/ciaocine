@@ -1,7 +1,6 @@
 const { getRandomPosterUrl } = require('../../config/fakeposters')
-const {
-  getMoviesBetweenTimes,
-} = require('../../db/aggregations/movies-showing-by-date')
+const { getMoviesBetweenTimes } =
+  require('../../db/aggregations/movies-showing-by-date').default
 const {
   filterCinemaToUgcIllimite,
   filterCinemaToRiveGauche,

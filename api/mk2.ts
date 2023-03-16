@@ -1,5 +1,10 @@
 import axios, { AxiosError } from 'axios'
 import { Ymd } from '../utils/types'
+import {
+  findCinema,
+  findComplexForCinema,
+  Mk2Cinema,
+} from './helpers/mk2-complex'
 
 const baseUrl = 'https://prod.api.mk2.com/cinema-complex'
 
@@ -16,9 +21,9 @@ const getShowtimesForCinemaConfig = (
   }
 }
 
-interface SessionsByFilmAndCinema {
+interface SessionByFilmAndCinema {
   film: Mk2Film
-  cinema: any
+  cinema: Mk2Cinema
   sessions: Mk2Session[]
 }
 
@@ -33,27 +38,58 @@ export interface Mk2Session {
   mk2ShowtimeId: string
 }
 
+export interface FilmSessions {
+  type: { id: 'film'; name: 'Film' }
+  sessionsByFilmAndCinema: Array<SessionByFilmAndCinema>
+}
+
+export interface SessionsByType extends Array<FilmSessions> {}
+
 export const getShowtimesForCinemaAndDate = async (
   cinemaSlug: string,
   date: Ymd
-): Promise<SessionsByFilmAndCinema[]> => {
+): Promise<SessionByFilmAndCinema[]> => {
+  const cinema = findCinema(cinemaSlug)
+
+  if (typeof cinema === 'undefined') {
+    throw Error(`Unknown cinema slug: ${cinemaSlug}`)
+  }
+
+  const config = getShowtimesForCinemaConfig(cinema.complexSlug, date)
+
   try {
-    const config = getShowtimesForCinemaConfig(cinemaSlug, date)
-
     const {
-      data: {
-        sessionsByType: [{ sessionsByFilmAndCinema }],
-      },
-    } = await axios(config)
+      data: { sessionsByType },
+    } = await axios.get<{ sessionsByType?: SessionsByType }>('', config)
 
-    return sessionsByFilmAndCinema
+    if (typeof sessionsByType === 'undefined' || sessionsByType?.length === 0) {
+      return []
+    }
+    // Only look at films
+    const filmSessionsByCinema = sessionsByType.find(
+      (x) => x.type.id === 'film'
+    )
+    if (typeof filmSessionsByCinema === 'undefined') {
+      return []
+    }
+
+    // Finally, filter for the current cinema
+    return filmSessionsByCinema.sessionsByFilmAndCinema.filter(
+      (x) => x.cinema.slug === cinema.cinema.slug
+    )
   } catch (error: any) {
     const axiosError = error as AxiosError
     console.error(
-      `Error occurred during ${getShowtimesForCinemaAndDate.name} for cinema ${cinemaSlug}:
+      `Error occurred during ${
+        getShowtimesForCinemaAndDate.name
+      } for cinema ${cinemaSlug}:
 
-  ${axiosError.response?.data?.message}`
+  ${axiosError.response?.data?.message}
+  
+  config: ${JSON.stringify(config, undefined, 2)}
+  `
     )
+    throw axiosError
     return []
   }
 }
