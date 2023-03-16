@@ -1,19 +1,5 @@
+import { Mk2Cinema, Mk2CinemaComplex, Mk2Complex } from '../types'
 import info from './mk2-info.json'
-
-interface Mk2Complex {
-  slug: string
-  cinemas: Mk2Cinema[]
-}
-
-interface Mk2CinemaComplex {
-  cinema: Mk2Cinema
-  complexSlug: string
-}
-
-export interface Mk2Cinema {
-  slug: string
-  ciaocineSlug?: string
-}
 
 const mk2complexes: Mk2Complex[] = info.complexes
 

@@ -1,20 +1,22 @@
-import {
-  getShowtimesForCinemaAndDate,
-  Mk2Film,
-  Mk2Session,
-} from '../../api/mk2'
+import { getShowtimesForCinemaAndDate } from '../../api/mk2'
+import { Mk2Film, Mk2Session } from '../../api/types'
 import Cinema, { CinemaSchema } from '../../models/Cinema.model'
 import Movie, { MovieSchema } from '../../models/Movie.model'
 import Showtime, { ShowtimeSchema } from '../../models/Showtime.model'
+import { dateFormat, formatDate } from '../../utils/formatDate'
 import { Ymd } from '../../utils/types'
 
 const createShowtimesForCinemaAndDate = async (
   cinema: CinemaSchema,
-  date: Ymd
+  { year, month, day }: Ymd
 ) => {
+  console.info(
+    `Finding showtimes for ${cinema.name} on ${year}-${month}-${day}.`
+  )
+
   const sessionsByFilmAndCinema = await getShowtimesForCinemaAndDate(
     cinema.slug,
-    date
+    { year, month, day }
   )
 
   return Promise.all(
@@ -42,6 +44,10 @@ const createShowtimesForFilm = async (
   sessions: Mk2Session[],
   cinema: CinemaSchema
 ) => {
+  console.info(
+    `Found ${sessions.length} showings for film ${title} for ${cinema.name}`
+  )
+
   const movie = await Movie.findOne({
     $or: [
       {
@@ -98,7 +104,11 @@ const upsertShowtime = async (
 }
 
 const createShowtimesForAllMk2Cinemas = async () => {
+  console.info('Creating Showtimes For All Mk2 Cinemas')
+
   const cinemas = await Cinema.find({ slug: { $regex: 'mk2' } })
+
+  console.info(`Found ${cinemas.length} cinemas.`)
 
   const now = Date.now()
   const dates: Date[] = []

@@ -1,15 +1,15 @@
-require('dotenv/config')
-const { default: mongoose } = require('mongoose')
-const { deleteAllCalendars } = require('./calendar/delete')
-const { addLocationsToCinemas } = require('./cinemas/locations')
-const { addSlugsToCinemas } = require('./cinemas/slugs')
-const { deleteAllMovies } = require('./movies/delete')
-const { enhanceMovies } = require('./movies/enhance')
-const { enhanceMoviesFromTmdb } = require('./movies/enhanceFromTmdb')
-const { addSlugsToMovies } = require('./movies/slugs')
-const { createShowtimes } = require('./showtimes/create')
-const { deleteAllShowtimes } = require('./showtimes/delete')
-const { createShowtimesForAllMk2Cinemas } = require('./showtimes/mk2')
+import 'dotenv/config'
+import { deleteAllCalendars } from './calendar/delete'
+import { addLocationsToCinemas } from './cinemas/locations'
+import { addSlugsToCinemas } from './cinemas/slugs'
+import { deleteAllMovies } from './movies/delete'
+import { enhanceMovies } from './movies/enhance'
+import { enhanceMoviesFromTmdb } from './movies/enhanceFromTmdb'
+import { addSlugsToMovies } from './movies/slugs'
+import { createShowtimes } from './showtimes/create'
+import { deleteAllShowtimes } from './showtimes/delete'
+import { createShowtimesForAllMk2Cinemas } from './showtimes/mk2'
+import db from '../db'
 
 const readline = require('readline').createInterface({
   input: process.stdin,
@@ -98,7 +98,7 @@ const chooseAction = async (args: string[]) => {
 }
 
 const seed = async () => {
-  const connection = await require('../db/index')
+  const connection = await db
   const args = process.argv.slice(2)
 
   await chooseAction(args)

@@ -1,10 +1,11 @@
 import axios, { AxiosError } from 'axios'
 import { Ymd } from '../utils/types'
+import { findCinema } from './helpers/mk2-complex'
 import {
-  findCinema,
-  findComplexForCinema,
-  Mk2Cinema,
-} from './helpers/mk2-complex'
+  Mk2CinemaComplex,
+  SessionByFilmAndCinema,
+  SessionsByType,
+} from './types'
 
 const baseUrl = 'https://prod.api.mk2.com/cinema-complex'
 
@@ -21,29 +22,32 @@ const getShowtimesForCinemaConfig = (
   }
 }
 
-interface SessionByFilmAndCinema {
-  film: Mk2Film
-  cinema: Mk2Cinema
-  sessions: Mk2Session[]
-}
+const getSessionsByTypeForCinema = (
+  cinema: Mk2CinemaComplex,
+  sessionsByType?: SessionsByType
+): SessionByFilmAndCinema[] => {
+  if (typeof sessionsByType === 'undefined' || sessionsByType?.length === 0) {
+    console.error('sessionsByType is', sessionsByType, 'cinema', cinema)
+    return []
+  }
+  try {
+    // Only look at films
+    const filmSessionsByCinema = sessionsByType.find(
+      (x) => x.type?.id === 'film'
+    )
+    if (typeof filmSessionsByCinema === 'undefined') {
+      return []
+    }
 
-export interface Mk2Film {
-  slug: string
-  title: string
-  id: string
+    // Finally, filter for the current cinema
+    return filmSessionsByCinema.sessionsByFilmAndCinema.filter(
+      (x) => x.cinema.slug === cinema.cinema.slug
+    )
+  } catch (e) {
+    console.error('sessionsByType is', sessionsByType, 'cinema', cinema)
+    throw e
+  }
 }
-
-export interface Mk2Session {
-  showTime: string
-  mk2ShowtimeId: string
-}
-
-export interface FilmSessions {
-  type: { id: 'film'; name: 'Film' }
-  sessionsByFilmAndCinema: Array<SessionByFilmAndCinema>
-}
-
-export interface SessionsByType extends Array<FilmSessions> {}
 
 export const getShowtimesForCinemaAndDate = async (
   cinemaSlug: string,
@@ -60,23 +64,9 @@ export const getShowtimesForCinemaAndDate = async (
   try {
     const {
       data: { sessionsByType },
-    } = await axios.get<{ sessionsByType?: SessionsByType }>('', config)
+    } = await axios(config)
 
-    if (typeof sessionsByType === 'undefined' || sessionsByType?.length === 0) {
-      return []
-    }
-    // Only look at films
-    const filmSessionsByCinema = sessionsByType.find(
-      (x) => x.type.id === 'film'
-    )
-    if (typeof filmSessionsByCinema === 'undefined') {
-      return []
-    }
-
-    // Finally, filter for the current cinema
-    return filmSessionsByCinema.sessionsByFilmAndCinema.filter(
-      (x) => x.cinema.slug === cinema.cinema.slug
-    )
+    return getSessionsByTypeForCinema(cinema, sessionsByType)
   } catch (error: any) {
     const axiosError = error as AxiosError
     console.error(
@@ -90,6 +80,5 @@ export const getShowtimesForCinemaAndDate = async (
   `
     )
     throw axiosError
-    return []
   }
 }

@@ -1,4 +1,4 @@
-const Showtime = require('../../models/Showtime.model')
+import Showtime from '../../models/Showtime.model'
 
 const deleteAllShowtimes = async () => {
   const showtimes = await Showtime.deleteMany()
@@ -6,6 +6,4 @@ const deleteAllShowtimes = async () => {
   console.log(showtimes)
 }
 
-module.exports = {
-  deleteAllShowtimes,
-}
+export { deleteAllShowtimes }
