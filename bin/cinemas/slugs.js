@@ -1,4 +1,4 @@
-const { default: Cinema } = require('../../models/Cinema.model')
+import Cinema from '../../models/Cinema.model'
 
 const addSlugsToCinemas = async () => {
   // Find
@@ -16,6 +16,6 @@ const addSlugsToCinemas = async () => {
   console.log(`Updated ${cinemas.length} cinemas.`)
 }
 
-module.exports = {
+export default {
   addSlugsToCinemas,
 }

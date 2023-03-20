@@ -1,4 +1,4 @@
-const Movie = require('../../models/Movie.model')
+import Movie from '../../models/Movie.model'
 
 const deleteAllMovies = async () => {
   const movies = await Movie.deleteMany()
@@ -6,6 +6,4 @@ const deleteAllMovies = async () => {
   console.log(movies)
 }
 
-module.exports = {
-  deleteAllMovies,
-}
+export { deleteAllMovies }

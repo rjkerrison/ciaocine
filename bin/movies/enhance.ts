@@ -1,6 +1,7 @@
-const Movie = require('../../models/Movie.model')
-const { sleep } = require('../helpers')
-const { getMovieInfo } = require('../../api/allocine')
+import { HydratedDocument } from 'mongoose'
+import Movie, { MovieSchema } from '../../models/Movie.model'
+import { sleep } from '../helpers'
+import { getMovieInfo } from '../../api/allocine'
 
 const enhanceMovies = async () => {
   await Movie.init()
@@ -21,21 +22,22 @@ const enhanceMovies = async () => {
   console.log(`Skipped ${movies.length - filteredMovies.length} movies.`)
 }
 
-const enhanceMovie = async (movie) => {
+const enhanceMovie = async (
+  movie: HydratedDocument<MovieSchema | null, MovieSchema>
+) => {
   try {
     const movieInfo = await getMovieInfo(movie.allocineId)
     movie.set(movieInfo)
 
-    const updatedMovie = await movie.save({ new: true })
+    const updatedMovie = await movie.save()
     console.log(`Updated ${updatedMovie.title}.`)
 
     return updatedMovie
-  } catch (error) {
+  } catch (e) {
+    const error = e as Error
     console.error(`Error updating movie ${movie}.`, error.message)
     return
   }
 }
 
-module.exports = {
-  enhanceMovies,
-}
+export { enhanceMovies }

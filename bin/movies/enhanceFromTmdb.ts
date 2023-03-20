@@ -1,7 +1,8 @@
-const Movie = require('../../models/Movie.model')
-const { sleep } = require('../helpers')
-const { getMoviesFromTmdb } = require('../../api/tmdb')
-const { convertToSlug } = require('../../utils/slug')
+import { HydratedDocument } from 'mongoose'
+import Movie, { MovieSchema } from '../../models/Movie.model'
+import { sleep } from '../helpers'
+import { getMoviesFromTmdb } from '../../api/tmdb'
+import { convertToSlug } from '../../utils/slug'
 
 const TMDB_URLS = {
   base: 'https://www.themoviedb.org',
@@ -30,7 +31,9 @@ const enhanceMoviesFromTmdb = async () => {
   console.log(`Found TMDB info for ${movies.length} movies.`)
 }
 
-const enhanceMovieFromTmdbSearch = async (movie) => {
+const enhanceMovieFromTmdbSearch = async (
+  movie: HydratedDocument<MovieSchema>
+) => {
   try {
     const year = movie.releaseDate?.getFullYear()
     const director = movie.castingShort?.directors
@@ -83,16 +86,15 @@ const enhanceMovieFromTmdbSearch = async (movie) => {
       },
     })
 
-    const updatedMovie = await movie.save({ new: true })
+    const updatedMovie = await movie.save()
     console.log(`Updated ${updatedMovie.title} with slug "${slug}".`)
 
     return
-  } catch (error) {
+  } catch (e) {
+    const error = e as Error
     console.error(`Error updating movie ${movie}.`, error.message)
     return
   }
 }
 
-module.exports = {
-  enhanceMoviesFromTmdb,
-}
+export { enhanceMoviesFromTmdb }

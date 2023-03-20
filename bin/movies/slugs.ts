@@ -1,4 +1,4 @@
-const Movie = require('../../models/Movie.model')
+import Movie from '../../models/Movie.model'
 
 const addSlugsToMovies = async () => {
   // Find movies without slugs
@@ -8,7 +8,7 @@ const addSlugsToMovies = async () => {
   console.log('Found %s movies without slugs.', movies.length)
 
   for (let movie of movies) {
-    movie.slug = await Movie.getUniqueMovieSlug(movie)
+    movie.slug = await Movie.getUniqueSlugForMovie(movie)
     const updatedMovie = await movie.save()
     console.log('Updated movie:', updatedMovie)
   }
@@ -18,7 +18,4 @@ const addSlugsToMovies = async () => {
   // Let's create indexes
   await Movie.init()
 }
-
-module.exports = {
-  addSlugsToMovies,
-}
+export { addSlugsToMovies }
