@@ -1,7 +1,8 @@
 import index from './index.routes'
 import apiRouter from './api'
+import { Application } from 'express'
 
-const registerRoutes = (app) => {
+const registerRoutes = (app: Application) => {
   // Two base routes for compatibility
   app.use('/api', apiRouter)
   app.use('/', apiRouter)

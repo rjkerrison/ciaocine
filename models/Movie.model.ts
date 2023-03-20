@@ -1,6 +1,4 @@
-import { InferSchemaType, SchemaTypes } from 'mongoose'
-
-import { Schema, model } from 'mongoose'
+import { InferSchemaType, Query, SchemaTypes, Schema, model } from 'mongoose'
 import { findBySlugOrId } from '../utils/findBySlugOrId'
 import { convertToSlug } from '../utils/slug'
 import Showtime from './Showtime.model'
@@ -125,7 +123,7 @@ movieSchema.virtual('watchCount', {
 const Movie = model('Movie', movieSchema)
 
 // TODO replace searching with a search service which uses mapped keywords created on data change
-const search = (term = '') => {
+const search = (term = ''): Query<MovieSchema[] | null, MovieSchema> => {
   const query = { $regex: term, $options: 'i' }
 
   return Movie.find({
@@ -146,8 +144,8 @@ const searchableFields = [
 
 type ExtendedMovie = typeof Movie & {
   getUniqueSlugForMovie: (movie: MovieSchema) => Promise<any>
-  findBySlugOrId: (slugOrId: any) => any
-  search: (term: string) => any
+  findBySlugOrId: (slugOrId: string) => Query<MovieSchema | null, MovieSchema>
+  search: (term: string) => Query<MovieSchema[] | null, MovieSchema>
 }
 
 // This is silly. How do we extend a type nicely without destroying the original?

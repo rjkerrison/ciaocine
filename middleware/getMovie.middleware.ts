@@ -1,6 +1,7 @@
-const Movie = require('../models/Movie.model')
+import { RequestHandler } from 'express'
+import Movie from '../models/Movie.model'
 
-module.exports = async (req, res, next) => {
+const getMovie: RequestHandler = async (req, res, next) => {
   const movie = await Movie.findBySlugOrId(req.params.movieIdOrSlug)
 
   if (!movie) {
@@ -11,3 +12,5 @@ module.exports = async (req, res, next) => {
   req.movie = movie
   next()
 }
+
+export default getMovie
