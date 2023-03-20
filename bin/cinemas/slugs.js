@@ -16,6 +16,4 @@ const addSlugsToCinemas = async () => {
   console.log(`Updated ${cinemas.length} cinemas.`)
 }
 
-export default {
-  addSlugsToCinemas,
-}
+export { addSlugsToCinemas }
