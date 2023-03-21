@@ -1,5 +1,5 @@
-const { getLocation } = require('../../api/geocode')
-const { default: Cinema } = require('../../models/Cinema.model')
+import { getLocation } from '../../api/geocode'
+import Cinema from '../../models/Cinema.model'
 
 const addLocationsToCinemas = async () => {
   // Find
@@ -12,9 +12,11 @@ const addLocationsToCinemas = async () => {
       `${cinema.address}, ${cinema.zipcode}`,
       `${cinema.name}, ${cinema.zipcode}`
     )
-    cinema.geolocation = geolocation
-    const updatedCinema = await cinema.save()
-    console.log('Updated cinema:', updatedCinema)
+    if (geolocation !== null) {
+      cinema.geolocation = geolocation
+      const updatedCinema = await cinema.save()
+      console.log('Updated cinema:', updatedCinema)
+    }
   }
 
   // Rebuild indexes
@@ -23,6 +25,4 @@ const addLocationsToCinemas = async () => {
   console.log(`Updated ${cinemas.length} cinemas.`)
 }
 
-module.exports = {
-  addLocationsToCinemas,
-}
+export { addLocationsToCinemas }

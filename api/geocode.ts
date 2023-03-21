@@ -1,4 +1,5 @@
-const { default: axios } = require('axios')
+import axios from 'axios'
+import { PointSchema } from '../models/schemas/geolocation'
 
 const baseUrl = 'https://geocode.maps.co'
 
@@ -14,7 +15,7 @@ const getSearchConfig = (q) => {
   }
 }
 
-const getLocation = async (...qs) => {
+const getLocation = async (...qs: string[]): Promise<PointSchema | null> => {
   if (qs.length === 0) {
     // could not find anything
     return null
@@ -33,15 +34,13 @@ const getLocation = async (...qs) => {
   return await getLocation(...qs)
 }
 
-function convertGeocodeToLocation(geocode) {
-  const {
-    lat,
-    lon,
-    display_name: displayName,
-    place_id: placeId,
-    osm_id: osmId,
-  } = geocode
-
+function convertGeocodeToLocation({
+  lat,
+  lon,
+  display_name: displayName,
+  place_id: placeId,
+  osm_id: osmId,
+}): PointSchema {
   return {
     type: 'Point',
     coordinates: [parseFloat(lat), parseFloat(lon)],
@@ -51,6 +50,4 @@ function convertGeocodeToLocation(geocode) {
   }
 }
 
-module.exports = {
-  getLocation,
-}
+export { getLocation }

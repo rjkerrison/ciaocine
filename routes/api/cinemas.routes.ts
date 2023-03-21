@@ -1,19 +1,21 @@
-const router = require('express').Router()
-const { getMovies } = require('../helpers/movies').default
-const { getDateParams } = require('../helpers/dates')
-const { default: Cinema } = require('../../models/Cinema.model')
-const { readGeolocation } = require('../../middleware/readGeolocation')
+import { Router } from 'express'
+import { getMovies } from '../helpers/movies'
+import { getDateParams } from '../helpers/dates'
+import Cinema from '../../models/Cinema.model'
+import { readGeolocation } from '../../middleware/readGeolocation'
+
+const router = Router()
 
 /* GET /api/cinemas */
-router.get('/', async (req, res, next) => {
-  let cinemas = await Cinema.find()
+router.get('/', async (_req, res, _next) => {
+  const cinemas = await Cinema.find()
   res.status(200).json({ cinemas })
 })
 
 const twoKm = 2000
 
 /* GET /api/cinemas */
-router.get('/nearby', readGeolocation, async (req, res, next) => {
+router.get('/nearby', readGeolocation, async (req, res, _next) => {
   const cinemas = await Cinema.find({
     geolocation: {
       $near: { $geometry: req.geolocation, $maxDistance: twoKm },
@@ -23,7 +25,7 @@ router.get('/nearby', readGeolocation, async (req, res, next) => {
 })
 
 /* GET /api/cinemas/:cinemaId */
-router.get('/:cinemaIdOrSlug', async (req, res, next) => {
+router.get('/:cinemaIdOrSlug', async (req, res, _next) => {
   const { fromDate, toDate } = getDateParams(req.query)
 
   const cinema = await Cinema.findBySlugOrId(req.params.cinemaIdOrSlug)
@@ -49,14 +51,14 @@ router.get('/:cinemaIdOrSlug', async (req, res, next) => {
 
 router.get(
   '/:cinemaIdOrSlug/showtimes/:year/:month/:date',
-  async (req, res, next) => {
+  async (req, res, _next) => {
     const cinema = await Cinema.findBySlugOrId(req.params.cinemaIdOrSlug)
 
     const { year, month, date } = req.params
 
     const { fromDate, toDate } = getDateParams({
       ...req.query,
-      date: new Date(year, month - 1, date),
+      date: new Date(Number(year), Number(month) - 1, Number(date)),
     })
 
     const movies = await getMovies({
@@ -75,4 +77,4 @@ router.get(
   }
 )
 
-module.exports = router
+export default router

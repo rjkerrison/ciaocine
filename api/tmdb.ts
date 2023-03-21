@@ -1,8 +1,10 @@
-const { default: axios } = require('axios')
+import axios from 'axios'
+import { HydratedDocument } from 'mongoose'
+import { MovieSchema } from '../models/Movie.model'
 
 const baseUrl = 'https://api.themoviedb.org/3'
 
-const getMoviesConfig = (query, year) => {
+const getMoviesConfig = (query: string, year?: number) => {
   const page = 1
 
   return {
@@ -53,7 +55,7 @@ const getCrewDictionary = (crew) => {
   return result
 }
 
-const getMovieCredits = async (movie) => {
+const getMovieCredits = async (movie: HydratedDocument<MovieSchema>) => {
   const {
     data: { cast, crew },
   } = await axios(getCreditsConfig(movie.id))
@@ -64,13 +66,15 @@ const getMovieCredits = async (movie) => {
   }
 }
 
-const getMovieInfo = async (movie) => {
+const getMovieInfo = async (movie: HydratedDocument<MovieSchema>) => {
   const { data } = await axios(getMovieInfoConfig(movie.id))
 
   return data
 }
 
-const enhanceMovie = async (movie) => {
+const enhanceMovie = async (
+  movie: HydratedDocument<MovieSchema>
+): Promise<MovieSchema> => {
   const result = await Promise.all([
     getMovieInfo(movie),
     getMovieCredits(movie),
@@ -86,7 +90,7 @@ const enhanceMovie = async (movie) => {
   }
 }
 
-const stringsMatch = (a, b) => {
+const stringsMatch = (a: string, b: string) => {
   return a.localeCompare(b, 'en', { sensitivity: 'base' }) === 0
 }
 
@@ -110,18 +114,23 @@ const scoreMatch = (movie, { searchTerm, year, director }) => {
   return score
 }
 
-const compareScores = (a, b) => {
+const compareScores = (a: { score: number }, b: { score: number }) => {
   return b.score - a.score
 }
 
-const getMoviesFromTmdb = async (searchTerm, { year, director }) => {
+export type TmdbInfo = MovieSchema & { score: number }
+
+const getMoviesFromTmdb = async (
+  searchTerm: string,
+  { year, director }
+): Promise<TmdbInfo[]> => {
   const {
     data: { results: tmdbInfo },
   } = await axios(getMoviesConfig(searchTerm))
 
   const movies = tmdbInfo.slice(0, 5)
 
-  const enhancedMovies = await Promise.all(movies.map(enhanceMovie))
+  const enhancedMovies: TmdbInfo[] = await Promise.all(movies.map(enhanceMovie))
 
   enhancedMovies.forEach(
     (m) => (m.score = scoreMatch(m, { searchTerm, year, director }))
@@ -131,6 +140,4 @@ const getMoviesFromTmdb = async (searchTerm, { year, director }) => {
   return enhancedMovies
 }
 
-module.exports = {
-  getMoviesFromTmdb,
-}
+export { getMoviesFromTmdb }

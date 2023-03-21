@@ -1,9 +1,9 @@
-const { Schema, model, SchemaTypes } = require('mongoose')
+import { Schema, model, SchemaTypes } from 'mongoose'
 
 const userMovieRelationshipSchema = new Schema(
   {
-    movie: { type: Schema.Types.ObjectId, ref: 'Movie' },
-    user: { type: Schema.Types.ObjectId, ref: 'User' },
+    movie: { type: SchemaTypes.ObjectId, ref: 'Movie' },
+    user: { type: SchemaTypes.ObjectId, ref: 'User' },
   },
   {
     timestamps: true,
@@ -29,4 +29,4 @@ const Watch = UserMovieRelationship.discriminator('Watch', watchSchema)
 const Want = UserMovieRelationship.discriminator('Want', wantSchema)
 const Dismiss = UserMovieRelationship.discriminator('Dismiss', dismissSchema)
 
-module.exports = { Watch, Want, Dismiss, UserMovieRelationship }
+export { Watch, Want, Dismiss, UserMovieRelationship }

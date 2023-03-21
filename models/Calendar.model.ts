@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+import { Schema, model } from 'mongoose'
 
 const schema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -7,4 +7,4 @@ const schema = new Schema({
 
 const Calendar = model('Calendar', schema)
 
-module.exports = Calendar
+export default Calendar

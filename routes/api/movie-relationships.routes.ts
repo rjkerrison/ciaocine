@@ -1,5 +1,5 @@
 import { Model } from 'mongoose'
-import { Router } from 'express'
+import { Request, Response, Router } from 'express'
 import { isAuthenticated, includeUser } from '../../middleware/jwt.middleware'
 import { Watch, Dismiss, Want } from '../../models/UserMovieRelationship'
 
@@ -7,7 +7,11 @@ const router = Router()
 
 router.use(isAuthenticated, includeUser)
 
-const upsertRelationship = async <T>(relationshipModel: Model<T>, req, res) => {
+const upsertRelationship = async <T>(
+  relationshipModel: Model<T>,
+  req: Request,
+  res: Response
+) => {
   const relationship = await relationshipModel.findOneAndUpdate(
     {
       user: req.user.id,
@@ -26,7 +30,11 @@ const upsertRelationship = async <T>(relationshipModel: Model<T>, req, res) => {
   })
 }
 
-const removeRelationship = async <T>(relationshipModel: Model<T>, req, res) => {
+const removeRelationship = async <T>(
+  relationshipModel: Model<T>,
+  req: Request,
+  res: Response
+) => {
   await relationshipModel.findOneAndDelete({
     user: req.user.id,
     movie: req.movie.id,

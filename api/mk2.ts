@@ -9,27 +9,23 @@ import {
 
 const baseUrl = 'https://prod.api.mk2.com/cinema-complex'
 
-const getShowtimesForCinemaConfig = (
-  slug: string,
-  { year, month, day }: Ymd
-) => {
+const displayYmd = ({ year, month, day }: Ymd): string =>
+  `${year}-${month}-${day}`
+
+const getShowtimesForCinemaConfig = (slug: string, ymd: Ymd) => {
   return {
     baseURL: baseUrl,
     url: slug,
     params: {
-      'show-time_gt': `${year}-${month}-${day}`,
+      'show-time_gt': displayYmd(ymd),
     },
   }
 }
 
 const getSessionsByTypeForCinema = (
   cinema: Mk2CinemaComplex,
-  sessionsByType?: SessionsByType
+  sessionsByType: SessionsByType
 ): SessionByFilmAndCinema[] => {
-  if (typeof sessionsByType === 'undefined' || sessionsByType?.length === 0) {
-    console.error('sessionsByType is', sessionsByType, 'cinema', cinema)
-    return []
-  }
   try {
     // Only look at films
     const filmSessionsByCinema = sessionsByType.find(
@@ -40,11 +36,16 @@ const getSessionsByTypeForCinema = (
     }
 
     // Finally, filter for the current cinema
-    return filmSessionsByCinema.sessionsByFilmAndCinema.filter(
+    const filtered = filmSessionsByCinema.sessionsByFilmAndCinema.filter(
       (x) => x.cinema.slug === cinema.cinema.slug
     )
+    return filtered
   } catch (e) {
-    console.error('sessionsByType is', sessionsByType, 'cinema', cinema)
+    console.error(e)
+    console.info({
+      sessionsByType,
+      cinema,
+    })
     throw e
   }
 }
@@ -65,6 +66,15 @@ export const getShowtimesForCinemaAndDate = async (
     const {
       data: { sessionsByType },
     } = await axios(config)
+
+    if (typeof sessionsByType === 'undefined' || sessionsByType?.length === 0) {
+      console.warn(
+        `No sessions found for ${cinema.cinema.ciaocineSlug} on ${displayYmd(
+          date
+        )}`
+      )
+      return []
+    }
 
     return getSessionsByTypeForCinema(cinema, sessionsByType)
   } catch (error: any) {

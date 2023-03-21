@@ -1,9 +1,9 @@
+import { HydratedDocument } from 'mongoose'
 import { getShowtimesForCinemaAndDate } from '../../api/mk2'
-import { Mk2Film, Mk2Session } from '../../api/types'
+import { CastPersonType, Mk2Cast, Mk2Film, Mk2Session } from '../../api/types'
 import Cinema, { CinemaSchema } from '../../models/Cinema.model'
-import Movie, { MovieSchema } from '../../models/Movie.model'
+import Movie, { CastingShort, MovieSchema } from '../../models/Movie.model'
 import Showtime, { ShowtimeSchema } from '../../models/Showtime.model'
-import { dateFormat, formatDate } from '../../utils/formatDate'
 import { Ymd } from '../../utils/types'
 
 const createShowtimesForCinemaAndDate = async (
@@ -19,11 +19,9 @@ const createShowtimesForCinemaAndDate = async (
     { year, month, day }
   )
 
-  return Promise.all(
-    sessionsByFilmAndCinema.map(({ film, sessions }) =>
-      createShowtimesForFilm(film, sessions, cinema)
-    )
-  )
+  for (const { film, sessions } of sessionsByFilmAndCinema) {
+    await createShowtimesForFilm(film, sessions, cinema)
+  }
 }
 
 const toYmd = (date: Date): Ymd => {
@@ -34,40 +32,98 @@ const toYmd = (date: Date): Ymd => {
 }
 
 const createShowtimesForCinema = async (cinema: CinemaSchema, dates: Ymd[]) => {
-  return Promise.all(
-    dates.map((date: Ymd) => createShowtimesForCinemaAndDate(cinema, date))
-  )
+  // We don't parallelise, to avoid duplicated movies
+  for (const date of dates) {
+    await createShowtimesForCinemaAndDate(cinema, date)
+  }
+}
+
+const filterMk2CastToCsv = (cast: Mk2Cast, type: CastPersonType) => {
+  return cast
+    .filter((x) => x.personType === type)
+    .map((x) => `${x.firstName} ${x.lastName}`)
+    .join(', ')
+}
+
+const mk2CastToCastingShort = (cast: Mk2Cast): CastingShort => {
+  return {
+    directors: filterMk2CastToCsv(cast, 'Director'),
+    actors: filterMk2CastToCsv(cast, 'Actor'),
+  }
+}
+
+const assignMk2FieldsToMovie = async (
+  movie: HydratedDocument<MovieSchema>,
+  {
+    id,
+    slug,
+    title,
+    graphicUrl,
+    openingDate,
+    cast,
+    runTime,
+    synopsis,
+    backdropUrl,
+  }: Mk2Film
+): Promise<void> => {
+  const isInvalidatingSlug = movie.title !== title
+
+  const fieldsToAssign: Partial<MovieSchema> = {
+    externalIdentifiers: { mk2: { id, slug } },
+    // We don't override what already exists
+    title: movie.title || title,
+    poster: movie.poster || graphicUrl,
+    releaseDate: movie.releaseDate || openingDate,
+    castingShort: movie.castingShort || mk2CastToCastingShort(cast),
+    runtime: movie.runtime || runTime,
+    synopsis: movie.synopsis || synopsis,
+    images: movie.images || {
+      poster: graphicUrl,
+      backdrop: backdropUrl,
+    },
+  }
+
+  Object.assign(movie, fieldsToAssign)
+
+  if (isInvalidatingSlug || !movie.slug) {
+    movie.slug = await Movie.getUniqueSlugForMovie(movie)
+  }
+  try {
+    await movie.save()
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 const createShowtimesForFilm = async (
-  { slug, title, id }: Mk2Film,
+  mk2Film: Mk2Film,
   sessions: Mk2Session[],
   cinema: CinemaSchema
 ) => {
+  const { title, id, slug } = mk2Film
+
+  const movie =
+    (await Movie.findOne({
+      $or: [
+        { title: { $regex: `^${title}$`, $options: 'i' } },
+        {
+          externalIdentifiers: { mk2: { id } },
+        },
+        {
+          externalIdentifiers: { mk2: { slug } },
+        },
+      ],
+    })) || new Movie()
+
+  await assignMk2FieldsToMovie(movie, mk2Film)
+
   console.info(
-    `Found ${sessions.length} showings for film ${title} for ${cinema.name}`
+    `Found ${sessions.length} showings for film ${title} (${movie?._id}) for ${cinema.name}.`
   )
 
-  const movie = await Movie.findOne({
-    $or: [
-      {
-        slug,
-      },
-      { title: { $regex: `^${title}`, $options: 'i' } },
-    ],
-  })
-
-  if (movie === null) {
-    return []
+  for (const session of sessions) {
+    await upsertShowtimeFromSession(session, movie, cinema)
   }
-
-  console.log({ title, id, foundId: movie?._id }, sessions.length)
-
-  return Promise.all(
-    sessions.map((session: Mk2Session) =>
-      upsertShowtimeFromSession(session, movie, cinema)
-    )
-  )
 }
 
 const upsertShowtimeFromSession = async (
@@ -116,11 +172,10 @@ const createShowtimesForAllMk2Cinemas = async () => {
     dates.push(new Date(now + i * 86400 * 1000))
   }
 
-  return Promise.all(
-    cinemas.map((cinema: CinemaSchema) =>
-      createShowtimesForCinema(cinema, dates.map(toYmd))
-    )
-  )
+  // We don't parallelise, to avoid issues with duplicating movies
+  for (const cinema of cinemas) {
+    await createShowtimesForCinema(cinema, dates.map(toYmd))
+  }
 }
 
 export { createShowtimesForAllMk2Cinemas }

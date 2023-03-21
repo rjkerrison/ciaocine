@@ -1,10 +1,11 @@
-const { getMoviesNear } = require('../../db/aggregations/movies-near')
-const getShowtimeById = require('../../db/aggregations/showtimes-by-id')
-const { readGeolocation } = require('../../middleware/readGeolocation')
-const { getDateParams } = require('../helpers/dates')
-const { getMovies, getUrls } = require('../helpers/movies').default
+import { Router } from 'express'
+import { getMoviesNear } from '../../db/aggregations/movies-near'
+import getShowtimeById from '../../db/aggregations/showtimes-by-id'
+import { readGeolocation } from '../../middleware/readGeolocation'
+import { getDateParams } from '../helpers/dates'
+import { getMovies, getUrls } from '../helpers/movies'
 
-const router = require('express').Router()
+const router = Router()
 
 /* GET /api/showtimes/:year/:month/:date */
 router.get('/:year/:month/:date', async (req, res, _next) => {
@@ -12,7 +13,7 @@ router.get('/:year/:month/:date', async (req, res, _next) => {
 
   const { fromDate, toDate } = getDateParams({
     ...req.query,
-    date: new Date(year, month - 1, date),
+    date: new Date(Number(year), Number(month) - 1, Number(date)),
   })
 
   const movies = await getMovies({ fromDate, toDate, ...req.query })
@@ -44,11 +45,11 @@ router.get('/nearby/soon', readGeolocation, async (req, res, _next) => {
 })
 
 /* GET /api/showtimes/:showtimeId */
-router.get('/:showtimeId', async (req, res, next) => {
+router.get('/:showtimeId', async (req, res, _next) => {
   const { showtimeId } = req.params
 
   const showtime = await getShowtimeById(showtimeId)
   res.json({ showtime })
 })
 
-module.exports = router
+export default router

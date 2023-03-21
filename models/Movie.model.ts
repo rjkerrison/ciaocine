@@ -5,9 +5,11 @@ import Showtime from './Showtime.model'
 import { Want, Watch } from './UserMovieRelationship'
 
 const castingShortSchema = new Schema({
-  directors: String,
-  actors: String,
+  directors: SchemaTypes.String,
+  actors: SchemaTypes.String,
 })
+
+export type CastingShort = InferSchemaType<typeof castingShortSchema>
 
 export const movieSchema = new Schema(
   {
@@ -34,6 +36,10 @@ export const movieSchema = new Schema(
     externalIdentifiers: {
       letterboxd: {
         shortUrl: SchemaTypes.String,
+        slug: SchemaTypes.String,
+      },
+      mk2: {
+        id: SchemaTypes.String,
         slug: SchemaTypes.String,
       },
       tmdb: {

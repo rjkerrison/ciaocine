@@ -1,8 +1,9 @@
-const jwt = require('express-jwt')
-const { ALGORITHM } = require('../config/jwt')
-const User = require('../models/User.model')
+import { Request, RequestHandler } from 'express'
+import jwt from 'express-jwt'
+import { ALGORITHM } from '../config/jwt'
+import User from '../models/User.model'
 
-const isAuthenticated = jwt({
+const isAuthenticated: RequestHandler = jwt({
   secret: process.env.TOKEN_SECRET,
   algorithms: [ALGORITHM],
   requestProperty: 'payload',
@@ -12,7 +13,7 @@ const isAuthenticated = jwt({
 // Function used to extracts the JWT token from the request's 'Authorization' Headers
 // Authorization: Bearer <JWT>
 
-function getTokenFromHeaders(req) {
+function getTokenFromHeaders(req: Request) {
   // Check if the token is available on the request Headers
   if (
     req.headers.authorization &&
@@ -26,14 +27,11 @@ function getTokenFromHeaders(req) {
   return null
 }
 
-const includeUser = async (req, res, next) => {
+const includeUser: RequestHandler = async (req, res, next) => {
   const { username } = req.payload
   const user = await User.findOne({ username })
   req.user = user
   next()
 }
 
-module.exports = {
-  isAuthenticated,
-  includeUser,
-}
+export { isAuthenticated, includeUser }

@@ -199,4 +199,4 @@ const getMovies = async ({
   return movies
 }
 
-export default { getMovies, getUrls, getCalendarUrls }
+export { getMovies, getUrls, getCalendarUrls }

@@ -1,9 +1,6 @@
 const router = require('express').Router()
-const {
-  isAuthenticated,
-  includeUser,
-} = require('../../middleware/jwt.middleware')
-const FavouriteCinema = require('../../models/FavouriteCinema.model')
+import { isAuthenticated, includeUser } from '../../middleware/jwt.middleware'
+import FavouriteCinema from '../../models/FavouriteCinema.model'
 
 router.use(isAuthenticated, includeUser)
 
@@ -49,4 +46,4 @@ const unlike = (favourite) => {
   return FavouriteCinema.findOneAndDelete(favourite)
 }
 
-module.exports = router
+export default router

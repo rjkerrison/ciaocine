@@ -1,11 +1,11 @@
 import { ObjectId } from 'bson'
-import { default as mongoose, PipelineStage } from 'mongoose'
+import mongoose, { PipelineStage } from 'mongoose'
 
-const dollarise = (name) => (name.startsWith('$') ? name : `$${name}`)
-const selectFields = (...names) =>
+const dollarise = (name: string) => (name.startsWith('$') ? name : `$${name}`)
+const selectFields = (...names: string[]) =>
   Object.fromEntries(names.map((name) => [name, dollarise(name)]))
 
-const selectPrefixedFields = (prefix, ...names) =>
+const selectPrefixedFields = (prefix: string, ...names: string[]) =>
   Object.fromEntries(
     names.map((name) => [name, dollarise(`${prefix}.${name}`)])
   )
@@ -16,8 +16,12 @@ const match = (value: string, name = 'cinema') => ({
   },
 })
 
-const matchDate = (fromDate, toDate, field = 'startTime'): PipelineStage => {
-  if (!toDate) {
+const matchDate = (
+  fromDate: Date,
+  toDate?: Date,
+  field = 'startTime'
+): PipelineStage => {
+  if (typeof toDate === 'undefined') {
     toDate = new Date(fromDate)
     toDate.setDate(fromDate.getDate() + 1)
   }
@@ -115,7 +119,7 @@ const populateFutureShowtimes: PipelineStage = {
   },
 }
 
-const unwind = (name): PipelineStage => ({
+const unwind = (name: string): PipelineStage => ({
   $unwind: dollarise(name),
 })
 const unwindShowtime = unwind('showtime')
@@ -141,14 +145,25 @@ const groupByMovie = {
   },
 }
 
+const groupRelationshipByMovie = {
+  $group: {
+    _id: '$movie',
+    showtimes: {
+      $push: selectFields('_id', 'user'),
+    },
+  },
+}
+
 const filterCinemaToUgcIllimite = {
   $match: {
     'cinema.member_cards.code': 106002,
   },
 }
 
-const filterCinemaById = (...cinemaIds) => {
-  cinemaIds = cinemaIds.map((id) => {
+const filterCinemaById = (
+  ...cinemaIds: (ObjectId | string)[]
+): PipelineStage => {
+  const ids = cinemaIds.map((id): ObjectId => {
     if (typeof id === 'string') {
       return new ObjectId(id)
     }
@@ -157,7 +172,7 @@ const filterCinemaById = (...cinemaIds) => {
 
   return {
     $match: {
-      cinema: { $in: cinemaIds },
+      cinema: { $in: ids },
     },
   }
 }
@@ -195,7 +210,7 @@ const filterCinemaToRiveDroite = {
   },
 }
 
-const flatten = (name) => ({
+const flatten = (name: string) => ({
   $reduce: {
     input: dollarise(name),
     initialValue: [],
@@ -225,6 +240,7 @@ export {
   unwindShowtime,
   unwind,
   groupByMovie,
+  groupRelationshipByMovie,
   filterCinemaToUgcIllimite,
   filterCinemaToRiveGauche,
   filterCinemaToRiveDroite,

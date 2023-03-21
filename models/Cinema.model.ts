@@ -32,10 +32,13 @@ const cinemaSchema = new Schema({
 
 export type CinemaSchema = InferSchemaType<typeof cinemaSchema>
 
-const Cinema: Model<CinemaSchema> & {
-  findBySlugOrId?: Function
-} = model('Cinema', cinemaSchema)
+const Cinema = model('Cinema', cinemaSchema)
 
-Cinema.findBySlugOrId = (slugOrId: string) => findBySlugOrId(Cinema, slugOrId)
+type CinemaExtended = Model<CinemaSchema> & {
+  findBySlugOrId: Function
+}
 
-export default Cinema
+;(Cinema as CinemaExtended).findBySlugOrId = (slugOrId: string) =>
+  findBySlugOrId(Cinema, slugOrId)
+
+export default Cinema as CinemaExtended

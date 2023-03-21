@@ -1,15 +1,11 @@
-const {
-  isAuthenticated,
-  includeUser,
-} = require('../../middleware/jwt.middleware')
-const {
-  getCalendarForUserGroupByDate,
-} = require('../../db/aggregations/calendar-by-date')
-const Calendar = require('../../models/Calendar.model')
-const Showtime = require('../../models/Showtime.model')
-const User = require('../../models/User.model')
+import { Router } from 'express'
+import { isAuthenticated, includeUser } from '../../middleware/jwt.middleware'
+import { getCalendarForUserGroupByDate } from '../../db/aggregations/calendar-by-date'
+import Calendar from '../../models/Calendar.model'
+import Showtime from '../../models/Showtime.model'
+import User from '../../models/User.model'
 
-const router = require('express').Router()
+const router = Router()
 
 /* POST /api/calendar */
 router.post('/', isAuthenticated, includeUser, async (req, res, next) => {
@@ -18,8 +14,9 @@ router.post('/', isAuthenticated, includeUser, async (req, res, next) => {
 
   const showtime = await Showtime.findById(id)
 
-  if (!showtime) {
+  if (showtime === null) {
     res.status(400).json({ error: 'The showtime does not exist', showtime: id })
+    return
   }
 
   const calendarEntry = {
@@ -81,4 +78,4 @@ router.get('/:username', async (req, res, next) => {
 
 router.get('/', isAuthenticated, includeUser, getCalendarForUsername)
 
-module.exports = router
+export default router

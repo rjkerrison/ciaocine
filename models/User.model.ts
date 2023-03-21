@@ -1,20 +1,20 @@
-const { Schema, model } = require('mongoose')
+import { InferSchemaType, SchemaTypes, Schema, model } from 'mongoose'
 
 const userSchema = new Schema(
   {
     username: {
-      type: Schema.Types.String,
+      type: SchemaTypes.String,
       required: true,
       unique: true,
     },
     password: {
-      type: Schema.Types.String,
+      type: SchemaTypes.String,
       required: true,
       select: false,
       minlength: 8,
     },
     profilePictureUrl: {
-      type: Schema.Types.String,
+      type: SchemaTypes.String,
       required: false,
     },
   },
@@ -25,4 +25,6 @@ const userSchema = new Schema(
 
 const User = model('User', userSchema)
 
-module.exports = User
+export type UserSchema = InferSchemaType<typeof userSchema>
+
+export default User
