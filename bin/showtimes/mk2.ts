@@ -5,18 +5,19 @@ import Cinema, { CinemaSchema } from '../../models/Cinema.model'
 import Movie, { CastingShort, MovieSchema } from '../../models/Movie.model'
 import Showtime, { ShowtimeSchema } from '../../models/Showtime.model'
 import { Ymd } from '../../utils/types'
+import { dateFormat, formatDate } from '../../utils/formatDate'
 
 const createShowtimesForCinemaAndDate = async (
   cinema: CinemaSchema,
-  { year, month, day }: Ymd
+  date: Date
 ) => {
   console.info(
-    `Finding showtimes for ${cinema.name} on ${year}-${month}-${day}.`
+    `Finding showtimes for ${cinema.name} on ${formatDate(date, dateFormat)}.`
   )
 
   const sessionsByFilmAndCinema = await getShowtimesForCinemaAndDate(
     cinema.slug,
-    { year, month, day }
+    toYmd(date)
   )
 
   for (const { film, sessions } of sessionsByFilmAndCinema) {
@@ -31,7 +32,10 @@ const toYmd = (date: Date): Ymd => {
   return { year, month, day }
 }
 
-const createShowtimesForCinema = async (cinema: CinemaSchema, dates: Ymd[]) => {
+const createShowtimesForCinema = async (
+  cinema: CinemaSchema,
+  dates: Date[]
+) => {
   // We don't parallelise, to avoid duplicated movies
   for (const date of dates) {
     await createShowtimesForCinemaAndDate(cinema, date)
@@ -159,6 +163,20 @@ const upsertShowtime = async (
   return showtime
 }
 
+const ONE_DAY_IN_MILLISECONDS = 86400 * 1000
+// Generally only the next 7 days are available,
+// but some event showings are scheduled further in advance.
+const DAYS_AHEAD = 28
+
+const getUpcomingDates = (daysAhead: number): Date[] => {
+  const now = Date.now()
+  const dates: Date[] = []
+  for (let i = 0; i < daysAhead; i++) {
+    dates.push(new Date(now + i * ONE_DAY_IN_MILLISECONDS))
+  }
+  return dates
+}
+
 const createShowtimesForAllMk2Cinemas = async () => {
   console.info('Creating Showtimes For All Mk2 Cinemas')
 
@@ -166,15 +184,11 @@ const createShowtimesForAllMk2Cinemas = async () => {
 
   console.info(`Found ${cinemas.length} cinemas.`)
 
-  const now = Date.now()
-  const dates: Date[] = []
-  for (let i = 0; i < 7; i++) {
-    dates.push(new Date(now + i * 86400 * 1000))
-  }
+  const dates = getUpcomingDates(DAYS_AHEAD)
 
   // We don't parallelise, to avoid issues with duplicating movies
   for (const cinema of cinemas) {
-    await createShowtimesForCinema(cinema, dates.map(toYmd))
+    await createShowtimesForCinema(cinema, dates)
   }
 }
 
