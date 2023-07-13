@@ -7,6 +7,8 @@ import mongoose from 'mongoose'
 
 import { MONGO_URI } from '../utils/consts'
 
+mongoose.set('strictQuery', true)
+
 const connection = mongoose
   .connect(MONGO_URI)
   .then((x) => {
