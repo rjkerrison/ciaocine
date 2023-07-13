@@ -16,24 +16,34 @@ const enhanceMoviesFromTmdb = async () => {
     'externalIdentifiers.letterboxd.slug': { $exists: 0 },
   })
   console.log(
-    'Found %s movies without a populated letterboxd slug.',
-    movies.length
+    `Found ${movies.length} movies without a populated letterboxd slug.`
   )
 
   let count = 0
+  let successCount = 0
   for (let movie of movies) {
     // Attempt to do a little rate limiting
-    await sleep(250)
-    console.log(`${count++} of ${movies.length}:`)
-    await enhanceMovieFromTmdbSearch(movie)
+    await sleep(100)
+    const { message, status } = await enhanceMovieFromTmdbSearch(movie)
+    console.log(
+      `${count++} of ${movies.length} ${status.toLocaleUpperCase()}: ${message}`
+    )
+    if (status === 'success') {
+      successCount++
+    }
   }
 
-  console.log(`Found TMDB info for ${movies.length} movies.`)
+  console.log(`Found TMDB info for ${successCount} of ${movies.length} movies.`)
+}
+
+type EnhancementResult = {
+  status: 'success' | 'failure'
+  message: string
 }
 
 const enhanceMovieFromTmdbSearch = async (
   movie: HydratedDocument<MovieSchema>
-) => {
+): Promise<EnhancementResult> => {
   try {
     const year = movie.releaseDate?.getFullYear()
     const director = movie.castingShort?.directors
@@ -46,27 +56,26 @@ const enhanceMovieFromTmdbSearch = async (
       }
     )
     if (!found || !found.length) {
-      console.log(
-        `No movie found named ${
+      return {
+        status: 'failure',
+        message: `No movie found named ${
           movie.originalTitle || movie.title
-        } in year ${year} by director ${director}.`
-      )
-      return
+        } in year ${year} by director ${director}.`,
+      }
     }
     const {
       title,
       original_title: originalTitle,
-      poster_path,
-      release_date,
-      backdrop_path,
+      release_date: releaseDate,
+      poster_path: posterPath,
+      backdrop_path: backdropPath,
       id,
     } = found[0]
 
     const poster =
-      poster_path && [TMDB_URLS.base, TMDB_URLS.poster, poster_path].join('')
+      posterPath && `${TMDB_URLS.base}${TMDB_URLS.poster}${posterPath}`
     const backdrop =
-      backdrop_path &&
-      [TMDB_URLS.base, TMDB_URLS.backdrop, backdrop_path].join('')
+      backdropPath && `${TMDB_URLS.base}${TMDB_URLS.backdrop}${backdropPath}`
 
     const slug = convertToSlug(title)
 
@@ -82,7 +91,7 @@ const enhanceMovieFromTmdbSearch = async (
           originalTitle,
         },
       },
-      releaseDate: release_date,
+      releaseDate,
       images: {
         poster,
         backdrop,
@@ -90,13 +99,17 @@ const enhanceMovieFromTmdbSearch = async (
     })
 
     const updatedMovie = await movie.save()
-    console.log(`Updated ${updatedMovie.title} with slug "${slug}".`)
 
-    return
+    return {
+      status: 'success',
+      message: `Updated ${updatedMovie.title} with slug "${slug}".`,
+    }
   } catch (e) {
     const error = e as Error
-    console.error(`Error updating movie ${movie}.`, error.message)
-    return
+    return {
+      status: 'failure',
+      message: `Error updating movie ${movie}: ${error.message}`,
+    }
   }
 }
 
