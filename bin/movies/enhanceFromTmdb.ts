@@ -38,10 +38,13 @@ const enhanceMovieFromTmdbSearch = async (
     const year = movie.releaseDate?.getFullYear()
     const director = movie.castingShort?.directors
 
-    const found = await getMoviesFromTmdb(movie.originalTitle || movie.title, {
-      year,
-      director,
-    })
+    const found = await getMoviesFromTmdb(
+      movie.originalTitle || movie.title || '',
+      {
+        year,
+        director,
+      }
+    )
     if (!found || !found.length) {
       console.log(
         `No movie found named ${

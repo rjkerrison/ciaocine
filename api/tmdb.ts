@@ -118,7 +118,13 @@ const compareScores = (a: { score: number }, b: { score: number }) => {
   return b.score - a.score
 }
 
-export type TmdbInfo = MovieSchema & { score: number }
+export type TmdbInfo = MovieSchema & { score: number } & {
+  original_title: string
+  poster_path: string
+  release_date: string
+  backdrop_path: string
+  id: string
+}
 
 const getMoviesFromTmdb = async (
   searchTerm: string,
