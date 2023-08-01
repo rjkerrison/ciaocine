@@ -1,9 +1,14 @@
-import { isValidObjectId, Model, Query } from 'mongoose'
+import {
+  HydratedDocument,
+  isValidObjectId,
+  Model,
+  QueryWithHelpers,
+} from 'mongoose'
 
 const findBySlugOrId = <T>(
   model: Model<T>,
   idOrSlug: string
-): Query<T | null, T> => {
+): QueryWithHelpers<HydratedDocument<T> | null, HydratedDocument<T>> => {
   // This function must not use async await, because we must
   // return the full query so that additional query configuration can be done,
   // such as .populate(), .sort(), &c

@@ -1,6 +1,4 @@
-import { InferSchemaType, SchemaTypes } from 'mongoose'
-
-import { Schema, model } from 'mongoose'
+import { InferSchemaType, SchemaTypes, Schema, model } from 'mongoose'
 
 const externalIdSchema = new Schema({
   id: {

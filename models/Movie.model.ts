@@ -1,4 +1,13 @@
-import { InferSchemaType, Query, SchemaTypes, Schema, model } from 'mongoose'
+import {
+  InferSchemaType,
+  Query,
+  SchemaTypes,
+  Schema,
+  model,
+  HydratedDocumentFromSchema,
+  QueryWithHelpers,
+  HydratedDocument,
+} from 'mongoose'
 import { findBySlugOrId } from '../utils/findBySlugOrId'
 import { convertToSlug } from '../utils/slug'
 import Showtime from './Showtime.model'
@@ -150,7 +159,12 @@ const searchableFields = [
 
 type ExtendedMovie = typeof Movie & {
   getUniqueSlugForMovie: (movie: MovieSchema) => Promise<any>
-  findBySlugOrId: (slugOrId: string) => Query<MovieSchema | null, MovieSchema>
+  findBySlugOrId: (
+    slugOrId: string
+  ) => QueryWithHelpers<
+    HydratedDocument<MovieSchema> | null,
+    HydratedDocument<MovieSchema>
+  >
   search: (term: string) => Query<MovieSchema[] | null, MovieSchema>
 }
 

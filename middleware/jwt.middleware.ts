@@ -30,6 +30,12 @@ function getTokenFromHeaders(req: Request) {
 const includeUser: RequestHandler = async (req, res, next) => {
   const { username } = req.payload
   const user = await User.findOne({ username })
+
+  if (user === null) {
+    res.status(401).json({ error: 'User credentials not found' })
+    return
+  }
+
   req.user = user
   next()
 }

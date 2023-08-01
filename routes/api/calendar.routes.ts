@@ -71,6 +71,12 @@ const getCalendarForUsername = async (req, res, next) => {
 /* GET /api/calendar/ */
 router.get('/:username', async (req, res, next) => {
   const user = await User.findOne({ username: req.params.username })
+
+  if (user === null) {
+    res.status(404).json({ error: 'user not found' })
+    return
+  }
+
   req.user = user
 
   getCalendarForUsername(req, res, next)
